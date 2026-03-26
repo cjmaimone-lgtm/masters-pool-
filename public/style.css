@@ -1,0 +1,623 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: #f5f0e8;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, #006747, #004d35);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+header h1 {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header .subtitle {
+  font-size: 1.2rem;
+  color: #ffd700;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid #006747;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  background: #e8e0d0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+  transition: all 0.2s;
+  border-radius: 8px 8px 0 0;
+}
+
+.tab:hover {
+  background: #d4cbb8;
+}
+
+.tab.active {
+  background: #006747;
+  color: #fff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Pick Tab */
+.pick-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.name-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name-input label {
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.name-input input {
+  padding: 0.5rem 0.8rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 200px;
+}
+
+.name-input input:focus {
+  border-color: #006747;
+  outline: none;
+}
+
+.sub-count {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.selected-summary {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #006747;
+  background: #fff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  border: 2px solid #006747;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.search-bar input:focus {
+  border-color: #006747;
+  outline: none;
+}
+
+.search-bar select {
+  padding: 0.5rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* Golfer Table */
+.table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.golfer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.golfer-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.golfer-table th {
+  background: #006747;
+  color: #fff;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.golfer-table th:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+.golfer-table th:nth-child(3),
+.golfer-table th:nth-child(4) {
+  text-align: center;
+  width: 90px;
+}
+
+.golfer-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.golfer-table td:first-child {
+  text-align: center;
+}
+
+.golfer-table td:nth-child(3),
+.golfer-table td:nth-child(4) {
+  text-align: center;
+}
+
+.golfer-table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.golfer-table tbody tr:hover {
+  background: #f0ece4;
+}
+
+.golfer-table tbody tr.selected {
+  background: #e8f5e9;
+}
+
+.golfer-table tbody tr.selected td:first-child {
+  color: #006747;
+  font-weight: bold;
+}
+
+.golfer-table .golfer-name {
+  font-weight: bold;
+}
+
+.golfer-table .odds-cell {
+  font-weight: bold;
+  color: #006747;
+}
+
+.golfer-table .rank-cell {
+  font-weight: bold;
+  color: #555;
+}
+
+.golfer-table .checkmark {
+  color: #006747;
+  font-size: 1.1rem;
+}
+
+.golfer-table th:nth-child(5) {
+  text-align: center;
+  width: 160px;
+}
+
+.golfer-table td:nth-child(5) {
+  text-align: center;
+}
+
+/* Form Indicators */
+.form-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  cursor: help;
+}
+
+.form-badge {
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.form-badge.hot {
+  background: #006747;
+  color: #fff;
+}
+
+.form-badge.warm {
+  background: #d4a017;
+  color: #fff;
+}
+
+.form-detail {
+  color: #777;
+  font-size: 0.75rem;
+}
+
+.form-indicator.hot .form-detail { color: #006747; font-weight: bold; }
+.form-indicator.warm .form-detail { color: #8a7000; }
+.form-indicator.mild .form-detail { color: #555; }
+.form-indicator.cold .form-detail { color: #999; }
+
+.form-na {
+  color: #ccc;
+}
+
+/* Submit Area */
+.submit-area {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.selected-names {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: #333;
+  min-height: 1.5rem;
+}
+
+.submit-btn {
+  background: #006747;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.1rem;
+  font-family: inherit;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #004d35;
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* Leaderboard */
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.submission-card {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.submission-card .user-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #006747;
+  margin-bottom: 0.3rem;
+}
+
+.submission-card .golfer-list {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.submission-card .timestamp {
+  font-size: 0.75rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.submission-card .delete-btn {
+  background: none;
+  border: 1px solid #ddd;
+  color: #999;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.submission-card .delete-btn:hover {
+  border-color: #c00;
+  color: #c00;
+}
+
+.submission-card.duplicate {
+  border-color: #d4a017;
+  background: #fffbe6;
+}
+
+.dupe-badge {
+  background: #d4a017;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-left: 0.4rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+
+.no-submissions {
+  text-align: center;
+  color: #888;
+  padding: 3rem;
+  font-style: italic;
+}
+
+/* Stats / Popularity */
+.stats-subtitle {
+  text-align: center;
+  color: #888;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.popularity-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pop-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.pop-name {
+  width: 180px;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.pop-bar-bg {
+  flex: 1;
+  background: #e8e0d0;
+  border-radius: 4px;
+  height: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pop-bar {
+  background: linear-gradient(90deg, #006747, #00896b);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+.pop-count {
+  width: 30px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #006747;
+}
+
+/* Analytics Sections */
+.analytics-section {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.analytics-section h2 {
+  margin-bottom: 0.3rem;
+}
+
+/* Tier Breakdown */
+.tier-bar {
+  display: flex;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+  border: 1px solid #ddd;
+}
+
+.tier-segment {
+  transition: width 0.5s ease;
+  min-width: 1px;
+}
+
+.tier-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.tier-legend-item {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tier-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tier-verdict {
+  font-size: 1rem;
+  font-style: italic;
+  color: #555;
+  padding: 0.5rem;
+  background: #f5f0e8;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Coverage Gaps */
+.gaps-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.gap-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fff3f3;
+  border: 1px solid #e8c0c0;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.gap-rank {
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.gap-name {
+  font-weight: bold;
+}
+
+.gap-odds {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.gaps-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #c0392b;
+  font-style: italic;
+}
+
+.coverage-ok {
+  text-align: center;
+  color: #006747;
+  padding: 1rem;
+  font-style: italic;
+}
+
+.no-stats {
+  text-align: center;
+  color: #888;
+  padding: 3rem;
+  font-style: italic;
+}
+
+h2 {
+  text-align: center;
+  color: #006747;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #006747;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  header h1 { font-size: 1.6rem; }
+  .golfer-grid { grid-template-columns: 1fr 1fr; }
+  .pick-header { flex-direction: column; align-items: stretch; }
+  .selected-summary { text-align: center; }
+  .pop-name { width: 120px; font-size: 0.8rem; }
+  .submission-card { flex-direction: column; }
+}

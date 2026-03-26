@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masters Fivesome Picker 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>The Masters 2026</h1>
+    <p class="subtitle">Fivesome Picker</p>
+  </header>
+
+  <main>
+    <!-- Tab Navigation -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="pick">Pick Your Fivesome</button>
+      <button class="tab" data-tab="board">Leaderboard</button>
+      <button class="tab" data-tab="stats">Golfer Popularity</button>
+    </nav>
+
+    <!-- PICK TAB -->
+    <section id="tab-pick" class="tab-content active">
+      <div class="pick-header">
+        <div class="name-input">
+          <label for="userName">Your Name:</label>
+          <input type="text" id="userName" placeholder="Enter your name" maxlength="30">
+          <span id="submissionCount" class="sub-count"></span>
+        </div>
+        <div class="selected-summary">
+          <span id="selectedCount">0</span> / 5 selected
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="golferSearch" placeholder="Search golfers...">
+        <select id="sortBy">
+          <option value="ranking">Sort by World Ranking</option>
+          <option value="name">Sort by Name</option>
+          <option value="odds">Sort by Odds (Favorite first)</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="golferTable" class="golfer-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Golfer</th>
+              <th>OWGR</th>
+              <th>Odds</th>
+              <th>2026 Form</th>
+            </tr>
+          </thead>
+          <tbody id="golferBody"></tbody>
+        </table>
+      </div>
+
+      <div class="submit-area">
+        <div id="selectedNames" class="selected-names"></div>
+        <button id="submitBtn" class="submit-btn" disabled>Submit Fivesome</button>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD TAB -->
+    <section id="tab-board" class="tab-content">
+      <h2>All Fivesomes</h2>
+      <div id="submissionsList" class="submissions-list"></div>
+    </section>
+
+    <!-- STATS TAB -->
+    <section id="tab-stats" class="tab-content">
+      <div class="analytics-section">
+        <h2>Portfolio Risk Profile</h2>
+        <p class="stats-subtitle">Are we indexed to favorites or longshots?</p>
+        <div id="tierBreakdown" class="tier-breakdown"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Risk by Person</h2>
+        <p class="stats-subtitle">Average odds across each person's picks — lower = safer</p>
+        <div id="riskByPerson" class="popularity-chart"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Coverage Gaps</h2>
+        <p class="stats-subtitle">Top-ranked golfers nobody has picked</p>
+        <div id="coverageGaps"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Golfer Popularity</h2>
+        <p class="stats-subtitle">How often each golfer appears across all fivesomes</p>
+        <div id="popularityChart" class="popularity-chart"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
