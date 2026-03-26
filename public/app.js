@@ -84,6 +84,7 @@ function renderGolferTable() {
   const tbody = document.getElementById('golferBody');
   tbody.innerHTML = filtered.map(g => {
     const formHtml = formatForm(g.form);
+    const augustaHtml = formatAugusta(g.augusta);
     return `
     <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}"
         onclick="toggleGolfer('${g.name.replace(/'/g, "\\'")}')">
@@ -92,6 +93,7 @@ function renderGolferTable() {
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
       <td class="odds-cell">${g.odds}</td>
       <td class="form-cell">${formHtml}</td>
+      <td class="augusta-cell">${augustaHtml}</td>
     </tr>
   `}).join('');
 }
@@ -243,10 +245,50 @@ async function deleteSubmission(id) {
   }
 }
 
+function formatAugusta(augusta) {
+  if (!augusta || Object.keys(augusta).length === 0) return '<span class="form-na">Debut</span>';
+  const years = ['2022', '2023', '2024', '2025'];
+  const results = years
+    .filter(y => augusta[y])
+    .map(y => {
+      const res = augusta[y];
+      let cls = 'aug-mid';
+      const num = parseFinish(res);
+      if (res === 'MC' || res === 'WD') cls = 'aug-mc';
+      else if (num <= 5) cls = 'aug-top5';
+      else if (num <= 10) cls = 'aug-top10';
+      else if (num <= 25) cls = 'aug-top25';
+      return `<span class="aug-result ${cls}" title="${y}">'${y.slice(2)}: ${res}</span>`;
+    });
+  return results.join(' ');
+}
+
+function parseFinish(result) {
+  if (!result || result === 'MC' || result === 'WD') return 999;
+  return parseInt(result.replace('T', ''));
+}
+
+function getAugustaAvg(augusta) {
+  if (!augusta) return null;
+  const finishes = Object.values(augusta)
+    .filter(r => r !== 'MC' && r !== 'WD')
+    .map(r => parseFinish(r));
+  if (finishes.length === 0) return null;
+  return finishes.reduce((a, b) => a + b, 0) / finishes.length;
+}
+
+function getAugustaMadeCuts(augusta) {
+  if (!augusta) return { made: 0, total: 0 };
+  const entries = Object.values(augusta);
+  const made = entries.filter(r => r !== 'MC' && r !== 'WD').length;
+  return { made, total: entries.length };
+}
+
 // --- Analytics ---
 function renderAllStats() {
   renderTierBreakdown();
   renderRiskByPerson();
+  renderAugustaFit();
   renderCoverageGaps();
   renderPopularity();
 }
@@ -366,6 +408,70 @@ function renderRiskByPerson() {
       </div>
     `;
   }).join('');
+}
+
+function renderAugustaFit() {
+  const container = document.getElementById('augustaFit');
+  if (submissions.length === 0) {
+    container.innerHTML = '<div class="no-stats">No submissions yet</div>';
+    return;
+  }
+
+  const golferMap = {};
+  golfers.forEach(g => { golferMap[g.name] = g; });
+
+  // Get all picked golfers with Augusta history
+  const pickedSet = new Set();
+  submissions.forEach(s => s.golfers.forEach(g => pickedSet.add(g)));
+
+  const augustaData = [];
+  pickedSet.forEach(name => {
+    const g = golferMap[name];
+    if (!g) return;
+    const avg = getAugustaAvg(g.augusta);
+    const cuts = getAugustaMadeCuts(g.augusta);
+    augustaData.push({ name, avg, cuts, augusta: g.augusta || {} });
+  });
+
+  // Separate into golfers with history and debuts
+  const withHistory = augustaData.filter(d => d.avg !== null).sort((a, b) => a.avg - b.avg);
+  const debuts = augustaData.filter(d => d.avg === null && d.cuts.total === 0);
+  const allMC = augustaData.filter(d => d.avg === null && d.cuts.total > 0);
+
+  if (withHistory.length === 0 && debuts.length === 0) {
+    container.innerHTML = '<div class="no-stats">No Augusta data available for picked golfers</div>';
+    return;
+  }
+
+  const worstAvg = withHistory.length > 0 ? withHistory[withHistory.length - 1].avg : 60;
+
+  let html = '';
+
+  // Bar chart for golfers with made-cut history
+  html += withHistory.map(d => {
+    const pct = worstAvg > 0 ? (1 - (d.avg - 1) / (worstAvg - 1)) * 100 : 50;
+    const barColor = d.avg <= 10 ? '#006747' : d.avg <= 25 ? '#d4a017' : '#c0392b';
+    const years = Object.entries(d.augusta).map(([y, r]) => `'${y.slice(2)}: ${r}`).join(', ');
+    return `
+      <div class="pop-row">
+        <div class="pop-name">${escapeHtml(d.name)}</div>
+        <div class="pop-bar-bg">
+          <div class="pop-bar" style="width:${Math.max(pct, 3)}%;background:${barColor}" title="${years}"></div>
+        </div>
+        <div class="pop-count" style="width:50px;color:${barColor}">~${Math.round(d.avg)}</div>
+      </div>
+    `;
+  }).join('');
+
+  // List debuts and all-MC golfers
+  if (allMC.length > 0) {
+    html += `<div class="augusta-note" style="margin-top:0.8rem;"><strong>All missed cuts at Augusta:</strong> ${allMC.map(d => escapeHtml(d.name)).join(', ')}</div>`;
+  }
+  if (debuts.length > 0) {
+    html += `<div class="augusta-note"><strong>Augusta debutants:</strong> ${debuts.map(d => escapeHtml(d.name)).join(', ')}</div>`;
+  }
+
+  container.innerHTML = html;
 }
 
 function renderCoverageGaps() {
