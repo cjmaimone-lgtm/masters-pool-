@@ -263,11 +263,13 @@ main {
 
 /* Form Indicators */
 .form-indicator {
-  display: inline-flex;
+  display: inline-grid;
+  grid-template-columns: 30px 42px 1fr;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
   font-size: 0.8rem;
   cursor: help;
+  width: 100%;
 }
 
 .form-badge {
@@ -275,6 +277,11 @@ main {
   border-radius: 3px;
   font-size: 0.7rem;
   font-weight: bold;
+  text-align: center;
+}
+
+.form-badge-placeholder {
+  visibility: hidden;
 }
 
 .form-badge.hot {
@@ -290,6 +297,7 @@ main {
 .form-detail {
   color: #777;
   font-size: 0.75rem;
+  text-align: right;
 }
 
 .form-indicator.hot .form-detail { color: #006747; font-weight: bold; }
@@ -304,7 +312,7 @@ main {
 /* Augusta History */
 .golfer-table th:nth-child(6) {
   text-align: center;
-  width: 200px;
+  width: 220px;
 }
 
 .golfer-table td:nth-child(6) {
@@ -315,13 +323,33 @@ main {
   white-space: nowrap;
 }
 
+.augusta-grid {
+  display: inline-grid;
+  grid-template-columns: repeat(4, 46px);
+  gap: 2px;
+  align-items: center;
+}
+
+.aug-slot {
+  text-align: center;
+}
+
 .aug-result {
   display: inline-block;
   font-size: 0.7rem;
   padding: 0.1rem 0.3rem;
   border-radius: 3px;
-  margin: 0 1px;
   font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+.aug-empty {
+  display: inline-block;
+  min-width: 40px;
+  color: #ddd;
+  font-size: 0.65rem;
+  text-align: center;
 }
 
 .aug-top5 { background: #006747; color: #fff; }
