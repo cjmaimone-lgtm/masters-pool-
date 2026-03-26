@@ -263,13 +263,17 @@ main {
 
 /* Form Indicators */
 .form-indicator {
-  display: inline-grid;
-  grid-template-columns: 30px 42px 1fr;
+  display: flex;
   align-items: center;
-  gap: 0.2rem;
   font-size: 0.8rem;
   cursor: help;
   width: 100%;
+}
+
+.form-badges {
+  flex: 1;
+  display: flex;
+  gap: 0.2rem;
 }
 
 .form-badge {
@@ -278,10 +282,6 @@ main {
   font-size: 0.7rem;
   font-weight: bold;
   text-align: center;
-}
-
-.form-badge-placeholder {
-  visibility: hidden;
 }
 
 .form-badge.hot {
@@ -298,6 +298,8 @@ main {
   color: #777;
   font-size: 0.75rem;
   text-align: right;
+  flex-shrink: 0;
+  width: 52px;
 }
 
 .form-indicator.hot .form-detail { color: #006747; font-weight: bold; }
