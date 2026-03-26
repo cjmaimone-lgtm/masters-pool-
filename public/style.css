@@ -34,7 +34,7 @@ header .subtitle {
 }
 
 main {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 1.5rem 1rem;
 }
@@ -99,6 +99,7 @@ main {
   font-size: 1.05rem;
 }
 
+.name-input select,
 .name-input input {
   padding: 0.5rem 0.8rem;
   border: 2px solid #ccc;
@@ -106,8 +107,11 @@ main {
   font-size: 1rem;
   font-family: inherit;
   width: 200px;
+  background: #fff;
+  cursor: pointer;
 }
 
+.name-input select:focus,
 .name-input input:focus {
   border-color: #006747;
   outline: none;
@@ -254,7 +258,7 @@ main {
 
 .golfer-table th:nth-child(5) {
   text-align: center;
-  width: 160px;
+  width: 200px;
 }
 
 .golfer-table td:nth-child(5) {
@@ -274,6 +278,8 @@ main {
   flex: 1;
   display: flex;
   gap: 0.2rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .form-badge {
@@ -299,7 +305,8 @@ main {
   font-size: 0.75rem;
   text-align: right;
   flex-shrink: 0;
-  width: 52px;
+  width: 58px;
+  padding-left: 6px;
 }
 
 .form-indicator.hot .form-detail { color: #006747; font-weight: bold; }
@@ -314,7 +321,7 @@ main {
 /* Augusta History */
 .golfer-table th:nth-child(6) {
   text-align: center;
-  width: 220px;
+  width: 260px;
 }
 
 .golfer-table td:nth-child(6) {
@@ -327,8 +334,8 @@ main {
 
 .augusta-grid {
   display: inline-grid;
-  grid-template-columns: repeat(4, 46px);
-  gap: 2px;
+  grid-template-columns: repeat(4, 54px);
+  gap: 4px;
   align-items: center;
 }
 
