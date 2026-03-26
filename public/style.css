@@ -301,6 +301,42 @@ main {
   color: #ccc;
 }
 
+/* Augusta History */
+.golfer-table th:nth-child(6) {
+  text-align: center;
+  width: 200px;
+}
+
+.golfer-table td:nth-child(6) {
+  text-align: center;
+}
+
+.augusta-cell {
+  white-space: nowrap;
+}
+
+.aug-result {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  margin: 0 1px;
+  font-weight: bold;
+}
+
+.aug-top5 { background: #006747; color: #fff; }
+.aug-top10 { background: #2e8b57; color: #fff; }
+.aug-top25 { background: #d4a017; color: #fff; }
+.aug-mid { background: #e8e0d0; color: #555; }
+.aug-mc { background: #f5d5d5; color: #c0392b; }
+
+.augusta-note {
+  font-size: 0.85rem;
+  color: #666;
+  padding: 0.3rem 0;
+  margin-top: 0.3rem;
+}
+
 /* Submit Area */
 .submit-area {
   background: #fff;
