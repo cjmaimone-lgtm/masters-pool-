@@ -104,16 +104,15 @@ function parseOdds(odds) {
 
 function formatForm(form) {
   if (!form) return '<span class="form-na">—</span>';
-  const winBadge = form.wins > 0 ? `<span class="form-badge hot">${form.wins}W</span>` : '';
-  const t10Badge = form.top10s > 0 ? `<span class="form-badge warm">${form.top10s}xT10</span>` : '';
+  const winBadge = form.wins > 0 ? `<span class="form-badge hot">${form.wins}W</span>` : '<span class="form-badge form-badge-placeholder">—</span>';
+  const t10Badge = form.top10s > 0 ? `<span class="form-badge warm">${form.top10s}xT10</span>` : '<span class="form-badge form-badge-placeholder">—</span>';
   const cutRate = Math.round((form.cuts / form.events) * 100);
   const avgStr = form.avg ? form.avg.toFixed(1) : '—';
-  // Heat indicator
   let heat = 'cold';
   if (form.wins > 0) heat = 'hot';
   else if (form.top10s >= 2) heat = 'warm';
   else if (form.top10s >= 1 && form.cuts / form.events >= 0.7) heat = 'mild';
-  return `<span class="form-indicator ${heat}" title="${form.events} events, ${form.wins}W, ${form.top10s} T10s, ${cutRate}% cuts, ${avgStr} avg">${winBadge}${t10Badge} <span class="form-detail">${avgStr} avg</span></span>`;
+  return `<span class="form-indicator ${heat}" title="${form.events} events, ${form.wins}W, ${form.top10s} T10s, ${cutRate}% cuts, ${avgStr} avg">${winBadge}${t10Badge}<span class="form-detail">${avgStr} avg</span></span>`;
 }
 
 function toggleGolfer(name) {
@@ -248,19 +247,18 @@ async function deleteSubmission(id) {
 function formatAugusta(augusta) {
   if (!augusta || Object.keys(augusta).length === 0) return '<span class="form-na">Debut</span>';
   const years = ['2022', '2023', '2024', '2025'];
-  const results = years
-    .filter(y => augusta[y])
-    .map(y => {
-      const res = augusta[y];
-      let cls = 'aug-mid';
-      const num = parseFinish(res);
-      if (res === 'MC' || res === 'WD') cls = 'aug-mc';
-      else if (num <= 5) cls = 'aug-top5';
-      else if (num <= 10) cls = 'aug-top10';
-      else if (num <= 25) cls = 'aug-top25';
-      return `<span class="aug-result ${cls}" title="${y}">'${y.slice(2)}: ${res}</span>`;
-    });
-  return results.join(' ');
+  const slots = years.map(y => {
+    if (!augusta[y]) return `<span class="aug-slot"><span class="aug-empty">—</span></span>`;
+    const res = augusta[y];
+    let cls = 'aug-mid';
+    const num = parseFinish(res);
+    if (res === 'MC' || res === 'WD') cls = 'aug-mc';
+    else if (num <= 5) cls = 'aug-top5';
+    else if (num <= 10) cls = 'aug-top10';
+    else if (num <= 25) cls = 'aug-top25';
+    return `<span class="aug-slot"><span class="aug-result ${cls}" title="${y}">'${y.slice(2)}: ${res}</span></span>`;
+  });
+  return `<div class="augusta-grid">${slots.join('')}</div>`;
 }
 
 function parseFinish(result) {
