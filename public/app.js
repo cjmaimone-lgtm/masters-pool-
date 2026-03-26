@@ -48,7 +48,7 @@ function setupSearch() {
 
 // --- Name Input ---
 function setupNameInput() {
-  document.getElementById('userName').addEventListener('input', updateSubmissionCount);
+  document.getElementById('userName').addEventListener('change', updateSubmissionCount);
 }
 
 function updateSubmissionCount() {
