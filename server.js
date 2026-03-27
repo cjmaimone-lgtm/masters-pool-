@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -17,11 +18,56 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const GOLFERS_FILE = path.join(__dirname, 'data', 'golfers.json');
+const STATUS_FILE = path.join(__dirname, 'data', 'refresh-status.json');
 
-// GET golfers (still from local JSON — no reason to put static data in the DB)
+// --- Name normalization for matching across APIs ---
+function normalizeName(name) {
+  return name
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
+    .replace(/[.\-']/g, '')                             // strip dots, hyphens, apostrophes
+    .replace(/\s+/g, ' ')                               // collapse whitespace
+    .trim()
+    .toLowerCase();
+}
+
+function buildNameIndex(golfers) {
+  const index = {};
+  golfers.forEach((g, i) => {
+    index[normalizeName(g.name)] = i;
+  });
+  return index;
+}
+
+function findGolferIndex(nameIndex, apiName) {
+  return nameIndex[normalizeName(apiName)] ?? -1;
+}
+
+// --- Refresh status tracking ---
+function getRefreshStatus() {
+  try {
+    return JSON.parse(fs.readFileSync(STATUS_FILE, 'utf8'));
+  } catch {
+    return { oddsUpdatedAt: null, statsUpdatedAt: null };
+  }
+}
+
+function saveRefreshStatus(status) {
+  fs.writeFileSync(STATUS_FILE, JSON.stringify(status, null, 2));
+}
+
+// ============================================================
+// EXISTING ENDPOINTS
+// ============================================================
+
+// GET golfers
 app.get('/api/golfers', (req, res) => {
   const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
   res.json(golfers);
+});
+
+// GET refresh status
+app.get('/api/refresh-status', (req, res) => {
+  res.json(getRefreshStatus());
 });
 
 // GET all submissions
@@ -33,7 +79,6 @@ app.get('/api/submissions', async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
 
-  // Map DB column names to what the frontend expects
   const submissions = data.map(row => ({
     id: row.id,
     userName: row.user_name,
@@ -54,7 +99,6 @@ app.post('/api/submissions', async (req, res) => {
     return res.status(400).json({ error: 'You must select exactly 5 golfers' });
   }
 
-  // Check if user already has 3 submissions
   const { data: existing, error: countErr } = await supabase
     .from('submissions')
     .select('id')
@@ -93,6 +137,233 @@ app.delete('/api/submissions/:id', async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
   res.json({ success: true });
+});
+
+// ============================================================
+// ODDS API REFRESH
+// ============================================================
+
+app.post('/api/refresh-odds', async (req, res) => {
+  const apiKey = process.env.ODDS_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'ODDS_API_KEY not configured in .env' });
+  }
+
+  try {
+    const url = `https://api.the-odds-api.com/v4/sports/golf_masters_tournament_winner/odds?apiKey=${apiKey}&regions=us&markets=outrights&oddsFormat=american`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const text = await response.text();
+      return res.status(response.status).json({ error: `Odds API error: ${text}` });
+    }
+
+    const oddsData = await response.json();
+    const remaining = response.headers.get('x-requests-remaining');
+
+    // Use the first bookmaker's outrights
+    const bookmaker = oddsData[0]?.bookmakers?.[0];
+    if (!bookmaker) {
+      return res.status(404).json({ error: 'No odds data available for the Masters right now' });
+    }
+
+    const outcomes = bookmaker.markets.find(m => m.key === 'outrights')?.outcomes || [];
+
+    // Load golfers and build name index
+    const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
+    const nameIndex = buildNameIndex(golfers);
+
+    let matched = 0;
+    let unmatched = [];
+
+    outcomes.forEach(outcome => {
+      const idx = findGolferIndex(nameIndex, outcome.name);
+      if (idx >= 0) {
+        const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
+        // Preserve opening odds — only set once
+        if (!golfers[idx].openingOdds) {
+          golfers[idx].openingOdds = golfers[idx].odds;
+        }
+        golfers[idx].odds = oddsVal;
+        matched++;
+      } else {
+        unmatched.push(outcome.name);
+      }
+    });
+
+    // Save updated golfers
+    fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
+
+    // Update status
+    const status = getRefreshStatus();
+    status.oddsUpdatedAt = new Date().toISOString();
+    status.oddsSource = bookmaker.title;
+    saveRefreshStatus(status);
+
+    res.json({
+      success: true,
+      matched,
+      unmatched,
+      source: bookmaker.title,
+      requestsRemaining: remaining,
+      updatedAt: status.oddsUpdatedAt
+    });
+  } catch (err) {
+    res.status(500).json({ error: `Failed to fetch odds: ${err.message}` });
+  }
+});
+
+// ============================================================
+// ESPN STATS REFRESH
+// ============================================================
+
+const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga';
+
+// 2026 PGA Tour event IDs (The Sentry through Valero Texas Open)
+const TOURNAMENT_IDS = [
+  401811927, // The Sentry
+  401811928, // Sony Open
+  401811929, // The American Express
+  401811930, // Farmers Insurance Open
+  401811931, // WM Phoenix Open
+  401811932, // AT&T Pebble Beach
+  401811933, // Genesis Invitational
+  401811934, // Cognizant Classic
+  401811935, // Arnold Palmer Invitational
+  401811936, // Puerto Rico Open
+  401811937, // THE PLAYERS Championship
+  401811938, // Valspar Championship
+  401811939, // Houston Open
+  401811940, // Valero Texas Open
+];
+
+app.post('/api/refresh-stats', async (req, res) => {
+  try {
+    // Step 1: Figure out which tournaments are completed
+    const scheduleRes = await fetch(`${ESPN_BASE}/scoreboard?dates=2026&limit=20`);
+    const scheduleData = await scheduleRes.json();
+    const events = scheduleData.events || [];
+
+    // Only include completed tournaments from our list
+    const completedIds = [];
+    for (const evt of events) {
+      const id = parseInt(evt.id);
+      if (!TOURNAMENT_IDS.includes(id)) continue;
+      // status.type.completed === true means the event is done
+      if (evt.status?.type?.completed) {
+        completedIds.push(id);
+      }
+    }
+
+    // Step 2: Fetch leaderboards for completed tournaments (last 9 max for form)
+    const recentIds = completedIds.slice(-9);
+
+    const leaderboards = await Promise.all(
+      recentIds.map(async (id) => {
+        try {
+          const lbRes = await fetch(`${ESPN_BASE}/scoreboard/${id}`);
+          const lbData = await lbRes.json();
+          const evt = lbData.events?.[0] || lbData;
+          const competition = evt.competitions?.[0];
+          const competitors = competition?.competitors || [];
+          const name = evt.name || evt.shortName || `Event ${id}`;
+          return { id, name, competitors };
+        } catch {
+          return { id, name: `Event ${id}`, competitors: [] };
+        }
+      })
+    );
+
+    // Step 3: Load golfers and build name index
+    const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
+    const nameIndex = buildNameIndex(golfers);
+
+    // Step 4: Aggregate form stats per golfer
+    // Track per-golfer: events played, wins, top10s, cuts made, round scores
+    // Also track last 3 tournament finishes for momentum
+    const formData = {}; // normalized name -> { events, wins, top10s, cuts, scores[], recentFinishes[] }
+
+    for (const lb of leaderboards) {
+      for (const comp of lb.competitors) {
+        const fullName = comp.athlete?.fullName || comp.athlete?.displayName;
+        if (!fullName) continue;
+
+        const norm = normalizeName(fullName);
+        const idx = nameIndex[norm];
+        if (idx === undefined) continue; // not in our Masters field
+
+        if (!formData[norm]) {
+          formData[norm] = { events: 0, wins: 0, top10s: 0, cuts: 0, scores: [], recentFinishes: [] };
+        }
+
+        const fd = formData[norm];
+        fd.events++;
+
+        const position = parseInt(comp.order || comp.status?.position?.id || '999');
+        const linescores = comp.linescores || [];
+        const roundsPlayed = linescores.length;
+
+        // Made the cut = played 4 rounds (or 3 for some events, but 4 is standard)
+        if (roundsPlayed >= 4) {
+          fd.cuts++;
+          if (position === 1) fd.wins++;
+          if (position <= 10) fd.top10s++;
+        }
+
+        // Collect round scores
+        for (const round of linescores) {
+          const val = parseFloat(round.value);
+          if (!isNaN(val)) fd.scores.push(val);
+        }
+
+        // Track finish position for momentum (ordered by tournament date)
+        fd.recentFinishes.push(position);
+      }
+    }
+
+    // Step 5: Write form data back to golfers
+    let updated = 0;
+    for (const [norm, fd] of Object.entries(formData)) {
+      const idx = nameIndex[norm];
+      if (idx === undefined) continue;
+
+      const avg = fd.scores.length > 0
+        ? Math.round((fd.scores.reduce((a, b) => a + b, 0) / fd.scores.length) * 10) / 10
+        : null;
+
+      golfers[idx].form = {
+        events: fd.events,
+        wins: fd.wins,
+        top10s: fd.top10s,
+        cuts: fd.cuts,
+        avg
+      };
+
+      // Store recent finishes for momentum (last 3)
+      golfers[idx].recentFinishes = fd.recentFinishes.slice(-3);
+
+      updated++;
+    }
+
+    // Save updated golfers
+    fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
+
+    // Update status
+    const status = getRefreshStatus();
+    status.statsUpdatedAt = new Date().toISOString();
+    status.tournamentsScanned = leaderboards.map(lb => lb.name);
+    saveRefreshStatus(status);
+
+    res.json({
+      success: true,
+      tournamentsScanned: leaderboards.length,
+      tournaments: leaderboards.map(lb => lb.name),
+      golfersUpdated: updated,
+      updatedAt: status.statsUpdatedAt
+    });
+  } catch (err) {
+    res.status(500).json({ error: `Failed to refresh stats: ${err.message}` });
+  }
 });
 
 app.listen(PORT, () => {
