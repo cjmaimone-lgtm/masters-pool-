@@ -647,6 +647,20 @@ main {
   border-radius: 4px;
   transition: width 0.5s ease;
   min-width: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-label {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.7rem;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .pop-count {
