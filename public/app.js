@@ -5,7 +5,7 @@ let submissions = [];
 
 // --- Init ---
 document.addEventListener('DOMContentLoaded', async () => {
-  await Promise.all([loadGolfers(), loadSubmissions()]);
+  await Promise.all([loadGolfers(), loadSubmissions(), loadRefreshStatus()]);
   renderGolferTable();
   setupTabs();
   setupSearch();
@@ -13,6 +13,92 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('submitBtn').addEventListener('click', submitFivesome);
 });
+
+// --- Data Refresh ---
+async function loadRefreshStatus() {
+  try {
+    const res = await fetch(`${API}/api/refresh-status`);
+    const status = await res.json();
+    updateTimestampDisplay('oddsTimestamp', status.oddsUpdatedAt, status.oddsSource);
+    updateTimestampDisplay('statsTimestamp', status.statsUpdatedAt);
+  } catch { /* ignore if no status yet */ }
+}
+
+function updateTimestampDisplay(elementId, isoDate, source) {
+  const el = document.getElementById(elementId);
+  if (!isoDate) {
+    el.textContent = 'Never refreshed';
+    return;
+  }
+  const date = new Date(isoDate);
+  const timeStr = date.toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+  });
+  el.textContent = source ? `${timeStr} (${source})` : timeStr;
+}
+
+async function refreshOdds() {
+  const btn = document.getElementById('refreshOddsBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'Refreshing...';
+
+  try {
+    const res = await fetch(`${API}/api/refresh-odds`, { method: 'POST' });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.error || 'Failed to refresh odds');
+      return;
+    }
+
+    // Reload golfers with fresh odds
+    await loadGolfers();
+    renderGolferTable();
+    updateTimestampDisplay('oddsTimestamp', data.updatedAt, data.source);
+
+    let msg = `Odds updated: ${data.matched} golfers matched`;
+    if (data.requestsRemaining) msg += ` (${data.requestsRemaining} API calls left this month)`;
+    if (data.unmatched?.length > 0) msg += ` | ${data.unmatched.length} unmatched`;
+    showToast(msg);
+  } catch (err) {
+    showToast('Error refreshing odds. Is the server running?');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = 'Refresh Odds';
+  }
+}
+
+async function refreshStats() {
+  const btn = document.getElementById('refreshStatsBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'Refreshing...';
+
+  try {
+    const res = await fetch(`${API}/api/refresh-stats`, { method: 'POST' });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.error || 'Failed to refresh stats');
+      return;
+    }
+
+    // Reload golfers with fresh stats
+    await loadGolfers();
+    renderGolferTable();
+    updateTimestampDisplay('statsTimestamp', data.updatedAt);
+
+    showToast(`Stats updated: ${data.golfersUpdated} golfers across ${data.tournamentsScanned} tournaments`);
+  } catch (err) {
+    showToast('Error refreshing stats. Is the server running?');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = 'Refresh Stats';
+  }
+}
 
 // --- Data Loading ---
 async function loadGolfers() {
@@ -85,13 +171,15 @@ function renderGolferTable() {
   tbody.innerHTML = filtered.map(g => {
     const formHtml = formatForm(g.form);
     const augustaHtml = formatAugusta(g.augusta);
+    const age = g.birthYear ? new Date().getFullYear() - g.birthYear : '—';
     return `
     <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}"
         onclick="toggleGolfer('${g.name.replace(/'/g, "\\'")}')">
       <td><span class="checkmark">${selectedGolfers.has(g.name) ? '\u2713' : ''}</span></td>
       <td class="golfer-name">${g.name}</td>
+      <td class="age-cell">${age}</td>
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
-      <td class="odds-cell">${g.odds}</td>
+      <td class="odds-cell">${formatOddsWithMovement(g)}</td>
       <td class="form-cell">${formHtml}</td>
       <td class="augusta-cell">${augustaHtml}</td>
     </tr>
@@ -100,6 +188,21 @@ function renderGolferTable() {
 
 function parseOdds(odds) {
   return parseInt(odds.replace('+', ''));
+}
+
+function formatOddsWithMovement(g) {
+  if (!g.openingOdds || g.openingOdds === g.odds) {
+    return g.odds;
+  }
+  const current = parseOdds(g.odds);
+  const opening = parseOdds(g.openingOdds);
+  const diff = current - opening;
+  // Lower odds = more favored. If odds dropped, they're getting more action (good)
+  if (diff < 0) {
+    return `${g.odds} <span class="odds-move odds-up" title="Opened ${g.openingOdds}">&#9650;</span>`;
+  } else {
+    return `${g.odds} <span class="odds-move odds-down" title="Opened ${g.openingOdds}">&#9660;</span>`;
+  }
 }
 
 function formatForm(form) {
@@ -289,6 +392,9 @@ function renderAllStats() {
   renderRiskByPerson();
   renderAugustaFit();
   renderCoverageGaps();
+  renderValuePicks();
+  renderSimilarityScore();
+  renderMomentumTracker();
   renderPopularity();
 }
 
@@ -540,6 +646,175 @@ function renderPopularity() {
       </div>
     `;
   }).join('');
+}
+
+// --- Value Picks ---
+function renderValuePicks() {
+  const container = document.getElementById('valuePicks');
+
+  // Score every golfer: lower odds number = more expected to win
+  // "Value" = strong form or ranking but odds are longer than expected
+  const golferMap = {};
+  golfers.forEach(g => { golferMap[g.name] = g; });
+
+  const scored = golfers
+    .filter(g => g.ranking && g.form && g.form.events > 0)
+    .map(g => {
+      const odds = parseOdds(g.odds);
+      // Expected odds tier based on ranking (rough heuristic)
+      const expectedOdds = g.ranking <= 5 ? 1500 : g.ranking <= 15 ? 4000 : g.ranking <= 30 ? 7000 : g.ranking <= 50 ? 12000 : 20000;
+
+      // Form score: wins worth 5, top10s worth 2, cut rate, low avg
+      const formScore = (g.form.wins * 5) + (g.form.top10s * 2) + (g.form.cuts / g.form.events);
+
+      // Value = how much longer the odds are vs what you'd expect + form bonus
+      const valueDelta = odds - expectedOdds;
+      const valueScore = valueDelta + (formScore * 500);
+
+      return { ...g, valueScore, valueDelta, formScore, expectedOdds };
+    })
+    .filter(g => g.valueScore > 500) // only show meaningful value
+    .sort((a, b) => b.valueScore - a.valueScore)
+    .slice(0, 10);
+
+  if (scored.length === 0) {
+    container.innerHTML = '<div class="no-stats">Not enough form data to identify value picks — try refreshing stats</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="value-picks-list">
+      ${scored.map(g => {
+        const formBadges = [];
+        if (g.form.wins > 0) formBadges.push(`<span class="form-badge hot">${g.form.wins}W</span>`);
+        if (g.form.top10s > 0) formBadges.push(`<span class="form-badge warm">${g.form.top10s}xT10</span>`);
+        const arrow = g.valueDelta > 0 ? 'undervalued' : 'fair price';
+        return `
+          <div class="value-card">
+            <div class="value-card-header">
+              <span class="value-name">${escapeHtml(g.name)}</span>
+              <span class="value-tag">${arrow}</span>
+            </div>
+            <div class="value-details">
+              <span>Rank #${g.ranking}</span>
+              <span class="value-odds">${g.odds}</span>
+              <span class="value-form">${formBadges.join(' ')} ${g.form.avg ? g.form.avg.toFixed(1) + ' avg' : ''}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+// --- Fivesome Similarity / Uniqueness ---
+function renderSimilarityScore() {
+  const container = document.getElementById('similarityScore');
+  if (submissions.length < 2) {
+    container.innerHTML = '<div class="no-stats">Need at least 2 submissions to measure uniqueness</div>';
+    return;
+  }
+
+  // Jaccard similarity: |intersection| / |union| for each pair
+  // Uniqueness = 1 - average similarity to all other entries
+  const results = submissions.map((s, i) => {
+    const mySet = new Set(s.golfers);
+    let totalSim = 0;
+    let comparisons = 0;
+
+    submissions.forEach((other, j) => {
+      if (i === j) return;
+      const otherSet = new Set(other.golfers);
+      const intersection = [...mySet].filter(g => otherSet.has(g)).length;
+      const union = new Set([...mySet, ...otherSet]).size;
+      totalSim += intersection / union;
+      comparisons++;
+    });
+
+    const avgSimilarity = totalSim / comparisons;
+    const uniqueness = Math.round((1 - avgSimilarity) * 100);
+    return { userName: s.userName, uniqueness, id: s.id };
+  });
+
+  results.sort((a, b) => b.uniqueness - a.uniqueness);
+  const maxUniq = results[0].uniqueness;
+
+  container.innerHTML = results.map(r => {
+    const pct = maxUniq > 0 ? (r.uniqueness / maxUniq) * 100 : 0;
+    const color = r.uniqueness >= 80 ? '#006747' : r.uniqueness >= 60 ? '#d4a017' : '#c0392b';
+    return `
+      <div class="pop-row">
+        <div class="pop-name">${escapeHtml(r.userName)}</div>
+        <div class="pop-bar-bg">
+          <div class="pop-bar" style="width:${pct}%;background:${color}"></div>
+        </div>
+        <div class="pop-count" style="width:40px;color:${color}">${r.uniqueness}%</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// --- Momentum Tracker ---
+function renderMomentumTracker() {
+  const container = document.getElementById('momentumTracker');
+
+  // Only show golfers that have been picked and have recentFinishes data
+  const pickedSet = new Set();
+  submissions.forEach(s => s.golfers.forEach(g => pickedSet.add(g)));
+
+  const golferMap = {};
+  golfers.forEach(g => { golferMap[g.name] = g; });
+
+  const momentumData = [];
+  pickedSet.forEach(name => {
+    const g = golferMap[name];
+    if (!g || !g.recentFinishes || g.recentFinishes.length < 2) return;
+
+    const finishes = g.recentFinishes;
+    // Momentum = are positions getting lower (better)?
+    // Compare each finish to the one before it
+    let score = 0;
+    for (let i = 1; i < finishes.length; i++) {
+      score += finishes[i - 1] - finishes[i]; // positive = improving
+    }
+    // Normalize to -100..+100 range roughly
+    const normalized = Math.max(-100, Math.min(100, score * 3));
+
+    momentumData.push({
+      name,
+      finishes,
+      score: normalized,
+      raw: score,
+      trend: normalized > 10 ? 'hot' : normalized < -10 ? 'cold' : 'steady'
+    });
+  });
+
+  if (momentumData.length === 0) {
+    container.innerHTML = '<div class="no-stats">No momentum data available — try refreshing stats first</div>';
+    return;
+  }
+
+  momentumData.sort((a, b) => b.score - a.score);
+
+  container.innerHTML = `
+    <div class="momentum-list">
+      ${momentumData.map(m => {
+        const trendIcon = m.trend === 'hot' ? '&#9650;' : m.trend === 'cold' ? '&#9660;' : '&#9644;';
+        const trendColor = m.trend === 'hot' ? '#006747' : m.trend === 'cold' ? '#c0392b' : '#d4a017';
+        const finishStr = m.finishes.map((f, i) => {
+          const label = i === m.finishes.length - 1 ? 'Latest' : i === m.finishes.length - 2 ? 'Prev' : 'Prior';
+          return `<span class="momentum-finish" title="${label}">${f > 100 ? 'MC' : f}</span>`;
+        }).join(' &#8594; ');
+        return `
+          <div class="momentum-row">
+            <span class="momentum-name">${escapeHtml(m.name)}</span>
+            <span class="momentum-finishes">${finishStr}</span>
+            <span class="momentum-trend" style="color:${trendColor}">${trendIcon} ${m.trend.toUpperCase()}</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
 }
 
 // --- Duplicate Detection ---
