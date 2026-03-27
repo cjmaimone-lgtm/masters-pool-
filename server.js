@@ -82,6 +82,7 @@ app.get('/api/submissions', async (req, res) => {
   const submissions = data.map(row => ({
     id: row.id,
     userName: row.user_name,
+    entryName: row.entry_name || '',
     golfers: row.golfers,
     submittedAt: row.submitted_at
   }));
@@ -90,7 +91,7 @@ app.get('/api/submissions', async (req, res) => {
 
 // POST a new fivesome submission
 app.post('/api/submissions', async (req, res) => {
-  const { userName, golfers } = req.body;
+  const { userName, entryName, golfers } = req.body;
 
   if (!userName || !userName.trim()) {
     return res.status(400).json({ error: 'Name is required' });
@@ -112,9 +113,15 @@ app.post('/api/submissions', async (req, res) => {
 
   const newId = Date.now().toString();
 
+  if (!entryName || !entryName.trim()) {
+    return res.status(400).json({ error: 'Entry name is required' });
+  }
+
+  const row = { id: newId, user_name: userName.trim(), entry_name: entryName.trim(), golfers };
+
   const { data, error } = await supabase
     .from('submissions')
-    .insert({ id: newId, user_name: userName.trim(), golfers })
+    .insert(row)
     .select()
     .single();
 
@@ -123,6 +130,7 @@ app.post('/api/submissions', async (req, res) => {
   res.status(201).json({
     id: data.id,
     userName: data.user_name,
+    entryName: data.entry_name || '',
     golfers: data.golfers,
     submittedAt: data.submitted_at
   });
