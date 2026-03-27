@@ -1,90 +1,1189 @@
 [
-  { "name": "Scottie Scheffler", "ranking": 1, "odds": "+400", "form": { "events": 6, "wins": 1, "top10s": 3, "cuts": 6, "avg": 68.3 }, "augusta": { "2022": "1", "2023": "T10", "2024": "1", "2025": "4" } },
-  { "name": "Rory McIlroy", "ranking": 2, "odds": "+700", "form": { "events": 6, "wins": 0, "top10s": 1, "cuts": 6, "avg": 69.0 }, "augusta": { "2022": "2", "2023": "MC", "2024": "T22", "2025": "1" } },
-  { "name": "Cameron Young", "ranking": 3, "odds": "+2700", "form": { "events": 6, "wins": 1, "top10s": 3, "cuts": 6, "avg": 69.2 }, "augusta": { "2022": "MC", "2023": "T7", "2024": "T9", "2025": "MC" } },
-  { "name": "Tommy Fleetwood", "ranking": 4, "odds": "+1800", "form": { "events": 4, "wins": 0, "top10s": 3, "cuts": 4, "avg": 69.6 }, "augusta": { "2022": "T14", "2023": "33", "2024": "T3", "2025": "T21" } },
-  { "name": "Xander Schauffele", "ranking": 5, "odds": "+1800", "form": { "events": 6, "wins": 0, "top10s": 3, "cuts": 6, "avg": 69.4 }, "augusta": { "2022": "MC", "2023": "T10", "2024": "8", "2025": "T8" } },
-  { "name": "Matt Fitzpatrick", "ranking": 6, "odds": "+3000", "form": { "events": 7, "wins": 1, "top10s": 3, "cuts": 7, "avg": 69.0 }, "augusta": { "2022": "T14", "2023": "T10", "2024": "T22", "2025": "T40" } },
-  { "name": "Justin Rose", "ranking": 7, "odds": "+3000", "form": { "events": 6, "wins": 1, "top10s": 1, "cuts": 3, "avg": 69.8 }, "augusta": { "2022": "MC", "2023": "T16", "2024": "MC", "2025": "2" } },
-  { "name": "Collin Morikawa", "ranking": 8, "odds": "+2200", "form": { "events": 6, "wins": 1, "top10s": 3, "cuts": 4, "avg": 68.7 }, "augusta": { "2022": "5", "2023": "T10", "2024": "T3", "2025": "T14" } },
-  { "name": "Russell Henley", "ranking": 9, "odds": "+6600", "form": { "events": 6, "wins": 0, "top10s": 1, "cuts": 6, "avg": 69.5 }, "augusta": { "2022": "T30", "2023": "T4", "2024": "T38", "2025": "MC" } },
-  { "name": "Chris Gotterup", "ranking": 10, "odds": "+3500", "form": { "events": 7, "wins": 2, "top10s": 2, "cuts": 6, "avg": 69.5 }, "augusta": {} },
-  { "name": "Robert MacIntyre", "ranking": 11, "odds": "+4000", "form": { "events": 5, "wins": 0, "top10s": 2, "cuts": 5, "avg": 69.4 }, "augusta": { "2022": "T23", "2025": "MC" } },
-  { "name": "Sepp Straka", "ranking": 12, "odds": "+7000", "form": { "events": 5, "wins": 0, "top10s": 2, "cuts": 5, "avg": 69.9 }, "augusta": { "2022": "T30", "2023": "T46", "2024": "T16", "2025": "MC" } },
-  { "name": "J.J. Spaun", "ranking": 13, "odds": "+9000", "form": null, "augusta": { "2022": "T23", "2025": "50" } },
-  { "name": "Hideki Matsuyama", "ranking": 14, "odds": "+3500", "form": { "events": 7, "wins": 0, "top10s": 2, "cuts": 7, "avg": 69.2 }, "augusta": { "2022": "T14", "2023": "T16", "2024": "T38", "2025": "T21" } },
-  { "name": "Justin Thomas", "ranking": 15, "odds": "+4000", "form": null, "augusta": { "2022": "T8", "2023": "MC", "2024": "MC", "2025": "T36" } },
-  { "name": "Ben Griffin", "ranking": 16, "odds": "+5500", "form": null, "augusta": {} },
-  { "name": "Jacob Bridgeman", "ranking": 17, "odds": "+9000", "form": { "events": 8, "wins": 1, "top10s": 4, "cuts": 8, "avg": 68.4 }, "augusta": {} },
-  { "name": "Ludvig Aberg", "ranking": 18, "odds": "+1600", "form": { "events": 4, "wins": 0, "top10s": 2, "cuts": 4, "avg": 69.6 }, "augusta": { "2024": "2", "2025": "7" } },
-  { "name": "Alexander Noren", "ranking": 19, "odds": "+10000", "form": null, "augusta": { "2023": "MC" } },
-  { "name": "Harris English", "ranking": 20, "odds": "+9000", "form": { "events": 7, "wins": 0, "top10s": 0, "cuts": 6, "avg": null }, "augusta": { "2023": "T43", "2024": "T22", "2025": "T12" } },
-  { "name": "Viktor Hovland", "ranking": 21, "odds": "+3500", "form": { "events": 9, "wins": 0, "top10s": 1, "cuts": 9, "avg": 70.4 }, "augusta": { "2022": "T27", "2023": "T7", "2024": "MC", "2025": "T21" } },
-  { "name": "Akshay Bhatia", "ranking": 22, "odds": "+6000", "form": { "events": 7, "wins": 1, "top10s": 3, "cuts": 5, "avg": 69.1 }, "augusta": { "2024": "T35", "2025": "T42" } },
-  { "name": "Patrick Reed", "ranking": 23, "odds": "+3000", "form": null, "augusta": { "2022": "T35", "2023": "T4", "2024": "T12", "2025": "3" } },
-  { "name": "Bryson DeChambeau", "ranking": 24, "odds": "+1000", "form": null, "augusta": { "2022": "MC", "2023": "MC", "2024": "T6", "2025": "T5" } },
-  { "name": "Keegan Bradley", "ranking": 25, "odds": "+12000", "form": { "events": 7, "wins": 0, "top10s": 0, "cuts": 4, "avg": null }, "augusta": { "2023": "T23", "2024": "T22", "2025": "MC" } },
-  { "name": "Maverick McNealy", "ranking": 26, "odds": "+11000", "form": { "events": 5, "wins": 0, "top10s": 1, "cuts": 5, "avg": 69.5 }, "augusta": { "2025": "T32" } },
-  { "name": "Ryan Gerard", "ranking": 27, "odds": "+11000", "form": { "events": 8, "wins": 0, "top10s": 2, "cuts": 8, "avg": 69.1 }, "augusta": {} },
-  { "name": "Jon Rahm", "ranking": 28, "odds": "+1200", "form": null, "augusta": { "2022": "T27", "2023": "1", "2024": "T45", "2025": "T14" } },
-  { "name": "Si Woo Kim", "ranking": 29, "odds": "+6000", "form": { "events": 8, "wins": 0, "top10s": 3, "cuts": 8, "avg": 68.9 }, "augusta": { "2022": "T39", "2023": "T29", "2024": "T30" } },
-  { "name": "Tyrrell Hatton", "ranking": 30, "odds": "+4000", "form": null, "augusta": { "2022": "52", "2023": "T34", "2024": "T9", "2025": "T14" } },
-  { "name": "Min Woo Lee", "ranking": 31, "odds": "+6600", "form": { "events": 6, "wins": 0, "top10s": 2, "cuts": 6, "avg": 68.9 }, "augusta": { "2022": "T14", "2023": "MC", "2024": "T22", "2025": "49" } },
-  { "name": "Shane Lowry", "ranking": 32, "odds": "+4500", "form": { "events": 9, "wins": 0, "top10s": 1, "cuts": 9, "avg": 69.7 }, "augusta": { "2022": "T3", "2023": "T16", "2024": "T43", "2025": "T42" } },
-  { "name": "Sam Burns", "ranking": 33, "odds": "+7000", "form": { "events": 6, "wins": 0, "top10s": 1, "cuts": 6, "avg": 69.8 }, "augusta": { "2022": "MC", "2023": "T29", "2024": "MC", "2025": "T46" } },
-  { "name": "Patrick Cantlay", "ranking": 34, "odds": "+5000", "form": { "events": 9, "wins": 0, "top10s": 2, "cuts": 9, "avg": 70.6 }, "augusta": { "2022": "T39", "2023": "T14", "2024": "T22", "2025": "T36" } },
-  { "name": "Kurt Kitayama", "ranking": 35, "odds": "+15000", "form": { "events": 7, "wins": 0, "top10s": 2, "cuts": 7, "avg": 69.5 }, "augusta": { "2023": "MC", "2024": "T35" } },
-  { "name": "Marco Penge", "ranking": 36, "odds": "+8000", "form": null, "augusta": {} },
-  { "name": "Nicolas Echavarria", "ranking": 38, "odds": "+15000", "form": { "events": 8, "wins": 1, "top10s": 2, "cuts": 4, "avg": 70.7 }, "augusta": { "2025": "51" } },
-  { "name": "Aaron Rai", "ranking": 39, "odds": "+13000", "form": null, "augusta": { "2025": "T27" } },
-  { "name": "Corey Conners", "ranking": 40, "odds": "+6000", "form": { "events": 8, "wins": 0, "top10s": 1, "cuts": 8, "avg": 69.8 }, "augusta": { "2022": "T6", "2023": "MC", "2024": "T38", "2025": "T8" } },
-  { "name": "Jason Day", "ranking": 41, "odds": "+6600", "form": { "events": 6, "wins": 0, "top10s": 1, "cuts": 4, "avg": null }, "augusta": { "2022": "T39", "2023": "T39", "2024": "T30", "2025": "T8" } },
-  { "name": "Michael Brennan", "ranking": 43, "odds": "+40000", "form": null, "augusta": {} },
-  { "name": "Ryan Fox", "ranking": 45, "odds": "+12000", "form": { "events": 7, "wins": 0, "top10s": 1, "cuts": 7, "avg": 71.0 }, "augusta": { "2023": "T26", "2024": "T38" } },
-  { "name": "Brian Harman", "ranking": 46, "odds": "+15000", "form": { "events": 8, "wins": 0, "top10s": 2, "cuts": 8, "avg": 69.8 }, "augusta": { "2022": "MC", "2023": "MC", "2024": "MC", "2025": "T36" } },
-  { "name": "Kristoffer Reitan", "ranking": 48, "odds": "+30000", "form": null, "augusta": {} },
-  { "name": "Andrew Novak", "ranking": 49, "odds": "+20000", "form": null, "augusta": {} },
-  { "name": "Sam Stevens", "ranking": 50, "odds": "+15000", "form": { "events": 7, "wins": 0, "top10s": 1, "cuts": 7, "avg": 71.6 }, "augusta": {} },
-  { "name": "Adam Scott", "ranking": 52, "odds": "+6600", "form": { "events": 7, "wins": 0, "top10s": 1, "cuts": 7, "avg": 69.4 }, "augusta": { "2022": "T48", "2023": "T39", "2024": "T22", "2025": "MC" } },
-  { "name": "Rasmus Hojgaard", "ranking": 53, "odds": "+15000", "form": null, "augusta": { "2025": "T32" } },
-  { "name": "Michael Kim", "ranking": 54, "odds": "+20000", "form": null, "augusta": { "2025": "T27" } },
-  { "name": "Sami Valimaki", "ranking": 55, "odds": "+30000", "form": null, "augusta": {} },
-  { "name": "Max Greyserman", "ranking": 58, "odds": "+25000", "form": null, "augusta": { "2025": "T32" } },
-  { "name": "Jordan Spieth", "ranking": 59, "odds": "+4000", "form": { "events": 9, "wins": 0, "top10s": 1, "cuts": 9, "avg": 69.7 }, "augusta": { "2022": "MC", "2023": "T4", "2024": "MC", "2025": "T14" } },
-  { "name": "Harry Hall", "ranking": 62, "odds": "+13000", "form": { "events": 7, "wins": 0, "top10s": 2, "cuts": 7, "avg": 70.0 }, "augusta": {} },
-  { "name": "Nick Taylor", "ranking": 64, "odds": "+25000", "form": null, "augusta": { "2024": "MC", "2025": "T40" } },
-  { "name": "Rasmus Neergaard-Petersen", "ranking": 66, "odds": "+13000", "form": null, "augusta": {} },
-  { "name": "Sungjae Im", "ranking": 67, "odds": "+8000", "form": null, "augusta": { "2022": "T8", "2023": "T16", "2024": "MC", "2025": "T5" } },
-  { "name": "Casey Jarvis", "ranking": 69, "odds": "+15000", "form": null, "augusta": {} },
-  { "name": "Wyndham Clark", "ranking": 72, "odds": "+8000", "form": null, "augusta": { "2024": "MC", "2025": "T46" } },
-  { "name": "Johnny Keefer", "ranking": 74, "odds": "+13000", "form": null, "augusta": {} },
-  { "name": "Aldrich Potgieter", "ranking": 77, "odds": "+20000", "form": { "events": 7, "wins": 0, "top10s": 0, "cuts": 7, "avg": 69.7 }, "augusta": { "2023": "MC" } },
-  { "name": "Hao-Tong Li", "ranking": 78, "odds": "+25000", "form": null, "augusta": {} },
-  { "name": "Tom McKibbin", "ranking": 97, "odds": "+14000", "form": null, "augusta": {} },
-  { "name": "Brian Campbell", "ranking": 102, "odds": "+40000", "form": null, "augusta": { "2025": "T32" } },
-  { "name": "Davis Riley", "ranking": 114, "odds": "+30000", "form": null, "augusta": { "2025": "T21" } },
-  { "name": "Max Homa", "ranking": 148, "odds": "+6600", "form": null, "augusta": { "2022": "T48", "2023": "T43", "2024": "T3", "2025": "T12" } },
-  { "name": "Carlos Ortiz", "ranking": 153, "odds": "+15000", "form": null, "augusta": {} },
-  { "name": "Brooks Koepka", "ranking": 162, "odds": "+3800", "form": null, "augusta": { "2022": "MC", "2023": "T2", "2024": "T45", "2025": "MC" } },
-  { "name": "Jackson Herrington", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Naoyuki Kataoka", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Zach Johnson", "ranking": null, "odds": "+40000", "form": null, "augusta": { "2022": "MC", "2023": "T34", "2025": "T8" } },
-  { "name": "Tiger Woods", "ranking": null, "odds": "+15000", "form": null, "augusta": { "2022": "47", "2023": "WD", "2024": "60" } },
-  { "name": "Danny Willett", "ranking": null, "odds": "+50000", "form": null, "augusta": { "2022": "T12", "2023": "MC", "2024": "T45", "2025": "T42" } },
-  { "name": "Mike Weir", "ranking": null, "odds": "+100000", "form": null, "augusta": { "2022": "MC", "2023": "MC", "2024": "MC", "2025": "MC" } },
-  { "name": "Bubba Watson", "ranking": null, "odds": "+25000", "form": null, "augusta": { "2022": "T39", "2023": "MC", "2025": "T14" } },
-  { "name": "Brandon Holtz", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Fifa Laopakdee", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Angel Cabrera", "ranking": null, "odds": "+50000", "form": null, "augusta": { "2025": "MC" } },
-  { "name": "Phil Mickelson", "ranking": null, "odds": "+20000", "form": null, "augusta": { "2022": "MC", "2023": "T2", "2024": "T43", "2025": "MC" } },
-  { "name": "Mateo Pulcini", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Jose Maria Olazabal", "ranking": null, "odds": "+200000", "form": null, "augusta": { "2022": "MC", "2023": "MC", "2024": "T45", "2025": "MC" } },
-  { "name": "Cameron Smith", "ranking": null, "odds": "+6600", "form": null, "augusta": { "2022": "T3", "2023": "T34", "2024": "T6", "2025": "MC" } },
-  { "name": "Vijay Singh", "ranking": null, "odds": "+100000", "form": null, "augusta": { "2022": "MC", "2024": "T58" } },
-  { "name": "Dustin Johnson", "ranking": null, "odds": "+9000", "form": null, "augusta": { "2022": "T12", "2023": "T48", "2024": "MC", "2025": "MC" } },
-  { "name": "Charl Schwartzel", "ranking": null, "odds": "+35000", "form": null, "augusta": { "2022": "T10", "2023": "T50", "2025": "T36" } },
-  { "name": "Mason Howell", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Ethan Fang", "ranking": null, "odds": "+100000", "form": null, "augusta": {} },
-  { "name": "Sergio Garcia", "ranking": null, "odds": "+10000", "form": null, "augusta": { "2022": "T23", "2023": "MC", "2024": "MC", "2025": "MC" } },
-  { "name": "Fred Couples", "ranking": null, "odds": "+100000", "form": null, "augusta": { "2022": "MC", "2023": "T50", "2025": "MC" } }
+  {
+    "name": "Scottie Scheffler",
+    "ranking": 1,
+    "odds": "+400",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 6,
+      "avg": 68.3
+    },
+    "augusta": {
+      "2022": "1",
+      "2023": "T10",
+      "2024": "1",
+      "2025": "4"
+    },
+    "birthYear": 1996
+  },
+  {
+    "name": "Rory McIlroy",
+    "ranking": 2,
+    "odds": "+700",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 6,
+      "avg": 69
+    },
+    "augusta": {
+      "2022": "2",
+      "2023": "MC",
+      "2024": "T22",
+      "2025": "1"
+    },
+    "birthYear": 1989
+  },
+  {
+    "name": "Cameron Young",
+    "ranking": 3,
+    "odds": "+2700",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 6,
+      "avg": 69.2
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "T7",
+      "2024": "T9",
+      "2025": "MC"
+    },
+    "birthYear": 1997
+  },
+  {
+    "name": "Tommy Fleetwood",
+    "ranking": 4,
+    "odds": "+1800",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 4,
+      "avg": 69.6
+    },
+    "augusta": {
+      "2022": "T14",
+      "2023": "33",
+      "2024": "T3",
+      "2025": "T21"
+    },
+    "birthYear": 1991
+  },
+  {
+    "name": "Xander Schauffele",
+    "ranking": 5,
+    "odds": "+1800",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 6,
+      "avg": 69.4
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "T10",
+      "2024": "8",
+      "2025": "T8"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Matt Fitzpatrick",
+    "ranking": 6,
+    "odds": "+3000",
+    "form": {
+      "events": 7,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 7,
+      "avg": 69
+    },
+    "augusta": {
+      "2022": "T14",
+      "2023": "T10",
+      "2024": "T22",
+      "2025": "T40"
+    },
+    "birthYear": 1994
+  },
+  {
+    "name": "Justin Rose",
+    "ranking": 7,
+    "odds": "+3000",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 69.8
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "T16",
+      "2024": "MC",
+      "2025": "2"
+    },
+    "birthYear": 1980
+  },
+  {
+    "name": "Collin Morikawa",
+    "ranking": 8,
+    "odds": "+2200",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 4,
+      "avg": 68.7
+    },
+    "augusta": {
+      "2022": "5",
+      "2023": "T10",
+      "2024": "T3",
+      "2025": "T14"
+    },
+    "birthYear": 1997
+  },
+  {
+    "name": "Russell Henley",
+    "ranking": 9,
+    "odds": "+6600",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 6,
+      "avg": 69.5
+    },
+    "augusta": {
+      "2022": "T30",
+      "2023": "T4",
+      "2024": "T38",
+      "2025": "MC"
+    },
+    "birthYear": 1989
+  },
+  {
+    "name": "Chris Gotterup",
+    "ranking": 10,
+    "odds": "+3500",
+    "form": {
+      "events": 7,
+      "wins": 2,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 69.5
+    },
+    "augusta": {},
+    "birthYear": 1999
+  },
+  {
+    "name": "Robert MacIntyre",
+    "ranking": 11,
+    "odds": "+4000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.4
+    },
+    "augusta": {
+      "2022": "T23",
+      "2025": "MC"
+    },
+    "birthYear": 1996
+  },
+  {
+    "name": "Sepp Straka",
+    "ranking": 12,
+    "odds": "+7000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.9
+    },
+    "augusta": {
+      "2022": "T30",
+      "2023": "T46",
+      "2024": "T16",
+      "2025": "MC"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "J.J. Spaun",
+    "ranking": 13,
+    "odds": "+9000",
+    "form": null,
+    "augusta": {
+      "2022": "T23",
+      "2025": "50"
+    },
+    "birthYear": 1990
+  },
+  {
+    "name": "Hideki Matsuyama",
+    "ranking": 14,
+    "odds": "+3500",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 7,
+      "avg": 69.2
+    },
+    "augusta": {
+      "2022": "T14",
+      "2023": "T16",
+      "2024": "T38",
+      "2025": "T21"
+    },
+    "birthYear": 1992
+  },
+  {
+    "name": "Justin Thomas",
+    "ranking": 15,
+    "odds": "+4000",
+    "form": null,
+    "augusta": {
+      "2022": "T8",
+      "2023": "MC",
+      "2024": "MC",
+      "2025": "T36"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Ben Griffin",
+    "ranking": 16,
+    "odds": "+5500",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1995
+  },
+  {
+    "name": "Jacob Bridgeman",
+    "ranking": 17,
+    "odds": "+9000",
+    "form": {
+      "events": 8,
+      "wins": 1,
+      "top10s": 4,
+      "cuts": 8,
+      "avg": 68.4
+    },
+    "augusta": {},
+    "birthYear": 2000
+  },
+  {
+    "name": "Ludvig Aberg",
+    "ranking": 18,
+    "odds": "+1600",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 69.6
+    },
+    "augusta": {
+      "2024": "2",
+      "2025": "7"
+    },
+    "birthYear": 1999
+  },
+  {
+    "name": "Alexander Noren",
+    "ranking": 19,
+    "odds": "+10000",
+    "form": null,
+    "augusta": {
+      "2023": "MC"
+    },
+    "birthYear": 1982
+  },
+  {
+    "name": "Harris English",
+    "ranking": 20,
+    "odds": "+9000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": null
+    },
+    "augusta": {
+      "2023": "T43",
+      "2024": "T22",
+      "2025": "T12"
+    },
+    "birthYear": 1989
+  },
+  {
+    "name": "Viktor Hovland",
+    "ranking": 21,
+    "odds": "+3500",
+    "form": {
+      "events": 9,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 9,
+      "avg": 70.4
+    },
+    "augusta": {
+      "2022": "T27",
+      "2023": "T7",
+      "2024": "MC",
+      "2025": "T21"
+    },
+    "birthYear": 1997
+  },
+  {
+    "name": "Akshay Bhatia",
+    "ranking": 22,
+    "odds": "+6000",
+    "form": {
+      "events": 7,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 5,
+      "avg": 69.1
+    },
+    "augusta": {
+      "2024": "T35",
+      "2025": "T42"
+    },
+    "birthYear": 2002
+  },
+  {
+    "name": "Patrick Reed",
+    "ranking": 23,
+    "odds": "+3000",
+    "form": null,
+    "augusta": {
+      "2022": "T35",
+      "2023": "T4",
+      "2024": "T12",
+      "2025": "3"
+    },
+    "birthYear": 1990
+  },
+  {
+    "name": "Bryson DeChambeau",
+    "ranking": 24,
+    "odds": "+1000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "MC",
+      "2024": "T6",
+      "2025": "T5"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Keegan Bradley",
+    "ranking": 25,
+    "odds": "+12000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": null
+    },
+    "augusta": {
+      "2023": "T23",
+      "2024": "T22",
+      "2025": "MC"
+    },
+    "birthYear": 1986
+  },
+  {
+    "name": "Maverick McNealy",
+    "ranking": 26,
+    "odds": "+11000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 5,
+      "avg": 69.5
+    },
+    "augusta": {
+      "2025": "T32"
+    },
+    "birthYear": 1995
+  },
+  {
+    "name": "Ryan Gerard",
+    "ranking": 27,
+    "odds": "+11000",
+    "form": {
+      "events": 8,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 8,
+      "avg": 69.1
+    },
+    "augusta": {},
+    "birthYear": 2000
+  },
+  {
+    "name": "Jon Rahm",
+    "ranking": 28,
+    "odds": "+1200",
+    "form": null,
+    "augusta": {
+      "2022": "T27",
+      "2023": "1",
+      "2024": "T45",
+      "2025": "T14"
+    },
+    "birthYear": 1994
+  },
+  {
+    "name": "Si Woo Kim",
+    "ranking": 29,
+    "odds": "+6000",
+    "form": {
+      "events": 8,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 8,
+      "avg": 68.9
+    },
+    "augusta": {
+      "2022": "T39",
+      "2023": "T29",
+      "2024": "T30"
+    },
+    "birthYear": 1995
+  },
+  {
+    "name": "Tyrrell Hatton",
+    "ranking": 30,
+    "odds": "+4000",
+    "form": null,
+    "augusta": {
+      "2022": "52",
+      "2023": "T34",
+      "2024": "T9",
+      "2025": "T14"
+    },
+    "birthYear": 1991
+  },
+  {
+    "name": "Min Woo Lee",
+    "ranking": 31,
+    "odds": "+6600",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 68.9
+    },
+    "augusta": {
+      "2022": "T14",
+      "2023": "MC",
+      "2024": "T22",
+      "2025": "49"
+    },
+    "birthYear": 1998
+  },
+  {
+    "name": "Shane Lowry",
+    "ranking": 32,
+    "odds": "+4500",
+    "form": {
+      "events": 9,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 9,
+      "avg": 69.7
+    },
+    "augusta": {
+      "2022": "T3",
+      "2023": "T16",
+      "2024": "T43",
+      "2025": "T42"
+    },
+    "birthYear": 1987
+  },
+  {
+    "name": "Sam Burns",
+    "ranking": 33,
+    "odds": "+7000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 6,
+      "avg": 69.8
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "T29",
+      "2024": "MC",
+      "2025": "T46"
+    },
+    "birthYear": 1996
+  },
+  {
+    "name": "Patrick Cantlay",
+    "ranking": 34,
+    "odds": "+5000",
+    "form": {
+      "events": 9,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 9,
+      "avg": 70.6
+    },
+    "augusta": {
+      "2022": "T39",
+      "2023": "T14",
+      "2024": "T22",
+      "2025": "T36"
+    },
+    "birthYear": 1992
+  },
+  {
+    "name": "Kurt Kitayama",
+    "ranking": 35,
+    "odds": "+15000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 7,
+      "avg": 69.5
+    },
+    "augusta": {
+      "2023": "MC",
+      "2024": "T35"
+    },
+    "birthYear": 1992
+  },
+  {
+    "name": "Marco Penge",
+    "ranking": 36,
+    "odds": "+8000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1997
+  },
+  {
+    "name": "Nicolas Echavarria",
+    "ranking": 38,
+    "odds": "+15000",
+    "form": {
+      "events": 8,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 70.7
+    },
+    "augusta": {
+      "2025": "51"
+    },
+    "birthYear": 1994
+  },
+  {
+    "name": "Aaron Rai",
+    "ranking": 39,
+    "odds": "+13000",
+    "form": null,
+    "augusta": {
+      "2025": "T27"
+    },
+    "birthYear": 1994
+  },
+  {
+    "name": "Corey Conners",
+    "ranking": 40,
+    "odds": "+6000",
+    "form": {
+      "events": 8,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 8,
+      "avg": 69.8
+    },
+    "augusta": {
+      "2022": "T6",
+      "2023": "MC",
+      "2024": "T38",
+      "2025": "T8"
+    },
+    "birthYear": 1992
+  },
+  {
+    "name": "Jason Day",
+    "ranking": 41,
+    "odds": "+6600",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": null
+    },
+    "augusta": {
+      "2022": "T39",
+      "2023": "T39",
+      "2024": "T30",
+      "2025": "T8"
+    },
+    "birthYear": 1987
+  },
+  {
+    "name": "Michael Brennan",
+    "ranking": 43,
+    "odds": "+40000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2002
+  },
+  {
+    "name": "Ryan Fox",
+    "ranking": 45,
+    "odds": "+12000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 7,
+      "avg": 71
+    },
+    "augusta": {
+      "2023": "T26",
+      "2024": "T38"
+    },
+    "birthYear": 1986
+  },
+  {
+    "name": "Brian Harman",
+    "ranking": 46,
+    "odds": "+15000",
+    "form": {
+      "events": 8,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 8,
+      "avg": 69.8
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "MC",
+      "2024": "MC",
+      "2025": "T36"
+    },
+    "birthYear": 1987
+  },
+  {
+    "name": "Kristoffer Reitan",
+    "ranking": 48,
+    "odds": "+30000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1999
+  },
+  {
+    "name": "Andrew Novak",
+    "ranking": 49,
+    "odds": "+20000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1996
+  },
+  {
+    "name": "Sam Stevens",
+    "ranking": 50,
+    "odds": "+15000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 7,
+      "avg": 71.6
+    },
+    "augusta": {},
+    "birthYear": 2000
+  },
+  {
+    "name": "Adam Scott",
+    "ranking": 52,
+    "odds": "+6600",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 7,
+      "avg": 69.4
+    },
+    "augusta": {
+      "2022": "T48",
+      "2023": "T39",
+      "2024": "T22",
+      "2025": "MC"
+    },
+    "birthYear": 1980
+  },
+  {
+    "name": "Rasmus Hojgaard",
+    "ranking": 53,
+    "odds": "+15000",
+    "form": null,
+    "augusta": {
+      "2025": "T32"
+    },
+    "birthYear": 2000
+  },
+  {
+    "name": "Michael Kim",
+    "ranking": 54,
+    "odds": "+20000",
+    "form": null,
+    "augusta": {
+      "2025": "T27"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Sami Valimaki",
+    "ranking": 55,
+    "odds": "+30000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1998
+  },
+  {
+    "name": "Max Greyserman",
+    "ranking": 58,
+    "odds": "+25000",
+    "form": null,
+    "augusta": {
+      "2025": "T32"
+    },
+    "birthYear": 1995
+  },
+  {
+    "name": "Jordan Spieth",
+    "ranking": 59,
+    "odds": "+4000",
+    "form": {
+      "events": 9,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 9,
+      "avg": 69.7
+    },
+    "augusta": {
+      "2022": "MC",
+      "2023": "T4",
+      "2024": "MC",
+      "2025": "T14"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Harry Hall",
+    "ranking": 62,
+    "odds": "+13000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 7,
+      "avg": 70
+    },
+    "augusta": {},
+    "birthYear": 1997
+  },
+  {
+    "name": "Nick Taylor",
+    "ranking": 64,
+    "odds": "+25000",
+    "form": null,
+    "augusta": {
+      "2024": "MC",
+      "2025": "T40"
+    },
+    "birthYear": 1988
+  },
+  {
+    "name": "Rasmus Neergaard-Petersen",
+    "ranking": 66,
+    "odds": "+13000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2001
+  },
+  {
+    "name": "Sungjae Im",
+    "ranking": 67,
+    "odds": "+8000",
+    "form": null,
+    "augusta": {
+      "2022": "T8",
+      "2023": "T16",
+      "2024": "MC",
+      "2025": "T5"
+    },
+    "birthYear": 1998
+  },
+  {
+    "name": "Casey Jarvis",
+    "ranking": 69,
+    "odds": "+15000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2003
+  },
+  {
+    "name": "Wyndham Clark",
+    "ranking": 72,
+    "odds": "+8000",
+    "form": null,
+    "augusta": {
+      "2024": "MC",
+      "2025": "T46"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Johnny Keefer",
+    "ranking": 74,
+    "odds": "+13000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2003
+  },
+  {
+    "name": "Aldrich Potgieter",
+    "ranking": 77,
+    "odds": "+20000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 7,
+      "avg": 69.7
+    },
+    "augusta": {
+      "2023": "MC"
+    },
+    "birthYear": 2005
+  },
+  {
+    "name": "Hao-Tong Li",
+    "ranking": 78,
+    "odds": "+25000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1995
+  },
+  {
+    "name": "Tom McKibbin",
+    "ranking": 97,
+    "odds": "+14000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2002
+  },
+  {
+    "name": "Brian Campbell",
+    "ranking": 102,
+    "odds": "+40000",
+    "form": null,
+    "augusta": {
+      "2025": "T32"
+    },
+    "birthYear": 2002
+  },
+  {
+    "name": "Davis Riley",
+    "ranking": 114,
+    "odds": "+30000",
+    "form": null,
+    "augusta": {
+      "2025": "T21"
+    },
+    "birthYear": 1996
+  },
+  {
+    "name": "Max Homa",
+    "ranking": 148,
+    "odds": "+6600",
+    "form": null,
+    "augusta": {
+      "2022": "T48",
+      "2023": "T43",
+      "2024": "T3",
+      "2025": "T12"
+    },
+    "birthYear": 1990
+  },
+  {
+    "name": "Carlos Ortiz",
+    "ranking": 153,
+    "odds": "+15000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 1991
+  },
+  {
+    "name": "Brooks Koepka",
+    "ranking": 162,
+    "odds": "+3800",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "T2",
+      "2024": "T45",
+      "2025": "MC"
+    },
+    "birthYear": 1990
+  },
+  {
+    "name": "Jackson Herrington",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2004
+  },
+  {
+    "name": "Naoyuki Kataoka",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": 2003
+  },
+  {
+    "name": "Zach Johnson",
+    "ranking": null,
+    "odds": "+40000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "T34",
+      "2025": "T8"
+    },
+    "birthYear": 1976
+  },
+  {
+    "name": "Tiger Woods",
+    "ranking": null,
+    "odds": "+15000",
+    "form": null,
+    "augusta": {
+      "2022": "47",
+      "2023": "WD",
+      "2024": "60"
+    },
+    "birthYear": 1975
+  },
+  {
+    "name": "Danny Willett",
+    "ranking": null,
+    "odds": "+50000",
+    "form": null,
+    "augusta": {
+      "2022": "T12",
+      "2023": "MC",
+      "2024": "T45",
+      "2025": "T42"
+    },
+    "birthYear": 1987
+  },
+  {
+    "name": "Mike Weir",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "MC",
+      "2024": "MC",
+      "2025": "MC"
+    },
+    "birthYear": 1970
+  },
+  {
+    "name": "Bubba Watson",
+    "ranking": null,
+    "odds": "+25000",
+    "form": null,
+    "augusta": {
+      "2022": "T39",
+      "2023": "MC",
+      "2025": "T14"
+    },
+    "birthYear": 1978
+  },
+  {
+    "name": "Brandon Holtz",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": null
+  },
+  {
+    "name": "Fifa Laopakdee",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": null
+  },
+  {
+    "name": "Angel Cabrera",
+    "ranking": null,
+    "odds": "+50000",
+    "form": null,
+    "augusta": {
+      "2025": "MC"
+    },
+    "birthYear": 1969
+  },
+  {
+    "name": "Phil Mickelson",
+    "ranking": null,
+    "odds": "+20000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "T2",
+      "2024": "T43",
+      "2025": "MC"
+    },
+    "birthYear": 1970
+  },
+  {
+    "name": "Mateo Pulcini",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": null
+  },
+  {
+    "name": "Jose Maria Olazabal",
+    "ranking": null,
+    "odds": "+200000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "MC",
+      "2024": "T45",
+      "2025": "MC"
+    },
+    "birthYear": 1966
+  },
+  {
+    "name": "Cameron Smith",
+    "ranking": null,
+    "odds": "+6600",
+    "form": null,
+    "augusta": {
+      "2022": "T3",
+      "2023": "T34",
+      "2024": "T6",
+      "2025": "MC"
+    },
+    "birthYear": 1993
+  },
+  {
+    "name": "Vijay Singh",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2024": "T58"
+    },
+    "birthYear": 1963
+  },
+  {
+    "name": "Dustin Johnson",
+    "ranking": null,
+    "odds": "+9000",
+    "form": null,
+    "augusta": {
+      "2022": "T12",
+      "2023": "T48",
+      "2024": "MC",
+      "2025": "MC"
+    },
+    "birthYear": 1984
+  },
+  {
+    "name": "Charl Schwartzel",
+    "ranking": null,
+    "odds": "+35000",
+    "form": null,
+    "augusta": {
+      "2022": "T10",
+      "2023": "T50",
+      "2025": "T36"
+    },
+    "birthYear": 1984
+  },
+  {
+    "name": "Mason Howell",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": null
+  },
+  {
+    "name": "Ethan Fang",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {},
+    "birthYear": null
+  },
+  {
+    "name": "Sergio Garcia",
+    "ranking": null,
+    "odds": "+10000",
+    "form": null,
+    "augusta": {
+      "2022": "T23",
+      "2023": "MC",
+      "2024": "MC",
+      "2025": "MC"
+    },
+    "birthYear": 1980
+  },
+  {
+    "name": "Fred Couples",
+    "ranking": null,
+    "odds": "+100000",
+    "form": null,
+    "augusta": {
+      "2022": "MC",
+      "2023": "T50",
+      "2025": "MC"
+    },
+    "birthYear": 1959
+  }
 ]
