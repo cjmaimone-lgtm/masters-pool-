@@ -12,6 +12,22 @@
     <p class="subtitle">Fivesome Picker</p>
   </header>
 
+  <!-- Data Freshness Bar -->
+  <div class="freshness-bar">
+    <div class="freshness-inner">
+      <div class="freshness-item">
+        <span class="freshness-label">Odds</span>
+        <span id="oddsTimestamp" class="freshness-time">—</span>
+        <button id="refreshOddsBtn" class="refresh-btn" onclick="refreshOdds()">Refresh Odds</button>
+      </div>
+      <div class="freshness-item">
+        <span class="freshness-label">Form & Stats</span>
+        <span id="statsTimestamp" class="freshness-time">—</span>
+        <button id="refreshStatsBtn" class="refresh-btn" onclick="refreshStats()">Refresh Stats</button>
+      </div>
+    </div>
+  </div>
+
   <main>
     <!-- Tab Navigation -->
     <nav class="tabs">
@@ -39,10 +55,10 @@
             <option>Mooch</option>
             <option>NG</option>
             <option>Rand</option>
-            <option>T Butch</option>
-	        <option>T Burke</option>
-			<option>Tony F</option>
-	        <option>Timbo</option>
+            <option>TB</option>
+            <option>Tom Burke</option>
+			  <option>Tony F</option>
+			  <option>Timbo</option>
           </select>
           <span id="submissionCount" class="sub-count"></span>
         </div>
@@ -66,6 +82,7 @@
             <tr>
               <th></th>
               <th>Golfer</th>
+              <th>Age</th>
               <th>OWGR</th>
               <th>Odds</th>
               <th>2026 Form</th>
@@ -112,6 +129,24 @@
         <h2>Coverage Gaps</h2>
         <p class="stats-subtitle">Top-ranked golfers nobody has picked</p>
         <div id="coverageGaps"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Value Picks</h2>
+        <p class="stats-subtitle">Golfers with strong form or ranking but longer odds — potential bargains</p>
+        <div id="valuePicks"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Fivesome Uniqueness</h2>
+        <p class="stats-subtitle">How different each entry is from the rest of the field</p>
+        <div id="similarityScore" class="popularity-chart"></div>
+      </div>
+
+      <div class="analytics-section">
+        <h2>Momentum Tracker</h2>
+        <p class="stats-subtitle">Trending up or down based on last 3 tournament finishes</p>
+        <div id="momentumTracker"></div>
       </div>
 
       <div class="analytics-section">
