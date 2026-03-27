@@ -48,7 +48,7 @@ async function refreshOdds() {
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.error || 'Failed to refresh odds');
+      showToast(data.error || 'Failed to refresh odds', res.status === 429);
       return;
     }
 
@@ -81,7 +81,7 @@ async function refreshStats() {
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.error || 'Failed to refresh stats');
+      showToast(data.error || 'Failed to refresh stats', res.status === 429);
       return;
     }
 
@@ -847,9 +847,9 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function showToast(msg) {
+function showToast(msg, long) {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  setTimeout(() => toast.classList.remove('show'), long ? 5000 : 2500);
 }
