@@ -257,6 +257,11 @@ async function submitFivesome() {
   }
   if (selectedGolfers.size !== 5) return;
 
+  const entryName = document.getElementById('entryName').value.trim();
+  if (!entryName) {
+    showToast('Please name this entry first!');
+    return;
+  }
   const golferNames = Array.from(selectedGolfers);
 
   // Check for duplicate fivesome
@@ -272,7 +277,7 @@ async function submitFivesome() {
     const res = await fetch(`${API}/api/submissions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userName, golfers: golferNames })
+      body: JSON.stringify({ userName, entryName, golfers: golferNames })
     });
 
     const data = await res.json();
@@ -284,6 +289,7 @@ async function submitFivesome() {
 
     submissions.push(data);
     selectedGolfers.clear();
+    document.getElementById('entryName').value = '';
     renderGolferTable();
     updateSelectedDisplay();
     updateSubmissionCount();
@@ -321,10 +327,11 @@ function renderSubmissions() {
     });
     const key = fivesomeKey(s.golfers);
     const isDupe = keyCounts[key] > 1;
+    const entryLabel = s.entryName ? ` — ${escapeHtml(s.entryName)}` : '';
     return `
       <div class="submission-card ${isDupe ? 'duplicate' : ''}">
         <div>
-          <div class="user-name">${escapeHtml(s.userName)}${isDupe ? ' <span class="dupe-badge">DUPLICATE</span>' : ''}</div>
+          <div class="user-name">${escapeHtml(s.userName)}${entryLabel}${isDupe ? ' <span class="dupe-badge">DUPLICATE</span>' : ''}</div>
           <div class="golfer-list">${s.golfers.map(g => escapeHtml(g)).join(' &bull; ')}</div>
         </div>
         <div style="text-align:right;">
@@ -734,7 +741,9 @@ function renderSimilarityScore() {
 
     const avgSimilarity = totalSim / comparisons;
     const uniqueness = Math.round((1 - avgSimilarity) * 100);
-    return { userName: s.userName, uniqueness, id: s.id };
+    const label = s.entryName ? `${s.userName} — ${s.entryName}` : s.userName;
+    const lastNames = s.golfers.map(g => g.split(' ').slice(-1)[0]);
+    return { label, uniqueness, lastNames, id: s.id };
   });
 
   results.sort((a, b) => b.uniqueness - a.uniqueness);
@@ -743,11 +752,14 @@ function renderSimilarityScore() {
   container.innerHTML = results.map(r => {
     const pct = maxUniq > 0 ? (r.uniqueness / maxUniq) * 100 : 0;
     const color = r.uniqueness >= 80 ? '#006747' : r.uniqueness >= 60 ? '#d4a017' : '#c0392b';
+    const namesInBar = r.lastNames.join(', ');
     return `
       <div class="pop-row">
-        <div class="pop-name">${escapeHtml(r.userName)}</div>
+        <div class="pop-name">${escapeHtml(r.label)}</div>
         <div class="pop-bar-bg">
-          <div class="pop-bar" style="width:${pct}%;background:${color}"></div>
+          <div class="pop-bar" style="width:${pct}%;background:${color}">
+            <span class="bar-label">${escapeHtml(namesInBar)}</span>
+          </div>
         </div>
         <div class="pop-count" style="width:40px;color:${color}">${r.uniqueness}%</div>
       </div>
