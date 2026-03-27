@@ -33,6 +33,85 @@ header .subtitle {
   font-style: italic;
 }
 
+/* Freshness Bar */
+.freshness-bar {
+  background: #004d35;
+  border-bottom: 2px solid #003d2a;
+  padding: 0.5rem 1rem;
+}
+
+.freshness-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.freshness-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.freshness-label {
+  color: #ffd700;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.freshness-time {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.8rem;
+}
+
+.refresh-btn {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.25);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refresh-btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.refresh-btn.loading::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 main {
   max-width: 1100px;
   margin: 0 auto;
@@ -199,8 +278,13 @@ main {
   text-align: center;
 }
 
-.golfer-table th:nth-child(3),
-.golfer-table th:nth-child(4) {
+.golfer-table th:nth-child(3) {
+  text-align: center;
+  width: 50px;
+}
+
+.golfer-table th:nth-child(4),
+.golfer-table th:nth-child(5) {
   text-align: center;
   width: 90px;
 }
@@ -215,8 +299,14 @@ main {
 }
 
 .golfer-table td:nth-child(3),
-.golfer-table td:nth-child(4) {
+.golfer-table td:nth-child(4),
+.golfer-table td:nth-child(5) {
   text-align: center;
+}
+
+.age-cell {
+  color: #888;
+  font-size: 0.85rem;
 }
 
 .golfer-table tbody tr {
@@ -244,6 +334,21 @@ main {
 .golfer-table .odds-cell {
   font-weight: bold;
   color: #006747;
+  white-space: nowrap;
+}
+
+.odds-move {
+  font-size: 0.7rem;
+  margin-left: 2px;
+  cursor: help;
+}
+
+.odds-up {
+  color: #006747;
+}
+
+.odds-down {
+  color: #c0392b;
 }
 
 .golfer-table .rank-cell {
@@ -256,12 +361,12 @@ main {
   font-size: 1.1rem;
 }
 
-.golfer-table th:nth-child(5) {
+.golfer-table th:nth-child(6) {
   text-align: center;
   width: 200px;
 }
 
-.golfer-table td:nth-child(5) {
+.golfer-table td:nth-child(6) {
   text-align: center;
 }
 
@@ -319,12 +424,12 @@ main {
 }
 
 /* Augusta History */
-.golfer-table th:nth-child(6) {
+.golfer-table th:nth-child(7) {
   text-align: center;
   width: 260px;
 }
 
-.golfer-table td:nth-child(6) {
+.golfer-table td:nth-child(7) {
   text-align: center;
 }
 
@@ -655,6 +760,106 @@ main {
   color: #888;
   padding: 3rem;
   font-style: italic;
+}
+
+/* Value Picks */
+.value-picks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.value-card {
+  background: #f9f6ef;
+  border: 1px solid #ddd;
+  border-left: 4px solid #006747;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  flex: 1 1 300px;
+  min-width: 280px;
+}
+
+.value-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.value-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.value-tag {
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #006747;
+  background: #e8f5e9;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.value-details {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.value-odds {
+  font-weight: bold;
+  color: #006747;
+}
+
+/* Momentum Tracker */
+.momentum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.momentum-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0.8rem;
+  background: #f9f6ef;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.momentum-name {
+  font-weight: bold;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.momentum-finishes {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
+
+.momentum-finish {
+  display: inline-block;
+  background: #e8e0d0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  min-width: 28px;
+  text-align: center;
+}
+
+.momentum-trend {
+  font-weight: bold;
+  font-size: 0.85rem;
+  width: 80px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 h2 {
