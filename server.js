@@ -55,6 +55,40 @@ function saveRefreshStatus(status) {
   fs.writeFileSync(STATUS_FILE, JSON.stringify(status, null, 2));
 }
 
+// --- Rate limiting: 3 windows per day ---
+// Before 12pm, 12pm-4pm, 4pm-midnight (Eastern)
+function getRefreshWindow() {
+  const now = new Date();
+  // Get Eastern time hour (UTC-4 for EDT, UTC-5 for EST)
+  const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const hour = eastern.getHours();
+  const dateStr = eastern.toISOString().slice(0, 10); // YYYY-MM-DD
+
+  let window;
+  if (hour < 12) window = 'morning';
+  else if (hour < 16) window = 'afternoon';
+  else window = 'evening';
+
+  return `${dateStr}_${window}`;
+}
+
+function canRefresh(type) {
+  const status = getRefreshStatus();
+  const currentWindow = getRefreshWindow();
+  const lastWindow = type === 'odds' ? status.oddsLastWindow : status.statsLastWindow;
+  return lastWindow !== currentWindow;
+}
+
+function getNextWindowTime() {
+  const now = new Date();
+  const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const hour = eastern.getHours();
+
+  if (hour < 12) return '12:00 PM ET';
+  if (hour < 16) return '4:00 PM ET';
+  return 'tomorrow morning';
+}
+
 // ============================================================
 // EXISTING ENDPOINTS
 // ============================================================
@@ -152,6 +186,10 @@ app.delete('/api/submissions/:id', async (req, res) => {
 // ============================================================
 
 app.post('/api/refresh-odds', async (req, res) => {
+  if (!canRefresh('odds')) {
+    return res.status(429).json({ error: `Odds already refreshed this window. Next refresh available at ${getNextWindowTime()}` });
+  }
+
   const apiKey = process.env.ODDS_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'ODDS_API_KEY not configured in .env' });
@@ -206,6 +244,7 @@ app.post('/api/refresh-odds', async (req, res) => {
     const status = getRefreshStatus();
     status.oddsUpdatedAt = new Date().toISOString();
     status.oddsSource = bookmaker.title;
+    status.oddsLastWindow = getRefreshWindow();
     saveRefreshStatus(status);
 
     res.json({
@@ -246,6 +285,10 @@ const TOURNAMENT_IDS = [
 ];
 
 app.post('/api/refresh-stats', async (req, res) => {
+  if (!canRefresh('stats')) {
+    return res.status(429).json({ error: `Stats already refreshed this window. Next refresh available at ${getNextWindowTime()}` });
+  }
+
   try {
     // Step 1: Figure out which tournaments are completed
     const scheduleRes = await fetch(`${ESPN_BASE}/scoreboard?dates=2026&limit=20`);
@@ -359,6 +402,7 @@ app.post('/api/refresh-stats', async (req, res) => {
     // Update status
     const status = getRefreshStatus();
     status.statsUpdatedAt = new Date().toISOString();
+    status.statsLastWindow = getRefreshWindow();
     status.tournamentsScanned = leaderboards.map(lb => lb.name);
     saveRefreshStatus(status);
 
