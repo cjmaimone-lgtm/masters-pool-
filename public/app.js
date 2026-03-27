@@ -179,6 +179,7 @@ function renderGolferTable() {
       <td class="golfer-name">${g.name}</td>
       <td class="age-cell">${age}</td>
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
+      <td class="opening-odds-cell">${g.openingOdds || '—'}</td>
       <td class="odds-cell">${formatOddsWithMovement(g)}</td>
       <td class="form-cell">${formHtml}</td>
       <td class="augusta-cell">${augustaHtml}</td>
