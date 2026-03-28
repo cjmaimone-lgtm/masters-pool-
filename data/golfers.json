@@ -16,7 +16,8 @@
       "2024": "1",
       "2025": "4"
     },
-    "birthYear": 1996
+    "birthYear": 1996,
+    "openingOdds": "+400"
   },
   {
     "name": "Rory McIlroy",
@@ -35,7 +36,8 @@
       "2024": "T22",
       "2025": "1"
     },
-    "birthYear": 1989
+    "birthYear": 1989,
+    "openingOdds": "+700"
   },
   {
     "name": "Cameron Young",
@@ -54,7 +56,8 @@
       "2024": "T9",
       "2025": "MC"
     },
-    "birthYear": 1997
+    "birthYear": 1997,
+    "openingOdds": "+2700"
   },
   {
     "name": "Tommy Fleetwood",
@@ -73,7 +76,8 @@
       "2024": "T3",
       "2025": "T21"
     },
-    "birthYear": 1991
+    "birthYear": 1991,
+    "openingOdds": "+1800"
   },
   {
     "name": "Xander Schauffele",
@@ -92,7 +96,8 @@
       "2024": "8",
       "2025": "T8"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+1800"
   },
   {
     "name": "Matt Fitzpatrick",
@@ -111,7 +116,8 @@
       "2024": "T22",
       "2025": "T40"
     },
-    "birthYear": 1994
+    "birthYear": 1994,
+    "openingOdds": "+3000"
   },
   {
     "name": "Justin Rose",
@@ -130,7 +136,8 @@
       "2024": "MC",
       "2025": "2"
     },
-    "birthYear": 1980
+    "birthYear": 1980,
+    "openingOdds": "+3000"
   },
   {
     "name": "Collin Morikawa",
@@ -149,7 +156,8 @@
       "2024": "T3",
       "2025": "T14"
     },
-    "birthYear": 1997
+    "birthYear": 1997,
+    "openingOdds": "+2200"
   },
   {
     "name": "Russell Henley",
@@ -168,7 +176,8 @@
       "2024": "T38",
       "2025": "MC"
     },
-    "birthYear": 1989
+    "birthYear": 1989,
+    "openingOdds": "+6600"
   },
   {
     "name": "Chris Gotterup",
@@ -182,7 +191,8 @@
       "avg": 69.5
     },
     "augusta": {},
-    "birthYear": 1999
+    "birthYear": 1999,
+    "openingOdds": "+3500"
   },
   {
     "name": "Robert MacIntyre",
@@ -199,7 +209,8 @@
       "2022": "T23",
       "2025": "MC"
     },
-    "birthYear": 1996
+    "birthYear": 1996,
+    "openingOdds": "+4000"
   },
   {
     "name": "Sepp Straka",
@@ -218,7 +229,8 @@
       "2024": "T16",
       "2025": "MC"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+7000"
   },
   {
     "name": "J.J. Spaun",
@@ -229,7 +241,8 @@
       "2022": "T23",
       "2025": "50"
     },
-    "birthYear": 1990
+    "birthYear": 1990,
+    "openingOdds": "+9000"
   },
   {
     "name": "Hideki Matsuyama",
@@ -248,7 +261,8 @@
       "2024": "T38",
       "2025": "T21"
     },
-    "birthYear": 1992
+    "birthYear": 1992,
+    "openingOdds": "+3500"
   },
   {
     "name": "Justin Thomas",
@@ -261,7 +275,8 @@
       "2024": "MC",
       "2025": "T36"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+4000"
   },
   {
     "name": "Ben Griffin",
@@ -269,7 +284,8 @@
     "odds": "+5500",
     "form": null,
     "augusta": {},
-    "birthYear": 1995
+    "birthYear": 1995,
+    "openingOdds": "+5500"
   },
   {
     "name": "Jacob Bridgeman",
@@ -283,7 +299,8 @@
       "avg": 68.4
     },
     "augusta": {},
-    "birthYear": 2000
+    "birthYear": 2000,
+    "openingOdds": "+9000"
   },
   {
     "name": "Ludvig Aberg",
@@ -300,7 +317,8 @@
       "2024": "2",
       "2025": "7"
     },
-    "birthYear": 1999
+    "birthYear": 1999,
+    "openingOdds": "+1600"
   },
   {
     "name": "Alexander Noren",
@@ -310,7 +328,8 @@
     "augusta": {
       "2023": "MC"
     },
-    "birthYear": 1982
+    "birthYear": 1982,
+    "openingOdds": "+10000"
   },
   {
     "name": "Harris English",
@@ -328,7 +347,8 @@
       "2024": "T22",
       "2025": "T12"
     },
-    "birthYear": 1989
+    "birthYear": 1989,
+    "openingOdds": "+9000"
   },
   {
     "name": "Viktor Hovland",
@@ -347,7 +367,8 @@
       "2024": "MC",
       "2025": "T21"
     },
-    "birthYear": 1997
+    "birthYear": 1997,
+    "openingOdds": "+3500"
   },
   {
     "name": "Akshay Bhatia",
@@ -364,7 +385,8 @@
       "2024": "T35",
       "2025": "T42"
     },
-    "birthYear": 2002
+    "birthYear": 2002,
+    "openingOdds": "+6000"
   },
   {
     "name": "Patrick Reed",
@@ -377,7 +399,8 @@
       "2024": "T12",
       "2025": "3"
     },
-    "birthYear": 1990
+    "birthYear": 1990,
+    "openingOdds": "+3000"
   },
   {
     "name": "Bryson DeChambeau",
@@ -390,7 +413,8 @@
       "2024": "T6",
       "2025": "T5"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+1000"
   },
   {
     "name": "Keegan Bradley",
@@ -408,7 +432,8 @@
       "2024": "T22",
       "2025": "MC"
     },
-    "birthYear": 1986
+    "birthYear": 1986,
+    "openingOdds": "+12000"
   },
   {
     "name": "Maverick McNealy",
@@ -424,7 +449,8 @@
     "augusta": {
       "2025": "T32"
     },
-    "birthYear": 1995
+    "birthYear": 1995,
+    "openingOdds": "+11000"
   },
   {
     "name": "Ryan Gerard",
@@ -438,7 +464,8 @@
       "avg": 69.1
     },
     "augusta": {},
-    "birthYear": 2000
+    "birthYear": 2000,
+    "openingOdds": "+11000"
   },
   {
     "name": "Jon Rahm",
@@ -451,7 +478,8 @@
       "2024": "T45",
       "2025": "T14"
     },
-    "birthYear": 1994
+    "birthYear": 1994,
+    "openingOdds": "+1200"
   },
   {
     "name": "Si Woo Kim",
@@ -469,7 +497,8 @@
       "2023": "T29",
       "2024": "T30"
     },
-    "birthYear": 1995
+    "birthYear": 1995,
+    "openingOdds": "+6000"
   },
   {
     "name": "Tyrrell Hatton",
@@ -482,7 +511,8 @@
       "2024": "T9",
       "2025": "T14"
     },
-    "birthYear": 1991
+    "birthYear": 1991,
+    "openingOdds": "+4000"
   },
   {
     "name": "Min Woo Lee",
@@ -501,7 +531,8 @@
       "2024": "T22",
       "2025": "49"
     },
-    "birthYear": 1998
+    "birthYear": 1998,
+    "openingOdds": "+6600"
   },
   {
     "name": "Shane Lowry",
@@ -520,7 +551,8 @@
       "2024": "T43",
       "2025": "T42"
     },
-    "birthYear": 1987
+    "birthYear": 1987,
+    "openingOdds": "+4500"
   },
   {
     "name": "Sam Burns",
@@ -539,7 +571,8 @@
       "2024": "MC",
       "2025": "T46"
     },
-    "birthYear": 1996
+    "birthYear": 1996,
+    "openingOdds": "+7000"
   },
   {
     "name": "Patrick Cantlay",
@@ -558,7 +591,8 @@
       "2024": "T22",
       "2025": "T36"
     },
-    "birthYear": 1992
+    "birthYear": 1992,
+    "openingOdds": "+5000"
   },
   {
     "name": "Kurt Kitayama",
@@ -575,7 +609,8 @@
       "2023": "MC",
       "2024": "T35"
     },
-    "birthYear": 1992
+    "birthYear": 1992,
+    "openingOdds": "+15000"
   },
   {
     "name": "Marco Penge",
@@ -583,7 +618,8 @@
     "odds": "+8000",
     "form": null,
     "augusta": {},
-    "birthYear": 1997
+    "birthYear": 1997,
+    "openingOdds": "+8000"
   },
   {
     "name": "Nicolas Echavarria",
@@ -599,7 +635,8 @@
     "augusta": {
       "2025": "51"
     },
-    "birthYear": 1994
+    "birthYear": 1994,
+    "openingOdds": "+15000"
   },
   {
     "name": "Aaron Rai",
@@ -609,7 +646,8 @@
     "augusta": {
       "2025": "T27"
     },
-    "birthYear": 1994
+    "birthYear": 1994,
+    "openingOdds": "+13000"
   },
   {
     "name": "Corey Conners",
@@ -628,7 +666,8 @@
       "2024": "T38",
       "2025": "T8"
     },
-    "birthYear": 1992
+    "birthYear": 1992,
+    "openingOdds": "+6000"
   },
   {
     "name": "Jason Day",
@@ -647,7 +686,8 @@
       "2024": "T30",
       "2025": "T8"
     },
-    "birthYear": 1987
+    "birthYear": 1987,
+    "openingOdds": "+6600"
   },
   {
     "name": "Michael Brennan",
@@ -655,7 +695,8 @@
     "odds": "+40000",
     "form": null,
     "augusta": {},
-    "birthYear": 2002
+    "birthYear": 2002,
+    "openingOdds": "+40000"
   },
   {
     "name": "Ryan Fox",
@@ -672,7 +713,8 @@
       "2023": "T26",
       "2024": "T38"
     },
-    "birthYear": 1986
+    "birthYear": 1986,
+    "openingOdds": "+12000"
   },
   {
     "name": "Brian Harman",
@@ -691,7 +733,8 @@
       "2024": "MC",
       "2025": "T36"
     },
-    "birthYear": 1987
+    "birthYear": 1987,
+    "openingOdds": "+15000"
   },
   {
     "name": "Kristoffer Reitan",
@@ -699,7 +742,8 @@
     "odds": "+30000",
     "form": null,
     "augusta": {},
-    "birthYear": 1999
+    "birthYear": 1999,
+    "openingOdds": "+30000"
   },
   {
     "name": "Andrew Novak",
@@ -707,7 +751,8 @@
     "odds": "+20000",
     "form": null,
     "augusta": {},
-    "birthYear": 1996
+    "birthYear": 1996,
+    "openingOdds": "+20000"
   },
   {
     "name": "Sam Stevens",
@@ -721,7 +766,8 @@
       "avg": 71.6
     },
     "augusta": {},
-    "birthYear": 2000
+    "birthYear": 2000,
+    "openingOdds": "+15000"
   },
   {
     "name": "Adam Scott",
@@ -740,7 +786,8 @@
       "2024": "T22",
       "2025": "MC"
     },
-    "birthYear": 1980
+    "birthYear": 1980,
+    "openingOdds": "+6600"
   },
   {
     "name": "Rasmus Hojgaard",
@@ -750,7 +797,8 @@
     "augusta": {
       "2025": "T32"
     },
-    "birthYear": 2000
+    "birthYear": 2000,
+    "openingOdds": "+15000"
   },
   {
     "name": "Michael Kim",
@@ -760,7 +808,8 @@
     "augusta": {
       "2025": "T27"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+20000"
   },
   {
     "name": "Sami Valimaki",
@@ -768,7 +817,8 @@
     "odds": "+30000",
     "form": null,
     "augusta": {},
-    "birthYear": 1998
+    "birthYear": 1998,
+    "openingOdds": "+30000"
   },
   {
     "name": "Max Greyserman",
@@ -778,7 +828,8 @@
     "augusta": {
       "2025": "T32"
     },
-    "birthYear": 1995
+    "birthYear": 1995,
+    "openingOdds": "+25000"
   },
   {
     "name": "Jordan Spieth",
@@ -797,7 +848,8 @@
       "2024": "MC",
       "2025": "T14"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+4000"
   },
   {
     "name": "Harry Hall",
@@ -811,7 +863,8 @@
       "avg": 70
     },
     "augusta": {},
-    "birthYear": 1997
+    "birthYear": 1997,
+    "openingOdds": "+13000"
   },
   {
     "name": "Nick Taylor",
@@ -822,7 +875,8 @@
       "2024": "MC",
       "2025": "T40"
     },
-    "birthYear": 1988
+    "birthYear": 1988,
+    "openingOdds": "+25000"
   },
   {
     "name": "Rasmus Neergaard-Petersen",
@@ -830,7 +884,8 @@
     "odds": "+13000",
     "form": null,
     "augusta": {},
-    "birthYear": 2001
+    "birthYear": 2001,
+    "openingOdds": "+13000"
   },
   {
     "name": "Sungjae Im",
@@ -843,7 +898,8 @@
       "2024": "MC",
       "2025": "T5"
     },
-    "birthYear": 1998
+    "birthYear": 1998,
+    "openingOdds": "+8000"
   },
   {
     "name": "Casey Jarvis",
@@ -851,7 +907,8 @@
     "odds": "+15000",
     "form": null,
     "augusta": {},
-    "birthYear": 2003
+    "birthYear": 2003,
+    "openingOdds": "+15000"
   },
   {
     "name": "Wyndham Clark",
@@ -862,7 +919,8 @@
       "2024": "MC",
       "2025": "T46"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+8000"
   },
   {
     "name": "Johnny Keefer",
@@ -870,7 +928,8 @@
     "odds": "+13000",
     "form": null,
     "augusta": {},
-    "birthYear": 2003
+    "birthYear": 2003,
+    "openingOdds": "+13000"
   },
   {
     "name": "Aldrich Potgieter",
@@ -886,7 +945,8 @@
     "augusta": {
       "2023": "MC"
     },
-    "birthYear": 2005
+    "birthYear": 2005,
+    "openingOdds": "+20000"
   },
   {
     "name": "Hao-Tong Li",
@@ -894,7 +954,8 @@
     "odds": "+25000",
     "form": null,
     "augusta": {},
-    "birthYear": 1995
+    "birthYear": 1995,
+    "openingOdds": "+25000"
   },
   {
     "name": "Tom McKibbin",
@@ -902,7 +963,8 @@
     "odds": "+14000",
     "form": null,
     "augusta": {},
-    "birthYear": 2002
+    "birthYear": 2002,
+    "openingOdds": "+14000"
   },
   {
     "name": "Brian Campbell",
@@ -912,7 +974,8 @@
     "augusta": {
       "2025": "T32"
     },
-    "birthYear": 2002
+    "birthYear": 2002,
+    "openingOdds": "+40000"
   },
   {
     "name": "Davis Riley",
@@ -922,7 +985,8 @@
     "augusta": {
       "2025": "T21"
     },
-    "birthYear": 1996
+    "birthYear": 1996,
+    "openingOdds": "+30000"
   },
   {
     "name": "Max Homa",
@@ -935,7 +999,8 @@
       "2024": "T3",
       "2025": "T12"
     },
-    "birthYear": 1990
+    "birthYear": 1990,
+    "openingOdds": "+6600"
   },
   {
     "name": "Carlos Ortiz",
@@ -943,7 +1008,8 @@
     "odds": "+15000",
     "form": null,
     "augusta": {},
-    "birthYear": 1991
+    "birthYear": 1991,
+    "openingOdds": "+15000"
   },
   {
     "name": "Brooks Koepka",
@@ -956,7 +1022,8 @@
       "2024": "T45",
       "2025": "MC"
     },
-    "birthYear": 1990
+    "birthYear": 1990,
+    "openingOdds": "+3800"
   },
   {
     "name": "Jackson Herrington",
@@ -964,7 +1031,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": 2004
+    "birthYear": 2004,
+    "openingOdds": "+100000"
   },
   {
     "name": "Naoyuki Kataoka",
@@ -972,7 +1040,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": 2003
+    "birthYear": 2003,
+    "openingOdds": "+100000"
   },
   {
     "name": "Zach Johnson",
@@ -984,7 +1053,8 @@
       "2023": "T34",
       "2025": "T8"
     },
-    "birthYear": 1976
+    "birthYear": 1976,
+    "openingOdds": "+40000"
   },
   {
     "name": "Tiger Woods",
@@ -996,7 +1066,8 @@
       "2023": "WD",
       "2024": "60"
     },
-    "birthYear": 1975
+    "birthYear": 1975,
+    "openingOdds": "+15000"
   },
   {
     "name": "Danny Willett",
@@ -1009,7 +1080,8 @@
       "2024": "T45",
       "2025": "T42"
     },
-    "birthYear": 1987
+    "birthYear": 1987,
+    "openingOdds": "+50000"
   },
   {
     "name": "Mike Weir",
@@ -1022,7 +1094,8 @@
       "2024": "MC",
       "2025": "MC"
     },
-    "birthYear": 1970
+    "birthYear": 1970,
+    "openingOdds": "+100000"
   },
   {
     "name": "Bubba Watson",
@@ -1034,7 +1107,8 @@
       "2023": "MC",
       "2025": "T14"
     },
-    "birthYear": 1978
+    "birthYear": 1978,
+    "openingOdds": "+25000"
   },
   {
     "name": "Brandon Holtz",
@@ -1042,7 +1116,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null
+    "birthYear": null,
+    "openingOdds": "+100000"
   },
   {
     "name": "Fifa Laopakdee",
@@ -1050,7 +1125,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null
+    "birthYear": null,
+    "openingOdds": "+100000"
   },
   {
     "name": "Angel Cabrera",
@@ -1060,7 +1136,8 @@
     "augusta": {
       "2025": "MC"
     },
-    "birthYear": 1969
+    "birthYear": 1969,
+    "openingOdds": "+50000"
   },
   {
     "name": "Phil Mickelson",
@@ -1073,7 +1150,8 @@
       "2024": "T43",
       "2025": "MC"
     },
-    "birthYear": 1970
+    "birthYear": 1970,
+    "openingOdds": "+20000"
   },
   {
     "name": "Mateo Pulcini",
@@ -1081,7 +1159,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null
+    "birthYear": null,
+    "openingOdds": "+100000"
   },
   {
     "name": "Jose Maria Olazabal",
@@ -1094,7 +1173,8 @@
       "2024": "T45",
       "2025": "MC"
     },
-    "birthYear": 1966
+    "birthYear": 1966,
+    "openingOdds": "+200000"
   },
   {
     "name": "Cameron Smith",
@@ -1107,7 +1187,8 @@
       "2024": "T6",
       "2025": "MC"
     },
-    "birthYear": 1993
+    "birthYear": 1993,
+    "openingOdds": "+6600"
   },
   {
     "name": "Vijay Singh",
@@ -1118,7 +1199,8 @@
       "2022": "MC",
       "2024": "T58"
     },
-    "birthYear": 1963
+    "birthYear": 1963,
+    "openingOdds": "+100000"
   },
   {
     "name": "Dustin Johnson",
@@ -1131,7 +1213,8 @@
       "2024": "MC",
       "2025": "MC"
     },
-    "birthYear": 1984
+    "birthYear": 1984,
+    "openingOdds": "+9000"
   },
   {
     "name": "Charl Schwartzel",
@@ -1143,7 +1226,8 @@
       "2023": "T50",
       "2025": "T36"
     },
-    "birthYear": 1984
+    "birthYear": 1984,
+    "openingOdds": "+35000"
   },
   {
     "name": "Mason Howell",
@@ -1151,7 +1235,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null
+    "birthYear": null,
+    "openingOdds": "+100000"
   },
   {
     "name": "Ethan Fang",
@@ -1159,7 +1244,8 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null
+    "birthYear": null,
+    "openingOdds": "+100000"
   },
   {
     "name": "Sergio Garcia",
@@ -1172,7 +1258,8 @@
       "2024": "MC",
       "2025": "MC"
     },
-    "birthYear": 1980
+    "birthYear": 1980,
+    "openingOdds": "+10000"
   },
   {
     "name": "Fred Couples",
@@ -1184,6 +1271,7 @@
       "2023": "T50",
       "2025": "MC"
     },
-    "birthYear": 1959
+    "birthYear": 1959,
+    "openingOdds": "+100000"
   }
 ]
