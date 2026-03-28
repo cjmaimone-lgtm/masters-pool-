@@ -196,6 +196,10 @@ main {
   outline: none;
 }
 
+#guestName {
+  width: 160px;
+}
+
 .sub-count {
   font-size: 0.85rem;
   color: #888;
@@ -919,4 +923,85 @@ h2 {
   .selected-summary { text-align: center; }
   .pop-name { width: 120px; font-size: 0.8rem; }
   .submission-card { flex-direction: column; }
+
+  /* Freeze golfer name column on mobile */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .golfer-table {
+    min-width: 700px;
+  }
+  .golfer-table th:nth-child(2),
+  .golfer-table td:nth-child(2) {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: inherit;
+  }
+  .golfer-table th:nth-child(2) {
+    background: #006747;
+  }
+  .golfer-table tbody tr td:nth-child(2) {
+    background: #fff;
+  }
+  .golfer-table tbody tr.selected td:nth-child(2) {
+    background: #e8f5e9;
+  }
+  .golfer-table tbody tr:hover td:nth-child(2) {
+    background: #f0ece4;
+  }
+
+  /* Momentum tracker mobile fix */
+  .momentum-row {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+  }
+  .momentum-name {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  .momentum-finishes {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .momentum-finish {
+    font-size: 0.7rem;
+    min-width: 24px;
+    padding: 0.1rem 0.3rem;
+    flex-shrink: 0;
+  }
+  .momentum-trend {
+    width: auto;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* Fivesome uniqueness — hide bar labels on mobile, tap to reveal */
+  .bar-label {
+    display: none;
+  }
+  .pop-bar-bg {
+    cursor: pointer;
+  }
+  .pop-bar-bg .bar-label.visible {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: -1.6rem;
+    background: #333;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
 }
