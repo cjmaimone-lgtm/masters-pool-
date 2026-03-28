@@ -85,9 +85,10 @@ async function refreshStats() {
       return;
     }
 
-    // Reload golfers with fresh stats
+    // Reload golfers with fresh stats and re-render everything
     await loadGolfers();
     renderGolferTable();
+    renderAllStats();
     updateTimestampDisplay('statsTimestamp', data.updatedAt);
 
     showToast(`Stats updated: ${data.golfersUpdated} golfers across ${data.tournamentsScanned} tournaments`);
@@ -419,6 +420,7 @@ function renderAllStats() {
   renderSimilarityScore();
   renderMomentumTracker();
   renderPopularity();
+  renderOwnershipGrid();
 }
 
 function getOddsTier(odds) {
@@ -756,9 +758,10 @@ function renderSimilarityScore() {
 
     const avgSimilarity = totalSim / comparisons;
     const uniqueness = Math.round((1 - avgSimilarity) * 100);
-    const label = s.entryName ? `${s.userName} — ${s.entryName}` : s.userName;
-    const lastNames = s.golfers.map(g => g.split(' ').slice(-1)[0]);
-    return { label, uniqueness, lastNames, id: s.id };
+    const userName = s.userName;
+    const entryName = s.entryName || '';
+    const lastNames = [...s.golfers].map(g => g.split(' ').slice(-1)[0]).sort((a, b) => a.localeCompare(b));
+    return { userName, entryName, uniqueness, lastNames, id: s.id };
   });
 
   results.sort((a, b) => b.uniqueness - a.uniqueness);
@@ -770,7 +773,8 @@ function renderSimilarityScore() {
     const namesInBar = r.lastNames.join(', ');
     return `
       <div class="pop-row">
-        <div class="pop-name">${escapeHtml(r.label)}</div>
+        <div class="pop-name-col">${escapeHtml(r.userName)}</div>
+        <div class="pop-entry-col">${escapeHtml(r.entryName)}</div>
         <div class="pop-bar-bg" onclick="toggleBarLabel(this)">
           <div class="pop-bar" style="width:${pct}%;background:${color}">
             <span class="bar-label">${escapeHtml(namesInBar)}</span>
@@ -888,6 +892,66 @@ function renderMomentumTracker() {
           </div>
         `;
       }).join('')}
+    </div>
+  `;
+}
+
+// --- Ownership Grid ---
+function renderOwnershipGrid() {
+  const container = document.getElementById('ownershipGrid');
+  if (submissions.length === 0) {
+    container.innerHTML = '<div class="no-stats">No submissions yet</div>';
+    return;
+  }
+
+  // Get unique people (sorted) and unique golfers (sorted by pick count desc, then name)
+  const people = [...new Set(submissions.map(s => s.userName))].sort((a, b) => a.localeCompare(b));
+
+  // Build ownership map: golfer -> { person -> count }
+  const ownership = {};
+  submissions.forEach(s => {
+    s.golfers.forEach(g => {
+      if (!ownership[g]) ownership[g] = {};
+      ownership[g][s.userName] = (ownership[g][s.userName] || 0) + 1;
+    });
+  });
+
+  // Sort golfers by total picks descending, then alphabetically
+  const golferNames = Object.keys(ownership).sort((a, b) => {
+    const totalA = Object.values(ownership[a]).reduce((x, y) => x + y, 0);
+    const totalB = Object.values(ownership[b]).reduce((x, y) => x + y, 0);
+    if (totalB !== totalA) return totalB - totalA;
+    return a.localeCompare(b);
+  });
+
+  // Find max count for color scaling
+  const maxCount = Math.max(...golferNames.map(g => Math.max(...Object.values(ownership[g]))));
+
+  // Build table
+  const headerCells = people.map(p => {
+    const short = p.length > 6 ? p.slice(0, 6) : p;
+    return `<th class="og-person" title="${escapeHtml(p)}">${escapeHtml(short)}</th>`;
+  }).join('');
+
+  const rows = golferNames.map(g => {
+    const lastName = g.split(' ').slice(-1)[0];
+    const firstName = g.split(' ').slice(0, -1).join(' ');
+    const cells = people.map(p => {
+      const count = ownership[g][p] || 0;
+      if (count === 0) return '<td class="og-cell og-empty"></td>';
+      const opacity = 0.3 + (count / maxCount) * 0.7;
+      const label = count > 1 ? count : '';
+      return `<td class="og-cell og-filled" style="background:rgba(0,103,71,${opacity})" title="${escapeHtml(p)}: ${escapeHtml(g)} (${count}x)">${label}</td>`;
+    }).join('');
+    return `<tr><td class="og-golfer" title="${escapeHtml(g)}"><strong>${escapeHtml(lastName)}</strong><span class="og-first">${escapeHtml(firstName ? ', ' + firstName : '')}</span></td>${cells}</tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="og-wrapper">
+      <table class="og-table">
+        <thead><tr><th class="og-golfer-header">Golfer</th>${headerCells}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
     </div>
   `;
 }
