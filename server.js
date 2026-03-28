@@ -190,76 +190,66 @@ app.delete('/api/submissions/:id', async (req, res) => {
 // ODDS API REFRESH
 // ============================================================
 
+// Core odds refresh logic (reusable from endpoint and startup)
+async function refreshOddsCore() {
+  const apiKey = process.env.ODDS_API_KEY;
+  if (!apiKey) throw new Error('ODDS_API_KEY not configured');
+
+  const url = `https://api.the-odds-api.com/v4/sports/golf_masters_tournament_winner/odds?apiKey=${apiKey}&regions=us&markets=outrights&oddsFormat=american`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Odds API error: ${text}`);
+  }
+
+  const oddsData = await response.json();
+  const remaining = response.headers.get('x-requests-remaining');
+
+  const bookmaker = oddsData[0]?.bookmakers?.[0];
+  if (!bookmaker) throw new Error('No odds data available for the Masters right now');
+
+  const outcomes = bookmaker.markets.find(m => m.key === 'outrights')?.outcomes || [];
+
+  const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
+  const nameIndex = buildNameIndex(golfers);
+
+  let matched = 0;
+  let unmatched = [];
+
+  outcomes.forEach(outcome => {
+    const idx = findGolferIndex(nameIndex, outcome.name);
+    if (idx >= 0) {
+      const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
+      if (!golfers[idx].openingOdds) {
+        golfers[idx].openingOdds = golfers[idx].odds;
+      }
+      golfers[idx].odds = oddsVal;
+      matched++;
+    } else {
+      unmatched.push(outcome.name);
+    }
+  });
+
+  fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
+
+  const status = getRefreshStatus();
+  status.oddsUpdatedAt = new Date().toISOString();
+  status.oddsSource = bookmaker.title;
+  status.oddsLastWindow = getRefreshWindow();
+  saveRefreshStatus(status);
+
+  return { matched, unmatched, source: bookmaker.title, requestsRemaining: remaining, updatedAt: status.oddsUpdatedAt };
+}
+
 app.post('/api/refresh-odds', async (req, res) => {
   if (!canRefresh('odds')) {
     return res.status(429).json({ error: `Odds already refreshed this window. Next refresh available at ${getNextWindowTime()}` });
   }
 
-  const apiKey = process.env.ODDS_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'ODDS_API_KEY not configured in .env' });
-  }
-
   try {
-    const url = `https://api.the-odds-api.com/v4/sports/golf_masters_tournament_winner/odds?apiKey=${apiKey}&regions=us&markets=outrights&oddsFormat=american`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      const text = await response.text();
-      return res.status(response.status).json({ error: `Odds API error: ${text}` });
-    }
-
-    const oddsData = await response.json();
-    const remaining = response.headers.get('x-requests-remaining');
-
-    // Use the first bookmaker's outrights
-    const bookmaker = oddsData[0]?.bookmakers?.[0];
-    if (!bookmaker) {
-      return res.status(404).json({ error: 'No odds data available for the Masters right now' });
-    }
-
-    const outcomes = bookmaker.markets.find(m => m.key === 'outrights')?.outcomes || [];
-
-    // Load golfers and build name index
-    const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
-    const nameIndex = buildNameIndex(golfers);
-
-    let matched = 0;
-    let unmatched = [];
-
-    outcomes.forEach(outcome => {
-      const idx = findGolferIndex(nameIndex, outcome.name);
-      if (idx >= 0) {
-        const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
-        // Preserve opening odds — only set once
-        if (!golfers[idx].openingOdds) {
-          golfers[idx].openingOdds = golfers[idx].odds;
-        }
-        golfers[idx].odds = oddsVal;
-        matched++;
-      } else {
-        unmatched.push(outcome.name);
-      }
-    });
-
-    // Save updated golfers
-    fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
-
-    // Update status
-    const status = getRefreshStatus();
-    status.oddsUpdatedAt = new Date().toISOString();
-    status.oddsSource = bookmaker.title;
-    status.oddsLastWindow = getRefreshWindow();
-    saveRefreshStatus(status);
-
-    res.json({
-      success: true,
-      matched,
-      unmatched,
-      source: bookmaker.title,
-      requestsRemaining: remaining,
-      updatedAt: status.oddsUpdatedAt
-    });
+    const result = await refreshOddsCore();
+    res.json({ success: true, ...result });
   } catch (err) {
     res.status(500).json({ error: `Failed to fetch odds: ${err.message}` });
   }
@@ -269,10 +259,11 @@ app.post('/api/refresh-odds', async (req, res) => {
 // ESPN STATS REFRESH
 // ============================================================
 
-const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga';
+const ESPN_PGA = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga';
+const ESPN_EUR = 'https://site.api.espn.com/apis/site/v2/sports/golf/eur';
 
 // 2026 PGA Tour event IDs (The Sentry through Valero Texas Open)
-const TOURNAMENT_IDS = [
+const PGA_TOURNAMENT_IDS = [
   401811927, // The Sentry
   401811928, // Sony Open
   401811929, // The American Express
@@ -289,38 +280,53 @@ const TOURNAMENT_IDS = [
   401811940, // Valero Texas Open
 ];
 
+// Fetch completed event IDs from an ESPN tour endpoint
+async function getCompletedEventIds(baseUrl, knownIds) {
+  try {
+    const res = await fetch(`${baseUrl}/scoreboard?dates=2026&limit=20`);
+    const data = await res.json();
+    const completed = [];
+    for (const evt of (data.events || [])) {
+      const id = parseInt(evt.id);
+      if (knownIds && !knownIds.includes(id)) continue;
+      if (evt.status?.type?.completed) completed.push(id);
+    }
+    return completed;
+  } catch {
+    return [];
+  }
+}
+
+// Fetch leaderboard for a single event
+async function fetchLeaderboard(baseUrl, id) {
+  try {
+    const res = await fetch(`${baseUrl}/scoreboard/${id}`);
+    const data = await res.json();
+    const evt = data.events?.[0] || data;
+    const competition = evt.competitions?.[0];
+    const competitors = competition?.competitors || [];
+    const name = evt.name || evt.shortName || `Event ${id}`;
+    return { id, name, competitors };
+  } catch {
+    return { id, name: `Event ${id}`, competitors: [] };
+  }
+}
+
 // Core stats refresh logic (reusable from endpoint and post-submission)
 async function refreshStatsCore() {
-  const scheduleRes = await fetch(`${ESPN_BASE}/scoreboard?dates=2026&limit=20`);
-  const scheduleData = await scheduleRes.json();
-  const events = scheduleData.events || [];
+  // Fetch PGA Tour completed events
+  const pgaCompleted = await getCompletedEventIds(ESPN_PGA, PGA_TOURNAMENT_IDS);
+  const pgaRecent = pgaCompleted.slice(-9);
 
-  const completedIds = [];
-  for (const evt of events) {
-    const id = parseInt(evt.id);
-    if (!TOURNAMENT_IDS.includes(id)) continue;
-    if (evt.status?.type?.completed) {
-      completedIds.push(id);
-    }
-  }
+  // Fetch DP World Tour completed events (no ID filter — take all completed)
+  const eurCompleted = await getCompletedEventIds(ESPN_EUR, null);
+  const eurRecent = eurCompleted.slice(-6);
 
-  const recentIds = completedIds.slice(-9);
-
-  const leaderboards = await Promise.all(
-    recentIds.map(async (id) => {
-      try {
-        const lbRes = await fetch(`${ESPN_BASE}/scoreboard/${id}`);
-        const lbData = await lbRes.json();
-        const evt = lbData.events?.[0] || lbData;
-        const competition = evt.competitions?.[0];
-        const competitors = competition?.competitors || [];
-        const name = evt.name || evt.shortName || `Event ${id}`;
-        return { id, name, competitors };
-      } catch {
-        return { id, name: `Event ${id}`, competitors: [] };
-      }
-    })
-  );
+  // Fetch all leaderboards in parallel
+  const leaderboards = await Promise.all([
+    ...pgaRecent.map(id => fetchLeaderboard(ESPN_PGA, id)),
+    ...eurRecent.map(id => fetchLeaderboard(ESPN_EUR, id))
+  ]);
 
   const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
   const nameIndex = buildNameIndex(golfers);
@@ -413,4 +419,15 @@ app.post('/api/refresh-stats', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Masters Fivesome Picker running at http://localhost:${PORT}`);
+
+  // Auto-refresh odds and stats on startup so Render cold starts always have fresh data
+  console.log('Triggering startup odds refresh...');
+  refreshOddsCore()
+    .then(result => console.log(`Startup odds refresh complete: ${result.matched} golfers matched (${result.source})`))
+    .catch(err => console.error('Startup odds refresh failed:', err.message));
+
+  console.log('Triggering startup stats refresh...');
+  refreshStatsCore()
+    .then(result => console.log(`Startup stats refresh complete: ${result.golfersUpdated} golfers updated`))
+    .catch(err => console.error('Startup stats refresh failed:', err.message));
 });
