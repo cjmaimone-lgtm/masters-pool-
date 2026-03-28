@@ -134,11 +134,26 @@ function setupSearch() {
 
 // --- Name Input ---
 function setupNameInput() {
-  document.getElementById('userName').addEventListener('change', updateSubmissionCount);
+  const select = document.getElementById('userName');
+  const guestInput = document.getElementById('guestName');
+  select.addEventListener('change', () => {
+    guestInput.style.display = select.value === 'guest' ? 'inline-block' : 'none';
+    if (select.value !== 'guest') guestInput.value = '';
+    updateSubmissionCount();
+  });
+  guestInput.addEventListener('input', updateSubmissionCount);
+}
+
+function getEffectiveUserName() {
+  const select = document.getElementById('userName');
+  if (select.value === 'guest') {
+    return document.getElementById('guestName').value.trim();
+  }
+  return select.value.trim();
 }
 
 function updateSubmissionCount() {
-  const name = document.getElementById('userName').value.trim().toLowerCase();
+  const name = getEffectiveUserName().toLowerCase();
   if (!name) {
     document.getElementById('submissionCount').textContent = '';
     return;
@@ -250,9 +265,9 @@ function updateSelectedDisplay() {
 
 // --- Submit ---
 async function submitFivesome() {
-  const userName = document.getElementById('userName').value.trim();
+  const userName = getEffectiveUserName();
   if (!userName) {
-    showToast('Please enter your name first!');
+    showToast(document.getElementById('userName').value === 'guest' ? 'Please enter the guest name!' : 'Please select your name first!');
     return;
   }
   if (selectedGolfers.size !== 5) return;
@@ -332,7 +347,7 @@ function renderSubmissions() {
       <div class="submission-card ${isDupe ? 'duplicate' : ''}">
         <div>
           <div class="user-name">${escapeHtml(s.userName)}${entryLabel}${isDupe ? ' <span class="dupe-badge">DUPLICATE</span>' : ''}</div>
-          <div class="golfer-list">${s.golfers.map(g => escapeHtml(g)).join(' &bull; ')}</div>
+          <div class="golfer-list">${[...s.golfers].sort((a, b) => a.localeCompare(b)).map(g => escapeHtml(g)).join(' &bull; ')}</div>
         </div>
         <div style="text-align:right;">
           <div class="timestamp">${timeStr}</div>
@@ -756,7 +771,7 @@ function renderSimilarityScore() {
     return `
       <div class="pop-row">
         <div class="pop-name">${escapeHtml(r.label)}</div>
-        <div class="pop-bar-bg">
+        <div class="pop-bar-bg" onclick="toggleBarLabel(this)">
           <div class="pop-bar" style="width:${pct}%;background:${color}">
             <span class="bar-label">${escapeHtml(namesInBar)}</span>
           </div>
@@ -768,10 +783,63 @@ function renderSimilarityScore() {
 }
 
 // --- Momentum Tracker ---
+function getMomentumTier(finishes) {
+  // finishes array: oldest first, most recent last
+  // Values > 100 = missed cut
+  const latest = finishes[finishes.length - 1];
+  const prev = finishes.length >= 2 ? finishes[finishes.length - 2] : null;
+  const prior = finishes.length >= 3 ? finishes[finishes.length - 3] : null;
+
+  const latestMC = latest > 100;
+  const prevMC = prev !== null && prev > 100;
+
+  // Sequential improvement: each finish better than the last (ignoring MCs)
+  const sequential = finishes.length >= 2 && finishes.every((f, i) => i === 0 || f <= finishes[i - 1]);
+
+  // Net improvement score
+  let netScore = 0;
+  for (let i = 1; i < finishes.length; i++) {
+    netScore += finishes[i - 1] - finishes[i];
+  }
+
+  // HOT: top-10 most recent finish, OR sequential improvement ending in top-20
+  if (!latestMC && (latest <= 10 || (sequential && latest <= 20))) {
+    return 'hot';
+  }
+
+  // TRENDING UP: net improving (score > 5) and latest wasn't a MC
+  if (!latestMC && netScore > 5) {
+    return 'trending-up';
+  }
+
+  // COOLING OFF: was performing well but most recent result dropped significantly or MC
+  if (latestMC && prev !== null && !prevMC && prev <= 30) {
+    return 'cooling-off';
+  }
+  if (!latestMC && prev !== null && !prevMC && latest - prev > 15) {
+    return 'cooling-off';
+  }
+
+  // COLD: net declining (score < -5), or multiple MCs
+  const mcCount = finishes.filter(f => f > 100).length;
+  if (netScore < -5 || mcCount >= 2) {
+    return 'cold';
+  }
+
+  return 'steady';
+}
+
+const MOMENTUM_CONFIG = {
+  'hot':         { icon: '&#9650;&#9650;', color: '#006747', label: 'HOT' },
+  'trending-up': { icon: '&#9650;',        color: '#2e8b57', label: 'TRENDING UP' },
+  'steady':      { icon: '&#9644;',        color: '#d4a017', label: 'STEADY' },
+  'cooling-off': { icon: '&#9660;',        color: '#e67e22', label: 'COOLING OFF' },
+  'cold':        { icon: '&#9660;&#9660;', color: '#c0392b', label: 'COLD' }
+};
+
 function renderMomentumTracker() {
   const container = document.getElementById('momentumTracker');
 
-  // Only show golfers that have been picked and have recentFinishes data
   const pickedSet = new Set();
   submissions.forEach(s => s.golfers.forEach(g => pickedSet.add(g)));
 
@@ -784,22 +852,17 @@ function renderMomentumTracker() {
     if (!g || !g.recentFinishes || g.recentFinishes.length < 2) return;
 
     const finishes = g.recentFinishes;
-    // Momentum = are positions getting lower (better)?
-    // Compare each finish to the one before it
-    let score = 0;
-    for (let i = 1; i < finishes.length; i++) {
-      score += finishes[i - 1] - finishes[i]; // positive = improving
-    }
-    // Normalize to -100..+100 range roughly
-    const normalized = Math.max(-100, Math.min(100, score * 3));
+    const trend = getMomentumTier(finishes);
 
-    momentumData.push({
-      name,
-      finishes,
-      score: normalized,
-      raw: score,
-      trend: normalized > 10 ? 'hot' : normalized < -10 ? 'cold' : 'steady'
-    });
+    // Score for sorting (higher = hotter)
+    let netScore = 0;
+    for (let i = 1; i < finishes.length; i++) {
+      netScore += finishes[i - 1] - finishes[i];
+    }
+    const tierOrder = { 'hot': 200, 'trending-up': 100, 'steady': 0, 'cooling-off': -100, 'cold': -200 };
+    const sortScore = tierOrder[trend] + netScore;
+
+    momentumData.push({ name, finishes, trend, sortScore });
   });
 
   if (momentumData.length === 0) {
@@ -807,13 +870,12 @@ function renderMomentumTracker() {
     return;
   }
 
-  momentumData.sort((a, b) => b.score - a.score);
+  momentumData.sort((a, b) => b.sortScore - a.sortScore);
 
   container.innerHTML = `
     <div class="momentum-list">
       ${momentumData.map(m => {
-        const trendIcon = m.trend === 'hot' ? '&#9650;' : m.trend === 'cold' ? '&#9660;' : '&#9644;';
-        const trendColor = m.trend === 'hot' ? '#006747' : m.trend === 'cold' ? '#c0392b' : '#d4a017';
+        const cfg = MOMENTUM_CONFIG[m.trend];
         const finishStr = m.finishes.map((f, i) => {
           const label = i === m.finishes.length - 1 ? 'Latest' : i === m.finishes.length - 2 ? 'Prev' : 'Prior';
           return `<span class="momentum-finish" title="${label}">${f > 100 ? 'MC' : f}</span>`;
@@ -822,7 +884,7 @@ function renderMomentumTracker() {
           <div class="momentum-row">
             <span class="momentum-name">${escapeHtml(m.name)}</span>
             <span class="momentum-finishes">${finishStr}</span>
-            <span class="momentum-trend" style="color:${trendColor}">${trendIcon} ${m.trend.toUpperCase()}</span>
+            <span class="momentum-trend" style="color:${cfg.color}">${cfg.icon} ${cfg.label}</span>
           </div>
         `;
       }).join('')}
@@ -845,6 +907,16 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function toggleBarLabel(barBg) {
+  const label = barBg.querySelector('.bar-label');
+  if (!label) return;
+  label.classList.toggle('visible');
+  // Auto-hide after 3 seconds
+  if (label.classList.contains('visible')) {
+    setTimeout(() => label.classList.remove('visible'), 3000);
+  }
 }
 
 function showToast(msg, long) {
