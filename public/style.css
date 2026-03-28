@@ -636,6 +636,27 @@ main {
   flex-shrink: 0;
 }
 
+.pop-name-col {
+  width: 90px;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  color: #006747;
+}
+
+.pop-entry-col {
+  width: 120px;
+  text-align: right;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #666;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pop-bar-bg {
   flex: 1;
   background: #e8e0d0;
@@ -894,6 +915,69 @@ h2 {
   font-size: 1.5rem;
 }
 
+/* Ownership Grid */
+.og-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.og-table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  width: 100%;
+  min-width: 400px;
+}
+
+.og-table thead th {
+  background: #006747;
+  color: #fff;
+  padding: 0.4rem 0.3rem;
+  text-align: center;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.og-golfer-header {
+  text-align: left !important;
+  padding-left: 0.5rem !important;
+  min-width: 120px;
+}
+
+.og-golfer {
+  padding: 0.3rem 0.5rem;
+  white-space: nowrap;
+  border-bottom: 1px solid #eee;
+  font-size: 0.8rem;
+}
+
+.og-first {
+  color: #888;
+  font-weight: normal;
+  font-size: 0.7rem;
+}
+
+.og-cell {
+  width: 36px;
+  height: 28px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  border-left: 1px solid #f0f0f0;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.og-empty {
+  background: #f9f6ef;
+}
+
+.og-filled {
+  border-radius: 0;
+  cursor: help;
+}
+
 /* Toast */
 .toast {
   position: fixed;
@@ -922,6 +1006,8 @@ h2 {
   .pick-header { flex-direction: column; align-items: stretch; }
   .selected-summary { text-align: center; }
   .pop-name { width: 120px; font-size: 0.8rem; }
+  .pop-name-col { width: 60px; font-size: 0.75rem; }
+  .pop-entry-col { width: 70px; font-size: 0.7rem; }
   .submission-card { flex-direction: column; }
 
   /* Freeze golfer name column on mobile */
