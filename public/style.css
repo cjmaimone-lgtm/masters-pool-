@@ -481,7 +481,8 @@ main {
 .aug-top10 { background: #2e8b57; color: #fff; }
 .aug-top25 { background: #d4a017; color: #fff; }
 .aug-mid { background: #e8e0d0; color: #555; }
-.aug-mc { background: #f5d5d5; color: #c0392b; }
+.aug-mc { background: #a83232; color: #000; }
+.aug-debut { color: #777; font-style: italic; font-size: 0.85rem; }
 
 .augusta-note {
   font-size: 0.85rem;
@@ -917,14 +918,17 @@ h2 {
 
 /* Ownership Grid */
 .og-wrapper {
-  overflow-x: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
+  max-height: 500px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
 }
 
 .og-table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 0.85rem;
-  width: 100%;
   min-width: 400px;
 }
 
@@ -937,12 +941,19 @@ h2 {
   text-transform: uppercase;
   letter-spacing: 0.3px;
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .og-golfer-header {
   text-align: left !important;
   padding-left: 0.5rem !important;
   min-width: 120px;
+  position: sticky;
+  left: 0;
+  z-index: 3 !important;
+  background: #006747 !important;
 }
 
 .og-golfer {
@@ -950,6 +961,11 @@ h2 {
   white-space: nowrap;
   border-bottom: 1px solid #eee;
   font-size: 0.8rem;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fff;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.08);
 }
 
 .og-first {
