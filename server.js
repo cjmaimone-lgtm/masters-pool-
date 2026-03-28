@@ -168,6 +168,11 @@ app.post('/api/submissions', async (req, res) => {
     golfers: data.golfers,
     submittedAt: data.submitted_at
   });
+
+  // Trigger a stats refresh in the background after submission (if not already refreshed this window)
+  if (canRefresh('stats')) {
+    refreshStatsInBackground();
+  }
 });
 
 // DELETE a submission
@@ -284,135 +289,123 @@ const TOURNAMENT_IDS = [
   401811940, // Valero Texas Open
 ];
 
+// Core stats refresh logic (reusable from endpoint and post-submission)
+async function refreshStatsCore() {
+  const scheduleRes = await fetch(`${ESPN_BASE}/scoreboard?dates=2026&limit=20`);
+  const scheduleData = await scheduleRes.json();
+  const events = scheduleData.events || [];
+
+  const completedIds = [];
+  for (const evt of events) {
+    const id = parseInt(evt.id);
+    if (!TOURNAMENT_IDS.includes(id)) continue;
+    if (evt.status?.type?.completed) {
+      completedIds.push(id);
+    }
+  }
+
+  const recentIds = completedIds.slice(-9);
+
+  const leaderboards = await Promise.all(
+    recentIds.map(async (id) => {
+      try {
+        const lbRes = await fetch(`${ESPN_BASE}/scoreboard/${id}`);
+        const lbData = await lbRes.json();
+        const evt = lbData.events?.[0] || lbData;
+        const competition = evt.competitions?.[0];
+        const competitors = competition?.competitors || [];
+        const name = evt.name || evt.shortName || `Event ${id}`;
+        return { id, name, competitors };
+      } catch {
+        return { id, name: `Event ${id}`, competitors: [] };
+      }
+    })
+  );
+
+  const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
+  const nameIndex = buildNameIndex(golfers);
+
+  const formData = {};
+
+  for (const lb of leaderboards) {
+    for (const comp of lb.competitors) {
+      const fullName = comp.athlete?.fullName || comp.athlete?.displayName;
+      if (!fullName) continue;
+
+      const norm = normalizeName(fullName);
+      const idx = nameIndex[norm];
+      if (idx === undefined) continue;
+
+      if (!formData[norm]) {
+        formData[norm] = { events: 0, wins: 0, top10s: 0, cuts: 0, scores: [], recentFinishes: [] };
+      }
+
+      const fd = formData[norm];
+      fd.events++;
+
+      const position = parseInt(comp.order || comp.status?.position?.id || '999');
+      const linescores = comp.linescores || [];
+      const roundsPlayed = linescores.length;
+
+      if (roundsPlayed >= 4) {
+        fd.cuts++;
+        if (position === 1) fd.wins++;
+        if (position <= 10) fd.top10s++;
+      }
+
+      for (const round of linescores) {
+        const val = parseFloat(round.value);
+        if (!isNaN(val)) fd.scores.push(val);
+      }
+
+      fd.recentFinishes.push(position);
+    }
+  }
+
+  let updated = 0;
+  for (const [norm, fd] of Object.entries(formData)) {
+    const idx = nameIndex[norm];
+    if (idx === undefined) continue;
+
+    const avg = fd.scores.length > 0
+      ? Math.round((fd.scores.reduce((a, b) => a + b, 0) / fd.scores.length) * 10) / 10
+      : null;
+
+    golfers[idx].form = {
+      events: fd.events,
+      wins: fd.wins,
+      top10s: fd.top10s,
+      cuts: fd.cuts,
+      avg
+    };
+
+    golfers[idx].recentFinishes = fd.recentFinishes.slice(-3);
+    updated++;
+  }
+
+  fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
+
+  const status = getRefreshStatus();
+  status.statsUpdatedAt = new Date().toISOString();
+  status.statsLastWindow = getRefreshWindow();
+  status.tournamentsScanned = leaderboards.map(lb => lb.name);
+  saveRefreshStatus(status);
+
+  return { tournamentsScanned: leaderboards.length, tournaments: leaderboards.map(lb => lb.name), golfersUpdated: updated, updatedAt: status.statsUpdatedAt };
+}
+
+function refreshStatsInBackground() {
+  refreshStatsCore().catch(err => console.error('Background stats refresh failed:', err.message));
+}
+
 app.post('/api/refresh-stats', async (req, res) => {
   if (!canRefresh('stats')) {
     return res.status(429).json({ error: `Stats already refreshed this window. Next refresh available at ${getNextWindowTime()}` });
   }
 
   try {
-    // Step 1: Figure out which tournaments are completed
-    const scheduleRes = await fetch(`${ESPN_BASE}/scoreboard?dates=2026&limit=20`);
-    const scheduleData = await scheduleRes.json();
-    const events = scheduleData.events || [];
-
-    // Only include completed tournaments from our list
-    const completedIds = [];
-    for (const evt of events) {
-      const id = parseInt(evt.id);
-      if (!TOURNAMENT_IDS.includes(id)) continue;
-      // status.type.completed === true means the event is done
-      if (evt.status?.type?.completed) {
-        completedIds.push(id);
-      }
-    }
-
-    // Step 2: Fetch leaderboards for completed tournaments (last 9 max for form)
-    const recentIds = completedIds.slice(-9);
-
-    const leaderboards = await Promise.all(
-      recentIds.map(async (id) => {
-        try {
-          const lbRes = await fetch(`${ESPN_BASE}/scoreboard/${id}`);
-          const lbData = await lbRes.json();
-          const evt = lbData.events?.[0] || lbData;
-          const competition = evt.competitions?.[0];
-          const competitors = competition?.competitors || [];
-          const name = evt.name || evt.shortName || `Event ${id}`;
-          return { id, name, competitors };
-        } catch {
-          return { id, name: `Event ${id}`, competitors: [] };
-        }
-      })
-    );
-
-    // Step 3: Load golfers and build name index
-    const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
-    const nameIndex = buildNameIndex(golfers);
-
-    // Step 4: Aggregate form stats per golfer
-    // Track per-golfer: events played, wins, top10s, cuts made, round scores
-    // Also track last 3 tournament finishes for momentum
-    const formData = {}; // normalized name -> { events, wins, top10s, cuts, scores[], recentFinishes[] }
-
-    for (const lb of leaderboards) {
-      for (const comp of lb.competitors) {
-        const fullName = comp.athlete?.fullName || comp.athlete?.displayName;
-        if (!fullName) continue;
-
-        const norm = normalizeName(fullName);
-        const idx = nameIndex[norm];
-        if (idx === undefined) continue; // not in our Masters field
-
-        if (!formData[norm]) {
-          formData[norm] = { events: 0, wins: 0, top10s: 0, cuts: 0, scores: [], recentFinishes: [] };
-        }
-
-        const fd = formData[norm];
-        fd.events++;
-
-        const position = parseInt(comp.order || comp.status?.position?.id || '999');
-        const linescores = comp.linescores || [];
-        const roundsPlayed = linescores.length;
-
-        // Made the cut = played 4 rounds (or 3 for some events, but 4 is standard)
-        if (roundsPlayed >= 4) {
-          fd.cuts++;
-          if (position === 1) fd.wins++;
-          if (position <= 10) fd.top10s++;
-        }
-
-        // Collect round scores
-        for (const round of linescores) {
-          const val = parseFloat(round.value);
-          if (!isNaN(val)) fd.scores.push(val);
-        }
-
-        // Track finish position for momentum (ordered by tournament date)
-        fd.recentFinishes.push(position);
-      }
-    }
-
-    // Step 5: Write form data back to golfers
-    let updated = 0;
-    for (const [norm, fd] of Object.entries(formData)) {
-      const idx = nameIndex[norm];
-      if (idx === undefined) continue;
-
-      const avg = fd.scores.length > 0
-        ? Math.round((fd.scores.reduce((a, b) => a + b, 0) / fd.scores.length) * 10) / 10
-        : null;
-
-      golfers[idx].form = {
-        events: fd.events,
-        wins: fd.wins,
-        top10s: fd.top10s,
-        cuts: fd.cuts,
-        avg
-      };
-
-      // Store recent finishes for momentum (last 3)
-      golfers[idx].recentFinishes = fd.recentFinishes.slice(-3);
-
-      updated++;
-    }
-
-    // Save updated golfers
-    fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
-
-    // Update status
-    const status = getRefreshStatus();
-    status.statsUpdatedAt = new Date().toISOString();
-    status.statsLastWindow = getRefreshWindow();
-    status.tournamentsScanned = leaderboards.map(lb => lb.name);
-    saveRefreshStatus(status);
-
-    res.json({
-      success: true,
-      tournamentsScanned: leaderboards.length,
-      tournaments: leaderboards.map(lb => lb.name),
-      golfersUpdated: updated,
-      updatedAt: status.statsUpdatedAt
-    });
+    const result = await refreshStatsCore();
+    res.json({ success: true, ...result });
   } catch (err) {
     res.status(500).json({ error: `Failed to refresh stats: ${err.message}` });
   }
