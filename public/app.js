@@ -373,7 +373,7 @@ async function deleteSubmission(id) {
 }
 
 function formatAugusta(augusta) {
-  if (!augusta || Object.keys(augusta).length === 0) return '<span class="form-na">Debut</span>';
+  if (!augusta || Object.keys(augusta).length === 0) return '<span class="aug-debut">Debut</span>';
   const years = ['2022', '2023', '2024', '2025'];
   const slots = years.map(y => {
     if (!augusta[y]) return `<span class="aug-slot"><span class="aug-empty">—</span></span>`;
