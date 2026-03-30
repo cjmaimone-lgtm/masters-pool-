@@ -46,14 +46,20 @@ function normalizeName(name) {
 async function fetchBirthYearById(espnId) {
   for (const league of ['pga', 'eur']) {
     try {
-      const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/sports/golf/${league}/athletes/${espnId}`);
-      if (!res.ok) continue;
+      const url = `https://site.web.api.espn.com/apis/common/v3/sports/golf/${league}/athletes/${espnId}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.log(`    Profile HTTP ${res.status} for ID ${espnId} (${league})`);
+        continue;
+      }
       const data = await res.json();
       if (data.displayDOB) {
         const parts = data.displayDOB.split('/');
         return parseInt(parts[parts.length - 1]);
       }
-    } catch { /* try next league */ }
+    } catch (err) {
+      console.log(`    Profile error for ID ${espnId} (${league}): ${err.message}`);
+    }
   }
   return null;
 }
@@ -61,23 +67,29 @@ async function fetchBirthYearById(espnId) {
 // Search ESPN for a golfer by name and return their birth year
 async function fetchBirthYearByName(golferName) {
   try {
-    const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(golferName)}&limit=5&type=player&sport=golf`);
-    if (!res.ok) return null;
+    const searchUrl = `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(golferName)}&limit=5&type=player&sport=golf`;
+    const res = await fetch(searchUrl);
+    if (!res.ok) {
+      console.log(`    ESPN search HTTP ${res.status} for "${golferName}"`);
+      return null;
+    }
     const data = await res.json();
     const results = data.items || [];
+    console.log(`    ESPN search for "${golferName}": ${results.length} results`);
+    if (results.length === 0) return null;
     // Find the best match among golf results
     const norm = normalizeName(golferName);
     for (const r of results) {
       if (normalizeName(r.displayName || '') === norm) {
+        console.log(`    Exact match: ${r.displayName} (ID: ${r.id})`);
         return await fetchBirthYearById(r.id);
       }
     }
     // If no exact match, try the first result
-    if (results.length > 0) {
-      return await fetchBirthYearById(results[0].id);
-    }
-    return null;
-  } catch {
+    console.log(`    No exact match, using first result: ${results[0].displayName} (ID: ${results[0].id})`);
+    return await fetchBirthYearById(results[0].id);
+  } catch (err) {
+    console.log(`    ESPN search error for "${golferName}": ${err.message}`);
     return null;
   }
 }
