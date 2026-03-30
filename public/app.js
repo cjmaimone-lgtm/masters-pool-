@@ -185,7 +185,7 @@ function renderGolferTable() {
 
   const tbody = document.getElementById('golferBody');
   tbody.innerHTML = filtered.map(g => {
-    const formHtml = formatForm(g.form);
+    const formHtml = formatForm(g.form, g.recentFinishes);
     const augustaHtml = formatAugusta(g.augusta);
     const age = g.birthYear ? new Date().getFullYear() - g.birthYear : '—';
     const withdrawnClass = g.withdrawn ? ' withdrawn' : '';
@@ -233,7 +233,7 @@ function formatOddsWithMovement(g) {
   }
 }
 
-function formatForm(form) {
+function formatForm(form, recentFinishes) {
   if (!form) return '<span class="form-na">—</span>';
   const badges = [];
   if (form.wins > 0) badges.push(`<span class="form-badge hot">${form.wins}W</span>`);
@@ -244,7 +244,17 @@ function formatForm(form) {
   if (form.wins > 0) heat = 'hot';
   else if (form.top10s >= 2) heat = 'warm';
   else if (form.top10s >= 1 && form.cuts / form.events >= 0.7) heat = 'mild';
-  return `<span class="form-indicator ${heat}" title="${form.events} events, ${form.wins}W, ${form.top10s} T10s, ${cutRate}% cuts, ${avgStr} avg"><span class="form-badges">${badges.join('')}</span><span class="form-detail">${avgStr} avg</span></span>`;
+
+  // Show recent finishes for golfers without wins or top-10s
+  let detailStr = `${avgStr} avg`;
+  if (badges.length === 0 && recentFinishes && recentFinishes.length > 0) {
+    const finishLabels = recentFinishes.slice(-3).map(p => p >= 999 ? 'MC' : `T${p}`);
+    detailStr = `${finishLabels.join(', ')} · ${avgStr} avg`;
+  } else if (badges.length === 0) {
+    detailStr = `${form.cuts}/${form.events} cuts · ${avgStr} avg`;
+  }
+
+  return `<span class="form-indicator ${heat}" title="${form.events} events, ${form.wins}W, ${form.top10s} T10s, ${cutRate}% cuts, ${avgStr} avg"><span class="form-badges">${badges.join('')}</span><span class="form-detail">${detailStr}</span></span>`;
 }
 
 function toggleGolfer(name) {
