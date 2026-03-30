@@ -985,4 +985,9 @@ function toggleBarLabel(barBg) {
   }
 }
 
-function showToast(msg, long) 
+function showToast(msg, long) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), long ? 5000 : 2500);
+}
