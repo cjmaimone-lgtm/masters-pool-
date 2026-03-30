@@ -197,7 +197,7 @@ function renderGolferTable() {
       <td class="golfer-name">${g.name}${withdrawnLabel}</td>
       <td class="age-cell">${age}</td>
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
-      <td class="opening-odds-cell">${g.openingOdds || '—'}</td>
+      <td class="opening-odds-cell">${formatOddsDisplay(g.openingOdds)}</td>
       <td class="odds-cell">${formatOddsWithMovement(g)}</td>
       <td class="form-cell">${formHtml}</td>
       <td class="augusta-cell">${augustaHtml}</td>
@@ -209,18 +209,27 @@ function parseOdds(odds) {
   return parseInt(odds.replace('+', ''));
 }
 
+function formatOddsDisplay(odds) {
+  if (!odds) return '—';
+  const num = parseOdds(odds);
+  const sign = odds.startsWith('-') ? '-' : '+';
+  return sign + num.toLocaleString();
+}
+
 function formatOddsWithMovement(g) {
+  const display = formatOddsDisplay(g.odds);
   if (!g.openingOdds || g.openingOdds === g.odds) {
-    return g.odds;
+    return display;
   }
   const current = parseOdds(g.odds);
   const opening = parseOdds(g.openingOdds);
   const diff = current - opening;
+  const openDisplay = formatOddsDisplay(g.openingOdds);
   // Lower odds = more favored. If odds dropped, they're getting more action (good)
   if (diff < 0) {
-    return `${g.odds} <span class="odds-move odds-up" title="Opened ${g.openingOdds}">&#9650;</span>`;
+    return `${display} <span class="odds-move odds-up" title="Opened ${openDisplay}">&#9650;</span>`;
   } else {
-    return `${g.odds} <span class="odds-move odds-down" title="Opened ${g.openingOdds}">&#9660;</span>`;
+    return `${display} <span class="odds-move odds-down" title="Opened ${openDisplay}">&#9660;</span>`;
   }
 }
 
