@@ -27,7 +27,6 @@ const NAME_ALIASES = {
   'matthew fitzpatrick': 'matt fitzpatrick',
   'christopher gotterup': 'chris gotterup',
   'nico echavarria': 'nicolas echavarria',
-  'j. j. spaun': 'j.j. spaun',
   'john keefer': 'johnny keefer',
   'pongsapak laopakdee': 'fifa laopakdee',
 };
