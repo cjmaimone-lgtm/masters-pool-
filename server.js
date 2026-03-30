@@ -517,6 +517,9 @@ async function refreshStatsCore() {
     .map((g, i) => ({ g, i }))
     .filter(({ g }) => !g.birthYear);
 
+  console.log(`Birth year lookup: ${missingBY.length} golfers missing birthYear`);
+
+  let birthYearsFound = 0;
   for (const { g, i } of missingBY) {
     const key = resolveAlias(g.name);
     const espnId = espnIds[key];
@@ -528,8 +531,15 @@ async function refreshStatsCore() {
     if (!year) {
       year = await fetchBirthYearByName(g.name);
     }
-    if (year) golfers[i].birthYear = year;
+    if (year) {
+      golfers[i].birthYear = year;
+      birthYearsFound++;
+      console.log(`  Found birthYear for ${g.name}: ${year}`);
+    } else {
+      console.log(`  FAILED to find birthYear for ${g.name}`);
+    }
   }
+  console.log(`Birth year lookup complete: ${birthYearsFound}/${missingBY.length} found`);
 
   fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
 
