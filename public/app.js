@@ -188,11 +188,13 @@ function renderGolferTable() {
     const formHtml = formatForm(g.form);
     const augustaHtml = formatAugusta(g.augusta);
     const age = g.birthYear ? new Date().getFullYear() - g.birthYear : '—';
+    const withdrawnClass = g.withdrawn ? ' withdrawn' : '';
+    const withdrawnLabel = g.withdrawn ? ' <span class="withdrawn-badge">WD</span>' : '';
     return `
-    <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}"
+    <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}${withdrawnClass}"
         onclick="toggleGolfer('${g.name.replace(/'/g, "\\'")}')">
       <td><span class="checkmark">${selectedGolfers.has(g.name) ? '\u2713' : ''}</span></td>
-      <td class="golfer-name">${g.name}</td>
+      <td class="golfer-name">${g.name}${withdrawnLabel}</td>
       <td class="age-cell">${age}</td>
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
       <td class="opening-odds-cell">${g.openingOdds || '—'}</td>
@@ -983,9 +985,4 @@ function toggleBarLabel(barBg) {
   }
 }
 
-function showToast(msg, long) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), long ? 5000 : 2500);
-}
+function showToast(msg, long) 
