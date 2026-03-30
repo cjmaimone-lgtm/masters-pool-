@@ -42,13 +42,39 @@ function normalizeName(name) {
     .toLowerCase();
 }
 
-async function fetchBirthYear(espnId) {
+// Look up birth year from ESPN athlete profile (try PGA, then DP World Tour)
+async function fetchBirthYearById(espnId) {
+  for (const league of ['pga', 'eur']) {
+    try {
+      const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/sports/golf/${league}/athletes/${espnId}`);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.displayDOB) {
+        const parts = data.displayDOB.split('/');
+        return parseInt(parts[parts.length - 1]);
+      }
+    } catch { /* try next league */ }
+  }
+  return null;
+}
+
+// Search ESPN for a golfer by name and return their birth year
+async function fetchBirthYearByName(golferName) {
   try {
-    const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/sports/golf/pga/athletes/${espnId}`);
+    const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(golferName)}&limit=5&type=player&sport=golf`);
+    if (!res.ok) return null;
     const data = await res.json();
-    if (data.displayDOB) {
-      const parts = data.displayDOB.split('/');
-      return parseInt(parts[parts.length - 1]);
+    const results = data.results || [];
+    // Find the best match among golf results
+    const norm = normalizeName(golferName);
+    for (const r of results) {
+      if (normalizeName(r.displayName || '') === norm) {
+        return await fetchBirthYearById(r.id);
+      }
+    }
+    // If no exact match, try the first result
+    if (results.length > 0) {
+      return await fetchBirthYearById(results[0].id);
     }
     return null;
   } catch {
@@ -494,10 +520,15 @@ async function refreshStatsCore() {
   for (const { g, i } of missingBY) {
     const key = resolveAlias(g.name);
     const espnId = espnIds[key];
+    let year = null;
     if (espnId) {
-      const year = await fetchBirthYear(espnId);
-      if (year) golfers[i].birthYear = year;
+      year = await fetchBirthYearById(espnId);
     }
+    // Fallback: search ESPN by name (covers LIV, amateurs, past champions)
+    if (!year) {
+      year = await fetchBirthYearByName(g.name);
+    }
+    if (year) golfers[i].birthYear = year;
   }
 
   fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
