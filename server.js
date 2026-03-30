@@ -64,7 +64,7 @@ async function fetchBirthYearByName(golferName) {
     const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(golferName)}&limit=5&type=player&sport=golf`);
     if (!res.ok) return null;
     const data = await res.json();
-    const results = data.results || [];
+    const results = data.items || [];
     // Find the best match among golf results
     const norm = normalizeName(golferName);
     for (const r of results) {
@@ -547,10 +547,6 @@ function refreshStatsInBackground() {
 }
 
 app.post('/api/refresh-stats', async (req, res) => {
-  if (!canRefresh('stats')) {
-    return res.status(429).json({ error: `Stats already refreshed this window. Next refresh available at ${getNextWindowTime()}` });
-  }
-
   try {
     const result = await refreshStatsCore();
     res.json({ success: true, ...result });
