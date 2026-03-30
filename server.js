@@ -206,10 +206,22 @@ async function refreshOddsCore() {
   const oddsData = await response.json();
   const remaining = response.headers.get('x-requests-remaining');
 
-  const bookmaker = oddsData[0]?.bookmakers?.[0];
-  if (!bookmaker) throw new Error('No odds data available for the Masters right now');
+  const allBookmakers = oddsData[0]?.bookmakers || [];
+  if (!allBookmakers.length) throw new Error('No odds data available for the Masters right now');
 
-  const outcomes = bookmaker.markets.find(m => m.key === 'outrights')?.outcomes || [];
+  // Merge outcomes across all bookmakers so no golfer is falsely marked withdrawn
+  // Use the first bookmaker's odds as the canonical price, but track all names seen
+  const outcomesMap = new Map();
+  allBookmakers.forEach(bk => {
+    const mkts = bk.markets.find(m => m.key === 'outrights')?.outcomes || [];
+    mkts.forEach(o => {
+      if (!outcomesMap.has(o.name)) {
+        outcomesMap.set(o.name, o);
+      }
+    });
+  });
+  const outcomes = Array.from(outcomesMap.values());
+  const bookmaker = allBookmakers[0];
 
   const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
   const nameIndex = buildNameIndex(golfers);
