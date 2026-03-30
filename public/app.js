@@ -375,7 +375,7 @@ async function deleteSubmission(id) {
 }
 
 function formatAugusta(augusta) {
-  if (!augusta || Object.keys(augusta).length === 0) return '<span class="aug-debut">Debut</span>';
+  if (!augusta) augusta = {};
   const years = ['2022', '2023', '2024', '2025'];
   const slots = years.map(y => {
     if (!augusta[y]) return `<span class="aug-slot"><span class="aug-empty">—</span></span>`;
@@ -567,7 +567,7 @@ function renderAugustaFit() {
 
   // Separate into golfers with history and debuts
   const withHistory = augustaData.filter(d => d.avg !== null).sort((a, b) => a.avg - b.avg);
-  const debuts = augustaData.filter(d => d.avg === null && d.cuts.total === 0);
+  const debuts = augustaData.filter(d => d.avg === null && d.cuts.total === 0 && d.augusta && Object.keys(d.augusta).length > 0);
   const allMC = augustaData.filter(d => d.avg === null && d.cuts.total > 0);
 
   if (withHistory.length === 0 && debuts.length === 0) {
