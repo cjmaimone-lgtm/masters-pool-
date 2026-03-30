@@ -215,19 +215,45 @@ async function refreshOddsCore() {
   const nameIndex = buildNameIndex(golfers);
 
   let matched = 0;
+  let added = [];
   let unmatched = [];
+
+  // Track which golfers appear in the API response
+  const seenInApi = new Set();
 
   outcomes.forEach(outcome => {
     const idx = findGolferIndex(nameIndex, outcome.name);
+    const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
     if (idx >= 0) {
-      const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
       if (!golfers[idx].openingOdds) {
         golfers[idx].openingOdds = golfers[idx].odds;
       }
       golfers[idx].odds = oddsVal;
+      golfers[idx].withdrawn = false;
+      seenInApi.add(idx);
       matched++;
     } else {
-      unmatched.push(outcome.name);
+      // Auto-add new golfer from the odds market
+      const newGolfer = {
+        name: outcome.name,
+        ranking: null,
+        odds: oddsVal,
+        form: { events: 0, wins: 0, top10s: 0, cuts: 0, avg: null },
+        augusta: {},
+        birthYear: null,
+        openingOdds: oddsVal,
+        withdrawn: false
+      };
+      golfers.push(newGolfer);
+      seenInApi.add(golfers.length - 1);
+      added.push(outcome.name);
+    }
+  });
+
+  // Mark golfers not in the API response as withdrawn
+  golfers.forEach((g, i) => {
+    if (!seenInApi.has(i) && !g.withdrawn) {
+      g.withdrawn = true;
     }
   });
 
@@ -239,7 +265,8 @@ async function refreshOddsCore() {
   status.oddsLastWindow = getRefreshWindow();
   saveRefreshStatus(status);
 
-  return { matched, unmatched, source: bookmaker.title, requestsRemaining: remaining, updatedAt: status.oddsUpdatedAt };
+  const withdrawn = golfers.filter(g => g.withdrawn).map(g => g.name);
+  return { matched, added, unmatched, withdrawn, source: bookmaker.title, requestsRemaining: remaining, updatedAt: status.oddsUpdatedAt };
 }
 
 app.post('/api/refresh-odds', async (req, res) => {
@@ -423,7 +450,7 @@ app.listen(PORT, () => {
   // Auto-refresh odds and stats on startup so Render cold starts always have fresh data
   console.log('Triggering startup odds refresh...');
   refreshOddsCore()
-    .then(result => console.log(`Startup odds refresh complete: ${result.matched} golfers matched (${result.source})`))
+    .then(result => console.log(`Startup odds refresh complete: ${result.matched} matched, ${result.added.length} added, ${result.withdrawn.length} withdrawn (${result.source})`))
     .catch(err => console.error('Startup odds refresh failed:', err.message));
 
   console.log('Triggering startup stats refresh...');
