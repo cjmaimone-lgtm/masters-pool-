@@ -42,6 +42,20 @@ function normalizeName(name) {
     .toLowerCase();
 }
 
+async function fetchBirthYear(espnId) {
+  try {
+    const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/sports/golf/pga/athletes/${espnId}`);
+    const data = await res.json();
+    if (data.displayDOB) {
+      const parts = data.displayDOB.split('/');
+      return parseInt(parts[parts.length - 1]);
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function resolveAlias(name) {
   const normalized = normalizeName(name);
   return NAME_ALIASES[normalized] ? normalizeName(NAME_ALIASES[normalized]) : normalized;
@@ -408,11 +422,18 @@ async function refreshStatsCore() {
   const nameIndex = buildNameIndex(golfers);
 
   const formData = {};
+  const espnIds = {};
 
   for (const lb of leaderboards) {
     for (const comp of lb.competitors) {
       const fullName = comp.athlete?.fullName || comp.athlete?.displayName;
       if (!fullName) continue;
+
+      // Collect ESPN athlete IDs for birth year lookups
+      const espnId = comp.id || comp.athlete?.id;
+      if (espnId) {
+        espnIds[resolveAlias(fullName)] = espnId;
+      }
 
       const norm = normalizeName(fullName);
       const idx = nameIndex[norm];
@@ -463,6 +484,20 @@ async function refreshStatsCore() {
 
     golfers[idx].recentFinishes = fd.recentFinishes.slice(-3);
     updated++;
+  }
+
+  // Auto-fill missing birth years from ESPN athlete profiles
+  const missingBY = golfers
+    .map((g, i) => ({ g, i }))
+    .filter(({ g }) => !g.birthYear);
+
+  for (const { g, i } of missingBY) {
+    const key = resolveAlias(g.name);
+    const espnId = espnIds[key];
+    if (espnId) {
+      const year = await fetchBirthYear(espnId);
+      if (year) golfers[i].birthYear = year;
+    }
   }
 
   fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
