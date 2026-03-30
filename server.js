@@ -53,8 +53,9 @@ async function fetchBirthYearById(espnId) {
         continue;
       }
       const data = await res.json();
-      if (data.displayDOB) {
-        const parts = data.displayDOB.split('/');
+      const dob = data.displayDOB || (data.athlete && data.athlete.displayDOB);
+      if (dob) {
+        const parts = dob.split('/');
         return parseInt(parts[parts.length - 1]);
       }
     } catch (err) {
