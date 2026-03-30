@@ -29,6 +29,8 @@ const NAME_ALIASES = {
   'nico echavarria': 'nicolas echavarria',
   'john keefer': 'johnny keefer',
   'pongsapak laopakdee': 'fifa laopakdee',
+  'j j spaun': 'jj spaun',
+  'william zalatoris': 'will zalatoris',
 };
 
 function normalizeName(name) {
@@ -277,9 +279,29 @@ async function refreshOddsCore() {
     }
   });
 
+  // Remove duplicate entries that snuck in from API name mismatches
+  const seenNames = new Set();
+  for (let i = golfers.length - 1; i >= 0; i--) {
+    const key = resolveAlias(golfers[i].name);
+    if (seenNames.has(key)) {
+      golfers.splice(i, 1);
+      // Adjust seenInApi indices
+    } else {
+      seenNames.add(key);
+    }
+  }
+
+  // Rebuild seenInApi after dedup (re-match against cleaned list)
+  const cleanIndex = buildNameIndex(golfers);
+  const cleanSeen = new Set();
+  outcomes.forEach(outcome => {
+    const idx = findGolferIndex(cleanIndex, outcome.name);
+    if (idx >= 0) cleanSeen.add(idx);
+  });
+
   // Mark golfers not in the API response as withdrawn
   golfers.forEach((g, i) => {
-    if (!seenInApi.has(i) && !g.withdrawn) {
+    if (!cleanSeen.has(i) && !g.withdrawn) {
       g.withdrawn = true;
     }
   });
