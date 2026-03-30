@@ -21,6 +21,17 @@ const GOLFERS_FILE = path.join(__dirname, 'data', 'golfers.json');
 const STATUS_FILE = path.join(__dirname, 'data', 'refresh-status.json');
 
 // --- Name normalization for matching across APIs ---
+
+// Map of known nickname/spelling variants to canonical names used in golfers.json
+const NAME_ALIASES = {
+  'matthew fitzpatrick': 'matt fitzpatrick',
+  'christopher gotterup': 'chris gotterup',
+  'nico echavarria': 'nicolas echavarria',
+  'j. j. spaun': 'j.j. spaun',
+  'john keefer': 'johnny keefer',
+  'pongsapak laopakdee': 'fifa laopakdee',
+};
+
 function normalizeName(name) {
   return name
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
@@ -30,16 +41,21 @@ function normalizeName(name) {
     .toLowerCase();
 }
 
+function resolveAlias(name) {
+  const normalized = normalizeName(name);
+  return NAME_ALIASES[normalized] ? normalizeName(NAME_ALIASES[normalized]) : normalized;
+}
+
 function buildNameIndex(golfers) {
   const index = {};
   golfers.forEach((g, i) => {
-    index[normalizeName(g.name)] = i;
+    index[resolveAlias(g.name)] = i;
   });
   return index;
 }
 
 function findGolferIndex(nameIndex, apiName) {
-  return nameIndex[normalizeName(apiName)] ?? -1;
+  return nameIndex[resolveAlias(apiName)] ?? -1;
 }
 
 // --- Refresh status tracking ---
