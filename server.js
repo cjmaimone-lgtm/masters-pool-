@@ -44,7 +44,7 @@ function normalizeName(name) {
 
 // Look up birth year from ESPN athlete profile (try PGA, then DP World Tour)
 async function fetchBirthYearById(espnId) {
-  for (const league of ['pga', 'eur']) {
+  for (const league of ['pga', 'eur', 'liv']) {
     try {
       const url = `https://site.web.api.espn.com/apis/common/v3/sports/golf/${league}/athletes/${espnId}`;
       const res = await fetch(url);
@@ -390,6 +390,7 @@ app.post('/api/refresh-odds', async (req, res) => {
 
 const ESPN_PGA = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga';
 const ESPN_EUR = 'https://site.api.espn.com/apis/site/v2/sports/golf/eur';
+const ESPN_LIV = 'https://site.api.espn.com/apis/site/v2/sports/golf/liv';
 
 // 2026 PGA Tour event IDs (The Sentry through Valero Texas Open)
 const PGA_TOURNAMENT_IDS = [
@@ -451,10 +452,15 @@ async function refreshStatsCore() {
   const eurCompleted = await getCompletedEventIds(ESPN_EUR, null);
   const eurRecent = eurCompleted.slice(-6);
 
+  // Fetch LIV Golf completed events (no ID filter — take all completed)
+  const livCompleted = await getCompletedEventIds(ESPN_LIV, null);
+  const livRecent = livCompleted.slice(-6);
+
   // Fetch all leaderboards in parallel
   const leaderboards = await Promise.all([
     ...pgaRecent.map(id => fetchLeaderboard(ESPN_PGA, id)),
-    ...eurRecent.map(id => fetchLeaderboard(ESPN_EUR, id))
+    ...eurRecent.map(id => fetchLeaderboard(ESPN_EUR, id)),
+    ...livRecent.map(id => fetchLeaderboard(ESPN_LIV, id))
   ]);
 
   const golfers = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8'));
