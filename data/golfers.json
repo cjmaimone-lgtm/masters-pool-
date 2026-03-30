@@ -1116,7 +1116,7 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null,
+    "birthYear": 1986,
     "openingOdds": "+100000"
   },
   {
@@ -1125,7 +1125,7 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null,
+    "birthYear": 2005,
     "openingOdds": "+100000"
   },
   {
@@ -1159,7 +1159,7 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null,
+    "birthYear": 2000,
     "openingOdds": "+100000"
   },
   {
@@ -1235,7 +1235,7 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null,
+    "birthYear": 2007,
     "openingOdds": "+100000"
   },
   {
@@ -1244,7 +1244,7 @@
     "odds": "+100000",
     "form": null,
     "augusta": {},
-    "birthYear": null,
+    "birthYear": 2005,
     "openingOdds": "+100000"
   },
   {
@@ -1273,5 +1273,33 @@
     },
     "birthYear": 1959,
     "openingOdds": "+100000"
+  },
+  {
+    "name": "Tony Finau",
+    "ranking": null,
+    "odds": "+5000",
+    "form": null,
+    "augusta": {
+      "2022": "T35",
+      "2023": "T26",
+      "2024": "T55",
+      "2025": "MC"
+    },
+    "birthYear": 1989,
+    "openingOdds": "+5000"
+  },
+  {
+    "name": "Will Zalatoris",
+    "ranking": null,
+    "odds": "+8000",
+    "form": null,
+    "augusta": {
+      "2022": "T6",
+      "2023": "MC",
+      "2024": "T9",
+      "2025": "MC"
+    },
+    "birthYear": 1996,
+    "openingOdds": "+8000"
   }
 ]
