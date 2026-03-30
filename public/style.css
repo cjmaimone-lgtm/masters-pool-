@@ -357,6 +357,21 @@ main {
   color: #c0392b;
 }
 
+.golfer-table tbody tr.withdrawn {
+  opacity: 0.45;
+}
+
+.withdrawn-badge {
+  font-size: 0.7em;
+  font-weight: bold;
+  color: #c0392b;
+  background: #fde8e8;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 .golfer-table .rank-cell {
   font-weight: bold;
   color: #555;
