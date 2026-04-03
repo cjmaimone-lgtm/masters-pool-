@@ -32,6 +32,7 @@
     <nav class="tabs">
       <button class="tab active" data-tab="pick">Pick Your Fivesome</button>
       <button class="tab" data-tab="board">Entry List</button>
+      <button class="tab" data-tab="live">Live Tracker</button>
       <button class="tab" data-tab="stats">Entry Analytics</button>
     </nav>
 
@@ -107,6 +108,37 @@
     <section id="tab-board" class="tab-content">
       <h2>All Entries</h2>
       <div id="submissionsList" class="submissions-list"></div>
+    </section>
+
+    <!-- LIVE TRACKER TAB -->
+    <section id="tab-live" class="tab-content">
+      <div class="live-header">
+        <div class="live-tournament-info">
+          <h2 id="liveTournamentName">Loading...</h2>
+          <span id="liveTournamentStatus" class="live-status-badge"></span>
+        </div>
+        <div class="live-controls">
+          <button id="refreshLeaderboardBtn" class="refresh-btn" onclick="refreshLiveLeaderboard()">Refresh</button>
+        </div>
+      </div>
+
+      <div id="liveStandings" class="live-standings"></div>
+
+      <div id="rootingSection" class="rooting-section">
+        <div id="rootingHeader" class="rooting-header"></div>
+        <div class="rooting-columns">
+          <div class="rooting-col root-for">
+            <h3>Root For</h3>
+            <p class="rooting-subtitle">Golfers on our leading entry who aren't on any entry above us</p>
+            <div id="rootForList" class="rooting-list"></div>
+          </div>
+          <div class="rooting-col root-against">
+            <h3>Root Against</h3>
+            <p class="rooting-subtitle">Golfers on entries above ours who aren't on our leading entry</p>
+            <div id="rootAgainstList" class="rooting-list"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- STATS TAB -->
