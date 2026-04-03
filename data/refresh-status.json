@@ -1,0 +1,29 @@
+{
+  "oddsUpdatedAt": "2026-04-03T19:51:21.380Z",
+  "statsUpdatedAt": "2026-04-03T19:51:24.441Z",
+  "oddsSource": "BetRivers",
+  "oddsLastWindow": "2026-04-03_afternoon",
+  "statsLastWindow": "2026-04-03_afternoon",
+  "tournamentsScanned": [
+    "WM Phoenix Open",
+    "AT&T Pebble Beach Pro-Am",
+    "The Genesis Invitational",
+    "Cognizant Classic in The Palm Beaches",
+    "Arnold Palmer Invitational pres. by Mastercard",
+    "Puerto Rico Open",
+    "THE PLAYERS Championship",
+    "Valspar Championship",
+    "Texas Children's Houston Open",
+    "Qatar Masters",
+    "Magical Kenya Open",
+    "Investec SA Open Championship",
+    "Joburg Open",
+    "Hainan Classic pres. by MAEXTRO",
+    "Hero Indian Open",
+    "LIV Golf Riyadh",
+    "LIV Golf Adelaide",
+    "LIV Golf Hong Kong",
+    "LIV Golf Singapore",
+    "LIV Golf South Africa"
+  ]
+}
