@@ -100,6 +100,17 @@
 
       <div class="submit-area">
         <div id="selectedNames" class="selected-names"></div>
+        <div class="tiebreaker-row">
+          <div class="tiebreaker-input">
+            <label for="winningGolfer">Tiebreaker — Winning Golfer:</label>
+            <input type="text" id="winningGolfer" list="golferDatalist" placeholder="Search golfer name..." maxlength="40" autocomplete="off">
+            <datalist id="golferDatalist"></datalist>
+          </div>
+          <div class="tiebreaker-input">
+            <label for="winningScore">Winning Score (to par):</label>
+            <input type="number" id="winningScore" placeholder="e.g. -17" min="-30" max="20" step="1">
+          </div>
+        </div>
         <button id="submitBtn" class="submit-btn" disabled>Submit Fivesome</button>
       </div>
     </section>
@@ -122,8 +133,6 @@
         </div>
       </div>
 
-      <div id="liveStandings" class="live-standings"></div>
-
       <div id="rootingSection" class="rooting-section">
         <div id="rootingHeader" class="rooting-header"></div>
         <div class="rooting-columns">
@@ -139,6 +148,15 @@
           </div>
         </div>
       </div>
+
+      <div class="standings-header">
+        <h3>Standings</h3>
+        <div class="standings-filter">
+          <button class="filter-btn active" data-filter="ours" onclick="setStandingsFilter('ours')">Our Entries</button>
+          <button class="filter-btn" data-filter="all" onclick="setStandingsFilter('all')">Full Field</button>
+        </div>
+      </div>
+      <div id="liveStandings" class="live-standings"></div>
     </section>
 
     <!-- STATS TAB -->
