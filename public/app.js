@@ -1283,44 +1283,43 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
     : leadEntry.userName;
   const leadScoreDisplay = leadEntry.totalScore > 0 ? `+${leadEntry.totalScore}` : leadEntry.totalScore === 0 ? 'E' : String(leadEntry.totalScore);
 
-  // Find the nearest threat: the closest entry that's not in our portfolio
-  // If we're #1, look at the next-best entry behind us (the one that could catch us)
-  // If we're not #1, look at the entry just above us (the one we're chasing)
-  const leadIdx = standings.findIndex(e => e.id === leadEntry.id);
-  const entryAbove = standings.slice(0, leadIdx).reverse().find(e => !e.isPortfolio) || null;
-  const entryBelow = standings.slice(leadIdx + 1).find(e => !e.isPortfolio) || null;
-
-  // The nearest rival: prefer the entry above (we're chasing), fall back to entry below (chasing us)
-  const nearestRival = entryAbove || entryBelow;
-
-  if (!nearestRival) {
-    rootingHeader.innerHTML = `<div class="rooting-callout">Our leading entry: <strong>${escapeHtml(leadLabel)}</strong> (ranked #${leadEntry.rank}, best-4 score: ${leadScoreDisplay})</div>`;
-    rootForList.innerHTML = '<div class="no-stats">No competition entries loaded yet.</div>';
-    rootAgainstList.innerHTML = '<div class="no-stats">No competition entries loaded yet.</div>';
-    return;
-  }
-
-  const rivalLabel = nearestRival.entryName
-    ? `${nearestRival.userName} — ${nearestRival.entryName}`
-    : nearestRival.userName;
-  const rivalScoreDisplay = nearestRival.totalScore > 0 ? `+${nearestRival.totalScore}` : nearestRival.totalScore === 0 ? 'E' : String(nearestRival.totalScore);
-  const gap = leadEntry.totalScore - nearestRival.totalScore;
-  const gapStr = gap === 0 ? 'tied' : gap > 0 ? `${gap} back` : `${Math.abs(gap)} ahead`;
-  const rivalDirection = entryAbove ? 'Chasing' : 'Defending against';
+  // All non-portfolio entries ranked above our best entry
+  const entriesAbove = standings.filter(e => !e.isPortfolio && e.rank < leadEntry.rank);
+  const entriesAboveCount = entriesAbove.length;
 
   rootingHeader.innerHTML = `<div class="rooting-callout">
-    Our leading entry: <strong>${escapeHtml(leadLabel)}</strong> (ranked #${leadEntry.rank}, best-4: ${leadScoreDisplay})<br>
-    <span class="rooting-rival">${rivalDirection}: <strong>${escapeHtml(rivalLabel)}</strong> (#${nearestRival.rank}, best-4: ${rivalScoreDisplay}) — ${gapStr}</span>
+    Our leading entry: <strong>${escapeHtml(leadLabel)}</strong> (ranked #${leadEntry.rank} of ${standings.length}, best-4: ${leadScoreDisplay})
+    ${entriesAboveCount > 0 ? `<br><span class="rooting-rival">${entriesAboveCount} entr${entriesAboveCount === 1 ? 'y' : 'ies'} ahead of us</span>` : '<br><span class="rooting-rival">We\'re in first!</span>'}
   </div>`;
 
-  // Golfer sets for our entry and the nearest rival (counting golfers only, not dropped)
+  // Our counting golfers (not dropped)
   const ourGolfers = new Set(leadEntry.golferScores.filter(g => g.name !== leadEntry.droppedGolfer).map(g => g.name));
-  const rivalGolfers = new Set(nearestRival.golferScores.filter(g => g.name !== nearestRival.droppedGolfer).map(g => g.name));
 
-  // Root For: golfers on our entry NOT on the rival — their improvement helps us pull away / catch up
+  // Count how many entries above us have each golfer in their counting 4
+  const golferFreqAbove = new Map(); // golferName -> count of entries above that use this golfer
+  entriesAbove.forEach(entry => {
+    entry.golferScores.forEach(g => {
+      if (entry.droppedGolfer === g.name) return; // only counting golfers
+      golferFreqAbove.set(g.name, (golferFreqAbove.get(g.name) || 0) + 1);
+    });
+  });
+
+  // Also include entries just behind us that could catch up
+  const entriesBehind = standings.filter(e => !e.isPortfolio && e.rank > leadEntry.rank && e.rank <= leadEntry.rank + 10);
+  const golferFreqBehind = new Map();
+  entriesBehind.forEach(entry => {
+    entry.golferScores.forEach(g => {
+      if (entry.droppedGolfer === g.name) return;
+      golferFreqBehind.set(g.name, (golferFreqBehind.get(g.name) || 0) + 1);
+    });
+  });
+
+  // ROOT FOR: Our golfers that are most unique — fewest entries above share them.
+  // Impact = how many entries above us DON'T have this golfer (we gain on them when this golfer improves)
   const rootForGolfers = [];
   ourGolfers.forEach(name => {
-    if (rivalGolfers.has(name)) return; // shared — neutral
+    const sharedAbove = golferFreqAbove.get(name) || 0;
+    const impact = entriesAboveCount - sharedAbove; // entries we'd gain on
     const data = lookupGolferScore(name, scoreMap);
     rootForGolfers.push({
       name,
@@ -1328,56 +1327,91 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
       display: data ? data.scoreDisplay : 'N/F',
       position: data ? data.position : '-',
       status: data ? data.status : 'not_in_field',
-      roundStatus: getRoundStatus(name, scoreMap)
+      roundStatus: getRoundStatus(name, scoreMap),
+      impact,
+      sharedAbove
     });
   });
-  // Sort by score ascending (best first = most impactful), limit to 5
-  rootForGolfers.sort((a, b) => a.score - b.score);
+  // Sort by impact descending (most unique first), then by score ascending as tiebreaker
+  rootForGolfers.sort((a, b) => b.impact - a.impact || a.score - b.score);
   const topRootFor = rootForGolfers.slice(0, 5);
 
-  if (topRootFor.length === 0) {
-    rootForList.innerHTML = '<div class="no-stats">All our counting golfers are shared with the nearest rival.</div>';
+  if (topRootFor.length === 0 || entriesAboveCount === 0) {
+    rootForList.innerHTML = entriesAboveCount === 0
+      ? '<div class="no-stats">We\'re in first — every stroke our golfers gain extends the lead!</div>'
+      : '<div class="no-stats">All our counting golfers are shared with entries above us.</div>';
   } else {
     rootForList.innerHTML = topRootFor.map(g => {
       const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
       const roundInfo = g.roundStatus ? `<span class="rooting-round">${escapeHtml(g.roundStatus)}</span>` : '';
+      const impactLabel = `<span class="rooting-impact">beats ${g.impact} entr${g.impact === 1 ? 'y' : 'ies'}</span>`;
       return `<div class="rooting-item root-for-item${statusCls}">
         <span class="rooting-name">${escapeHtml(g.name)}</span>
         <span class="rooting-score">${g.display}</span>
         ${roundInfo}
+        ${impactLabel}
       </div>`;
     }).join('');
   }
 
-  // Root Against: golfers on the rival NOT on our entry — their improvement helps the rival
-  const rootAgainstGolfers = [];
-  rivalGolfers.forEach(name => {
+  // ROOT AGAINST: Golfers NOT on our entry that appear most across entries above us.
+  // A stroke lost by this golfer hurts the most entries ahead of us simultaneously.
+  // Also consider entries just behind — their golfers improving could overtake us.
+  const rootAgainstGolfers = new Map();
+
+  // Entries above: their golfers doing worse helps us climb
+  golferFreqAbove.forEach((count, name) => {
     if (ourGolfers.has(name)) return; // shared — neutral
     const data = lookupGolferScore(name, scoreMap);
-    rootAgainstGolfers.push({
+    rootAgainstGolfers.set(name, {
       name,
       score: data ? data.score : 10,
       display: data ? data.scoreDisplay : 'N/F',
       position: data ? data.position : '-',
       status: data ? data.status : 'not_in_field',
-      roundStatus: getRoundStatus(name, scoreMap)
+      roundStatus: getRoundStatus(name, scoreMap),
+      impact: count,
+      direction: 'above'
     });
   });
-  // Sort by score ascending (best first = biggest threat), limit to 5
-  rootAgainstGolfers.sort((a, b) => a.score - b.score);
-  const topRootAgainst = rootAgainstGolfers.slice(0, 5);
+
+  // Entries behind: their unique golfers improving could let them catch us
+  golferFreqBehind.forEach((count, name) => {
+    if (ourGolfers.has(name)) return;
+    if (rootAgainstGolfers.has(name)) {
+      // Already tracked from above — add the behind impact
+      rootAgainstGolfers.get(name).impact += count;
+    } else {
+      const data = lookupGolferScore(name, scoreMap);
+      rootAgainstGolfers.set(name, {
+        name,
+        score: data ? data.score : 10,
+        display: data ? data.scoreDisplay : 'N/F',
+        position: data ? data.position : '-',
+        status: data ? data.status : 'not_in_field',
+        roundStatus: getRoundStatus(name, scoreMap),
+        impact: count,
+        direction: 'behind'
+      });
+    }
+  });
+
+  // Sort by impact descending (most widespread = max damage per stroke), then by score ascending
+  const threats = [...rootAgainstGolfers.values()].sort((a, b) => b.impact - a.impact || a.score - b.score);
+  const topRootAgainst = threats.slice(0, 5);
 
   if (topRootAgainst.length === 0) {
-    rootAgainstList.innerHTML = '<div class="no-stats">All rival\'s counting golfers are shared with ours.</div>';
+    rootAgainstList.innerHTML = '<div class="no-stats">No competition entries loaded yet.</div>';
   } else {
     rootAgainstList.innerHTML = topRootAgainst.map(g => {
       const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : '';
       const roundInfo = g.roundStatus ? `<span class="rooting-round">${escapeHtml(g.roundStatus)}</span>` : '';
+      const impactLabel = `<span class="rooting-impact">in ${g.impact} entr${g.impact === 1 ? 'y' : 'ies'}</span>`;
       return `<div class="rooting-item root-against-item${statusCls}">
         <span class="rooting-name">${escapeHtml(g.name)}</span>
         <span class="rooting-score">${g.display}</span>
         ${roundInfo}
-        <span class="rooting-entries">in: ${escapeHtml(rivalLabel)}</span>
+        ${impactLabel}
       </div>`;
     }).join('');
   }
