@@ -1352,7 +1352,7 @@ h2 {
 }
 
 .live-entry-row.live-row-portfolio {
-  background: rgba(0, 103, 71, 0.04);
+  background: rgba(0, 103, 71, 0.12);
 }
 
 .live-rank {
@@ -1495,6 +1495,12 @@ h2 {
   margin-bottom: 1rem;
   font-size: 0.9rem;
   border-radius: 0 4px 4px 0;
+  line-height: 1.6;
+}
+
+.rooting-rival {
+  font-size: 0.85rem;
+  color: #555;
 }
 
 .rooting-columns {
