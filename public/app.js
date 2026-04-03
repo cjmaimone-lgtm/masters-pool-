@@ -1292,15 +1292,19 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
     ${entriesAboveCount > 0 ? `<br><span class="rooting-rival">${entriesAboveCount} entr${entriesAboveCount === 1 ? 'y' : 'ies'} ahead of us</span>` : '<br><span class="rooting-rival">We\'re in first!</span>'}
   </div>`;
 
-  // Our counting golfers (not dropped)
-  const ourGolfers = new Set(leadEntry.golferScores.filter(g => g.name !== leadEntry.droppedGolfer).map(g => g.name));
+  // Our counting golfers (not dropped) — keyed by normalized name for cross-entry comparison
+  const ourGolferNames = leadEntry.golferScores.filter(g => g.name !== leadEntry.droppedGolfer).map(g => g.name);
+  const ourNormSet = new Set(ourGolferNames.map(n => normalizeGolferName(n)));
 
-  // Count how many entries above us have each golfer in their counting 4
-  const golferFreqAbove = new Map(); // golferName -> count of entries above that use this golfer
+  // Count how many entries above us have each golfer in their counting 4 (normalized keys)
+  const golferFreqAbove = new Map(); // normalizedName -> count
+  const golferDisplayAbove = new Map(); // normalizedName -> display name (first seen)
   entriesAbove.forEach(entry => {
     entry.golferScores.forEach(g => {
-      if (entry.droppedGolfer === g.name) return; // only counting golfers
-      golferFreqAbove.set(g.name, (golferFreqAbove.get(g.name) || 0) + 1);
+      if (entry.droppedGolfer === g.name) return;
+      const norm = normalizeGolferName(g.name);
+      golferFreqAbove.set(norm, (golferFreqAbove.get(norm) || 0) + 1);
+      if (!golferDisplayAbove.has(norm)) golferDisplayAbove.set(norm, g.name);
     });
   });
 
@@ -1310,15 +1314,18 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
   entriesBehind.forEach(entry => {
     entry.golferScores.forEach(g => {
       if (entry.droppedGolfer === g.name) return;
-      golferFreqBehind.set(g.name, (golferFreqBehind.get(g.name) || 0) + 1);
+      const norm = normalizeGolferName(g.name);
+      golferFreqBehind.set(norm, (golferFreqBehind.get(norm) || 0) + 1);
+      if (!golferDisplayAbove.has(norm)) golferDisplayAbove.set(norm, g.name);
     });
   });
 
   // ROOT FOR: Our golfers that are most unique — fewest entries above share them.
   // Impact = how many entries above us DON'T have this golfer (we gain on them when this golfer improves)
   const rootForGolfers = [];
-  ourGolfers.forEach(name => {
-    const sharedAbove = golferFreqAbove.get(name) || 0;
+  ourGolferNames.forEach(name => {
+    const norm = normalizeGolferName(name);
+    const sharedAbove = golferFreqAbove.get(norm) || 0;
     const impact = entriesAboveCount - sharedAbove; // entries we'd gain on
     const data = lookupGolferScore(name, scoreMap);
     rootForGolfers.push({
@@ -1357,39 +1364,41 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
   // ROOT AGAINST: Golfers NOT on our entry that appear most across entries above us.
   // A stroke lost by this golfer hurts the most entries ahead of us simultaneously.
   // Also consider entries just behind — their golfers improving could overtake us.
-  const rootAgainstGolfers = new Map();
+  const rootAgainstGolfers = new Map(); // normalizedName -> data
 
   // Entries above: their golfers doing worse helps us climb
-  golferFreqAbove.forEach((count, name) => {
-    if (ourGolfers.has(name)) return; // shared — neutral
-    const data = lookupGolferScore(name, scoreMap);
-    rootAgainstGolfers.set(name, {
-      name,
+  golferFreqAbove.forEach((count, norm) => {
+    if (ourNormSet.has(norm)) return; // on our team — never root against
+    const displayName = golferDisplayAbove.get(norm) || norm;
+    const data = lookupGolferScore(displayName, scoreMap);
+    rootAgainstGolfers.set(norm, {
+      name: displayName,
       score: data ? data.score : 10,
       display: data ? data.scoreDisplay : 'N/F',
       position: data ? data.position : '-',
       status: data ? data.status : 'not_in_field',
-      roundStatus: getRoundStatus(name, scoreMap),
+      roundStatus: getRoundStatus(displayName, scoreMap),
       impact: count,
       direction: 'above'
     });
   });
 
   // Entries behind: their unique golfers improving could let them catch us
-  golferFreqBehind.forEach((count, name) => {
-    if (ourGolfers.has(name)) return;
-    if (rootAgainstGolfers.has(name)) {
+  golferFreqBehind.forEach((count, norm) => {
+    if (ourNormSet.has(norm)) return; // on our team — never root against
+    if (rootAgainstGolfers.has(norm)) {
       // Already tracked from above — add the behind impact
-      rootAgainstGolfers.get(name).impact += count;
+      rootAgainstGolfers.get(norm).impact += count;
     } else {
-      const data = lookupGolferScore(name, scoreMap);
-      rootAgainstGolfers.set(name, {
-        name,
+      const displayName = golferDisplayAbove.get(norm) || norm;
+      const data = lookupGolferScore(displayName, scoreMap);
+      rootAgainstGolfers.set(norm, {
+        name: displayName,
         score: data ? data.score : 10,
         display: data ? data.scoreDisplay : 'N/F',
         position: data ? data.position : '-',
         status: data ? data.status : 'not_in_field',
-        roundStatus: getRoundStatus(name, scoreMap),
+        roundStatus: getRoundStatus(displayName, scoreMap),
         impact: count,
         direction: 'behind'
       });
