@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const GOLFERS_FILE = path.join(__dirname, 'data', 'golfers.json');
 const STATUS_FILE = path.join(__dirname, 'data', 'refresh-status.json');
+const FIELD_ENTRIES_FILE = path.join(__dirname, 'data', 'field-entries.json');
 
 // --- Name normalization for matching across APIs ---
 
@@ -188,6 +189,8 @@ app.get('/api/submissions', async (req, res) => {
     userName: row.user_name,
     entryName: row.entry_name || '',
     golfers: row.golfers,
+    winningGolfer: row.winning_golfer || null,
+    winningScore: row.winning_score != null ? row.winning_score : null,
     submittedAt: row.submitted_at
   }));
   res.json(submissions);
@@ -195,7 +198,7 @@ app.get('/api/submissions', async (req, res) => {
 
 // POST a new fivesome submission
 app.post('/api/submissions', async (req, res) => {
-  const { userName, entryName, golfers } = req.body;
+  const { userName, entryName, golfers, winningGolfer, winningScore } = req.body;
 
   if (!userName || !userName.trim()) {
     return res.status(400).json({ error: 'Name is required' });
@@ -221,7 +224,14 @@ app.post('/api/submissions', async (req, res) => {
     return res.status(400).json({ error: 'Entry name is required' });
   }
 
-  const row = { id: newId, user_name: userName.trim(), entry_name: entryName.trim(), golfers };
+  const row = {
+    id: newId,
+    user_name: userName.trim(),
+    entry_name: entryName.trim(),
+    golfers,
+    winning_golfer: winningGolfer ? winningGolfer.trim() : null,
+    winning_score: winningScore != null ? Number(winningScore) : null
+  };
 
   const { data, error } = await supabase
     .from('submissions')
@@ -236,6 +246,8 @@ app.post('/api/submissions', async (req, res) => {
     userName: data.user_name,
     entryName: data.entry_name || '',
     golfers: data.golfers,
+    winningGolfer: data.winning_golfer || null,
+    winningScore: data.winning_score != null ? data.winning_score : null,
     submittedAt: data.submitted_at
   });
 
@@ -254,6 +266,16 @@ app.delete('/api/submissions/:id', async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
   res.json({ success: true });
+});
+
+// GET field entries (the competition — stored in a JSON file, easy to replace)
+app.get('/api/field-entries', (req, res) => {
+  try {
+    const entries = JSON.parse(fs.readFileSync(FIELD_ENTRIES_FILE, 'utf8'));
+    res.json(entries);
+  } catch {
+    res.json([]);
+  }
 });
 
 // ============================================================
