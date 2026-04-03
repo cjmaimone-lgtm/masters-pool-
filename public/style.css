@@ -1594,6 +1594,22 @@ h2 {
   white-space: nowrap;
 }
 
+.rooting-impact {
+  font-size: 0.7rem;
+  color: #fff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.root-for-item .rooting-impact {
+  background: #2e7d32;
+}
+
+.root-against-item .rooting-impact {
+  background: #c62828;
+}
+
 .rooting-note {
   font-size: 0.75rem;
   color: #999;
