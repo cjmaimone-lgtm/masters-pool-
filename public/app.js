@@ -2,10 +2,11 @@ const API = '';
 let golfers = [];
 let selectedGolfers = new Set();
 let submissions = [];
+let fieldEntries = [];
 
 // --- Init ---
 document.addEventListener('DOMContentLoaded', async () => {
-  await Promise.all([loadGolfers(), loadSubmissions(), loadRefreshStatus()]);
+  await Promise.all([loadGolfers(), loadSubmissions(), loadFieldEntries(), loadRefreshStatus()]);
   renderGolferTable();
   setupTabs();
   setupSearch();
@@ -105,11 +106,29 @@ async function refreshStats() {
 async function loadGolfers() {
   const res = await fetch(`${API}/api/golfers`);
   golfers = await res.json();
+  // Populate tiebreaker datalist
+  const datalist = document.getElementById('golferDatalist');
+  if (datalist) {
+    datalist.innerHTML = golfers
+      .filter(g => !g.withdrawn)
+      .sort((a, b) => (a.ranking || 999) - (b.ranking || 999))
+      .map(g => `<option value="${g.name}">`)
+      .join('');
+  }
 }
 
 async function loadSubmissions() {
   const res = await fetch(`${API}/api/submissions`);
   submissions = await res.json();
+}
+
+async function loadFieldEntries() {
+  try {
+    const res = await fetch(`${API}/api/field-entries`);
+    fieldEntries = await res.json();
+  } catch {
+    fieldEntries = [];
+  }
 }
 
 // --- Tabs ---
@@ -306,6 +325,19 @@ async function submitFivesome() {
     showToast('Please name this entry first!');
     return;
   }
+
+  const winningGolfer = document.getElementById('winningGolfer').value.trim();
+  const winningScoreVal = document.getElementById('winningScore').value;
+  if (!winningGolfer) {
+    showToast('Please pick a winning golfer for your tiebreaker!');
+    return;
+  }
+  if (winningScoreVal === '') {
+    showToast('Please enter a predicted winning score for your tiebreaker!');
+    return;
+  }
+  const winningScore = parseInt(winningScoreVal);
+
   const golferNames = Array.from(selectedGolfers);
 
   // Check for duplicate fivesome
@@ -321,7 +353,7 @@ async function submitFivesome() {
     const res = await fetch(`${API}/api/submissions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userName, entryName, golfers: golferNames })
+      body: JSON.stringify({ userName, entryName, golfers: golferNames, winningGolfer, winningScore })
     });
 
     const data = await res.json();
@@ -334,6 +366,8 @@ async function submitFivesome() {
     submissions.push(data);
     selectedGolfers.clear();
     document.getElementById('entryName').value = '';
+    document.getElementById('winningGolfer').value = '';
+    document.getElementById('winningScore').value = '';
     renderGolferTable();
     updateSelectedDisplay();
     updateSubmissionCount();
@@ -372,11 +406,14 @@ function renderSubmissions() {
     const key = fivesomeKey(s.golfers);
     const isDupe = keyCounts[key] > 1;
     const entryLabel = s.entryName ? ` — ${escapeHtml(s.entryName)}` : '';
+    const tbGolfer = s.winningGolfer ? escapeHtml(s.winningGolfer) : '—';
+    const tbScore = s.winningScore != null ? (s.winningScore > 0 ? `+${s.winningScore}` : s.winningScore === 0 ? 'E' : String(s.winningScore)) : '—';
     return `
       <div class="submission-card ${isDupe ? 'duplicate' : ''}">
         <div>
           <div class="user-name">${escapeHtml(s.userName)}${entryLabel}${isDupe ? ' <span class="dupe-badge">DUPLICATE</span>' : ''}</div>
           <div class="golfer-list">${[...s.golfers].sort((a, b) => a.localeCompare(b)).map(g => escapeHtml(g)).join(' &bull; ')}</div>
+          <div class="tiebreaker-display">TB: ${tbGolfer} wins at ${tbScore}</div>
         </div>
         <div style="text-align:right;">
           <div class="timestamp">${timeStr}</div>
@@ -986,6 +1023,15 @@ function renderOwnershipGrid() {
 
 // --- Live Tournament Tracker ---
 let liveData = null;
+let standingsFilter = 'ours'; // 'ours' or 'all'
+
+function setStandingsFilter(filter) {
+  standingsFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  renderLiveTracker();
+}
 
 // Client-side name normalization (mirrors server logic)
 const CLIENT_NAME_ALIASES = {
@@ -1031,7 +1077,13 @@ async function refreshLiveLeaderboard() {
 function scoreEntries(scoreMap) {
   const MC_PENALTY = 10; // +10 for golfers who missed cut or aren't in the field
 
-  return submissions.map(s => {
+  // Combine portfolio (our submissions) and field entries (the competition)
+  const allEntries = [
+    ...submissions.map(s => ({ ...s, isPortfolio: true })),
+    ...fieldEntries.map(s => ({ ...s, isPortfolio: false }))
+  ];
+
+  return allEntries.map(s => {
     const golferScores = s.golfers.map(name => {
       const data = lookupGolferScore(name, scoreMap);
       let score, display, status, thru, today, position;
@@ -1084,9 +1136,31 @@ function scoreEntries(scoreMap) {
       best4Names: new Set(best4.map(g => g.name)),
       droppedGolfer: dropped?.name,
       totalScore,
+      winningGolfer: s.winningGolfer || null,
+      winningScore: s.winningScore != null ? s.winningScore : null,
+      isPortfolio: s.isPortfolio,
       poolPosition: null // user fills in later
     };
   }).sort((a, b) => a.totalScore - b.totalScore);
+}
+
+// Helper: get thru/round status string for a golfer in rooting display
+function getRoundStatus(golferName, scoreMap) {
+  const data = lookupGolferScore(golferName, scoreMap);
+  if (!data) return '';
+  if (data.status === 'cut') return 'MC';
+  if (data.status === 'wd') return 'WD';
+  // Mid-round: show "thru X"
+  if (data.thru && data.thru !== 'F' && data.thru !== '-') {
+    const todayPart = data.today ? ` (${data.today})` : '';
+    return `thru ${data.thru}${todayPart}`;
+  }
+  // Finished round: show most recent round score
+  if (data.rounds && data.rounds.length > 0) {
+    const lastRound = data.rounds[data.rounds.length - 1];
+    return `R${lastRound.round}: ${lastRound.strokes} (${lastRound.toPar})`;
+  }
+  return '';
 }
 
 function renderLiveTracker() {
@@ -1130,13 +1204,22 @@ function renderLiveTracker() {
     entry.rank = rank;
   });
 
-  // Find our leading portfolio entry (all current submissions are "ours" for now)
-  const leadEntry = standings[0]; // best score = first after sort
+  // Find our leading portfolio entry
+  const leadEntry = standings.find(e => e.isPortfolio) || standings[0];
+
+  // Rooting interests — rendered first (above standings)
+  renderRootingInterests(standings, leadEntry, scoreMap);
+
+  // Apply filter to standings table
+  const displayEntries = standingsFilter === 'ours'
+    ? standings.filter(e => e.isPortfolio)
+    : standings;
 
   // Render standings table
-  const rows = standings.map(entry => {
+  const rows = displayEntries.map(entry => {
     const isLead = entry.id === leadEntry.id;
-    const highlightClass = isLead ? ' live-row-highlight' : '';
+    const isOurs = entry.isPortfolio;
+    const highlightClass = isLead ? ' live-row-highlight' : isOurs ? ' live-row-portfolio' : '';
     const totalDisplay = entry.totalScore > 0 ? `+${entry.totalScore}` : entry.totalScore === 0 ? 'E' : String(entry.totalScore);
     const entryLabel = entry.entryName ? `${escapeHtml(entry.userName)} — ${escapeHtml(entry.entryName)}` : escapeHtml(entry.userName);
     const leadBadge = isLead ? ' <span class="lead-badge">OUR BEST</span>' : '';
@@ -1145,13 +1228,21 @@ function renderLiveTracker() {
       .sort((a, b) => a.score - b.score)
       .map(g => {
         const isDrop = g.name === entry.droppedGolfer;
+        const isWinPick = entry.winningGolfer && normalizeGolferName(g.name) === normalizeGolferName(entry.winningGolfer);
         const statusClass = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
         const dropClass = isDrop ? ' golfer-dropped' : '';
+        const winClass = isWinPick ? ' golfer-win-pick' : '';
         const lastName = g.name.split(' ').slice(-1)[0];
         const thruStr = g.thru === 'F' ? '' : g.thru === '-' ? '' : ` (${g.thru})`;
         const todayStr = g.today ? ` today: ${g.today}` : '';
-        return `<span class="live-golfer${statusClass}${dropClass}" title="${escapeHtml(g.name)}: ${g.display}${thruStr}${todayStr}${isDrop ? ' (dropped)' : ''}">${escapeHtml(lastName)} <span class="live-golfer-score">${g.display}</span>${isDrop ? '<span class="drop-x">&#10005;</span>' : ''}</span>`;
+        const winIcon = isWinPick ? '<span class="win-pick-icon" title="Winning golfer pick">&#9733;</span>' : '';
+        return `<span class="live-golfer${statusClass}${dropClass}${winClass}" title="${escapeHtml(g.name)}: ${g.display}${thruStr}${todayStr}${isDrop ? ' (dropped)' : ''}${isWinPick ? ' (winner pick)' : ''}">${winIcon}${escapeHtml(lastName)} <span class="live-golfer-score">${g.display}</span>${isDrop ? '<span class="drop-x">&#10005;</span>' : ''}</span>`;
       }).join('');
+
+    // Winning score tiebreaker badge
+    const winScoreBadge = entry.winningScore != null
+      ? `<span class="live-win-score" title="Predicted winning score">${entry.winningScore > 0 ? '+' + entry.winningScore : entry.winningScore === 0 ? 'E' : entry.winningScore}</span>`
+      : '';
 
     const poolPosCell = '<span class="pool-pos-placeholder">—</span>';
 
@@ -1160,7 +1251,7 @@ function renderLiveTracker() {
         <td class="live-rank">${entry.rank}</td>
         <td class="live-entry-name">${entryLabel}${leadBadge}</td>
         <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
-        <td class="live-golfers">${golferCells}</td>
+        <td class="live-golfers">${golferCells}${winScoreBadge}</td>
         <td class="live-pool-pos">${poolPosCell}</td>
       </tr>
     `;
@@ -1180,9 +1271,6 @@ function renderLiveTracker() {
       <tbody>${rows}</tbody>
     </table>
   `;
-
-  // Rooting interests — always shown, based on our leading entry
-  renderRootingInterests(standings, leadEntry, scoreMap);
 }
 
 function renderRootingInterests(standings, leadEntry, scoreMap) {
@@ -1196,9 +1284,8 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
   const leadScoreDisplay = leadEntry.totalScore > 0 ? `+${leadEntry.totalScore}` : leadEntry.totalScore === 0 ? 'E' : String(leadEntry.totalScore);
   rootingHeader.innerHTML = `<div class="rooting-callout">Our leading entry: <strong>${escapeHtml(leadLabel)}</strong> (ranked #${leadEntry.rank}, best-4 score: ${leadScoreDisplay})</div>`;
 
-  // Golfers on our leading entry (the counting 4, not the dropped one)
+  // Golfers on our leading entry
   const leadGolferNames = new Set(leadEntry.golferScores.map(g => g.name));
-  const leadBest4Names = leadEntry.best4Names;
 
   // Golfers on entries ranked above our leader
   const entriesAbove = standings.filter(e => e.rank < leadEntry.rank);
@@ -1212,7 +1299,7 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
   // Root For: golfers on our leading entry who are NOT on any higher-ranked entry
   const rootForGolfers = [];
   leadGolferNames.forEach(name => {
-    if (aboveGolferNames.has(name)) return; // shared with an entry above — rooting is neutral
+    if (aboveGolferNames.has(name)) return;
     const data = lookupGolferScore(name, scoreMap);
     const isDropped = leadEntry.droppedGolfer === name;
     rootForGolfers.push({
@@ -1221,6 +1308,7 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
       display: data ? data.scoreDisplay : 'N/F',
       position: data ? data.position : '-',
       status: data ? data.status : 'not_in_field',
+      roundStatus: getRoundStatus(name, scoreMap),
       isDropped
     });
   });
@@ -1232,10 +1320,11 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
     rootForList.innerHTML = rootForGolfers.map(g => {
       const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
       const dropNote = g.isDropped ? ' <span class="rooting-note">(currently dropped)</span>' : '';
+      const roundInfo = g.roundStatus ? `<span class="rooting-round">${escapeHtml(g.roundStatus)}</span>` : '';
       return `<div class="rooting-item root-for-item${statusCls}">
         <span class="rooting-name">${escapeHtml(g.name)}</span>
         <span class="rooting-score">${g.display}</span>
-        <span class="rooting-pos">T${g.position}</span>
+        ${roundInfo}
         ${dropNote}
       </div>`;
     }).join('');
@@ -1245,8 +1334,8 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
   const threatGolfers = new Map();
   entriesAbove.forEach(entry => {
     entry.golferScores.forEach(g => {
-      if (leadGolferNames.has(g.name)) return; // shared — neutral
-      if (entry.droppedGolfer === g.name) return; // dropped from their scoring
+      if (leadGolferNames.has(g.name)) return;
+      if (entry.droppedGolfer === g.name) return;
       if (!threatGolfers.has(g.name)) {
         threatGolfers.set(g.name, { ...g, inEntries: [] });
       }
@@ -1266,9 +1355,12 @@ function renderRootingInterests(standings, leadEntry, scoreMap) {
     rootAgainstList.innerHTML = threats.map(g => {
       const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : '';
       const entriesStr = g.inEntries.map(e => escapeHtml(e)).join(', ');
+      const roundInfo = getRoundStatus(g.name, scoreMap);
+      const roundHtml = roundInfo ? `<span class="rooting-round">${escapeHtml(roundInfo)}</span>` : '';
       return `<div class="rooting-item root-against-item${statusCls}">
         <span class="rooting-name">${escapeHtml(g.name)}</span>
         <span class="rooting-score">${g.display}</span>
+        ${roundHtml}
         <span class="rooting-entries" title="${entriesStr}">in: ${entriesStr}</span>
       </div>`;
     }).join('');
