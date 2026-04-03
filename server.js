@@ -584,6 +584,99 @@ app.post('/api/refresh-stats', async (req, res) => {
   }
 });
 
+// ============================================================
+// LIVE TOURNAMENT LEADERBOARD
+// ============================================================
+
+app.get('/api/live-leaderboard', async (req, res) => {
+  try {
+    // Fetch PGA scoreboard to find current/recent event
+    const sbRes = await fetch(`${ESPN_PGA}/scoreboard`);
+    const sbData = await sbRes.json();
+    const events = sbData.events || [];
+
+    // Prefer in-progress, then most recent post, then last listed
+    let event = events.find(e => e.status?.type?.state === 'in')
+             || events.find(e => e.status?.type?.state === 'post')
+             || events[events.length - 1];
+
+    if (!event) {
+      return res.json({ tournament: null, competitors: [], scoreMap: {} });
+    }
+
+    // Fetch detailed leaderboard for this event
+    const lbRes = await fetch(`${ESPN_PGA}/scoreboard/${event.id}`);
+    const lbData = await lbRes.json();
+    const evt = lbData.events?.[0] || lbData;
+    const competition = evt.competitions?.[0] || {};
+    const competitors = competition.competitors || [];
+
+    const scoreMap = {};
+
+    const competitorList = competitors.map((c, idx) => {
+      const displayName = c.athlete?.displayName || c.athlete?.fullName || 'Unknown';
+      const scoreStr = c.score || 'E';
+      let scoreToPar = 0;
+      if (scoreStr !== 'E') scoreToPar = parseInt(scoreStr) || 0;
+
+      // Round scores (completed rounds only)
+      const rounds = (c.linescores || [])
+        .filter(ls => ls.value != null)
+        .map(ls => ({ round: ls.period, strokes: ls.value, toPar: ls.displayValue }));
+
+      // Determine "thru" for current round
+      let thru = 'F';
+      let todayScore = null;
+      const inProgressRound = (c.linescores || []).find(ls => ls.value == null && ls.period != null);
+      if (inProgressRound && inProgressRound.linescores && inProgressRound.linescores.length > 0) {
+        thru = String(inProgressRound.linescores.length);
+        todayScore = inProgressRound.linescores.reduce((sum, h) => {
+          const v = parseInt(h.scoreType?.displayValue);
+          return isNaN(v) ? sum : sum + v;
+        }, 0);
+      } else if (inProgressRound) {
+        thru = '-';
+      }
+
+      // Player status
+      let playerStatus = 'active';
+      if (c.status?.type?.name === 'cut' || c.status?.period === 99) playerStatus = 'cut';
+      if (c.status?.type?.name === 'wd' || c.status?.type?.description === 'Withdrawn') playerStatus = 'wd';
+
+      const entry = {
+        name: displayName,
+        score: scoreToPar,
+        scoreDisplay: scoreStr === 'E' ? 'E' : (scoreToPar > 0 ? `+${scoreToPar}` : String(scoreToPar)),
+        position: idx + 1,
+        rounds,
+        thru,
+        today: todayScore !== null ? (todayScore > 0 ? `+${todayScore}` : todayScore === 0 ? 'E' : String(todayScore)) : null,
+        status: playerStatus
+      };
+
+      // Build scoreMap keyed by normalized name for client-side matching
+      const normKey = resolveAlias(displayName);
+      scoreMap[normKey] = entry;
+
+      return entry;
+    });
+
+    res.json({
+      tournament: {
+        name: event.name || event.shortName,
+        id: event.id,
+        status: event.status?.type?.description || 'Unknown',
+        detail: event.status?.type?.detail || '',
+        state: event.status?.type?.state
+      },
+      competitors: competitorList,
+      scoreMap
+    });
+  } catch (err) {
+    res.status(500).json({ error: `Failed to fetch live leaderboard: ${err.message}` });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Masters Fivesome Picker running at http://localhost:${PORT}`);
 
