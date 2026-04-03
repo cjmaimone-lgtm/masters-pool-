@@ -1127,3 +1127,369 @@ h2 {
     pointer-events: none;
   }
 }
+
+/* ============================================================
+   LIVE TRACKER TAB
+   ============================================================ */
+
+.live-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.live-tournament-info h2 {
+  font-size: 1.5rem;
+  color: #006747;
+  margin-bottom: 0.3rem;
+}
+
+.live-badge-live {
+  display: inline-block;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse-live 2s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.live-badge-final {
+  display: inline-block;
+  background: #555;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.live-detail {
+  font-size: 0.85rem;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+.live-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.live-controls .refresh-btn {
+  background: #006747;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.live-controls .refresh-btn:hover:not(:disabled) {
+  background: #004d35;
+}
+
+.live-controls .refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Standings Table */
+.live-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.live-table thead th {
+  background: #006747;
+  color: #fff;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.live-table thead th:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+.live-table thead th:nth-child(3) {
+  width: 70px;
+  text-align: center;
+}
+
+.live-table thead th:last-child {
+  width: 70px;
+  text-align: center;
+}
+
+.live-entry-row {
+  border-bottom: 1px solid #e0d8c8;
+  transition: background 0.15s;
+}
+
+.live-entry-row:hover {
+  background: rgba(0, 103, 71, 0.04);
+}
+
+.live-entry-row.live-row-highlight {
+  background: rgba(0, 103, 71, 0.1);
+  font-weight: bold;
+}
+
+.live-entry-row.live-row-highlight:hover {
+  background: rgba(0, 103, 71, 0.15);
+}
+
+.live-rank {
+  text-align: center;
+  font-weight: bold;
+  color: #006747;
+  padding: 0.6rem 0.4rem;
+  font-size: 1rem;
+}
+
+.live-entry-name {
+  padding: 0.6rem 0.8rem;
+}
+
+.live-total {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0.6rem 0.4rem;
+}
+
+.live-total.under-par { color: #d32f2f; }
+.live-total.over-par { color: #555; }
+
+.live-golfers {
+  padding: 0.5rem 0.8rem;
+  vertical-align: middle;
+}
+
+.live-golfer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.live-golfer-score {
+  font-weight: bold;
+  color: #006747;
+}
+
+.live-golfer.golfer-dropped {
+  background: #f5f5f5;
+  border-color: #ccc;
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.live-golfer.golfer-cut {
+  background: #fff3e0;
+  border-color: #ffcc80;
+}
+
+.live-golfer.golfer-wd {
+  background: #fce4ec;
+  border-color: #ef9a9a;
+}
+
+.live-golfer.golfer-nif {
+  background: #f5f5f5;
+  border-color: #bbb;
+  color: #999;
+}
+
+.drop-x {
+  color: #d32f2f;
+  font-size: 0.7rem;
+  margin-left: 0.15rem;
+}
+
+.live-pool-pos {
+  text-align: center;
+  padding: 0.6rem 0.4rem;
+  color: #999;
+}
+
+.pool-pos-placeholder {
+  font-style: italic;
+}
+
+.lead-badge {
+  display: inline-block;
+  background: #ffd700;
+  color: #333;
+  font-size: 0.6rem;
+  font-weight: bold;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+/* Rooting Interests */
+.rooting-section {
+  margin-top: 2rem;
+}
+
+.rooting-callout {
+  background: rgba(0, 103, 71, 0.08);
+  border-left: 4px solid #006747;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.rooting-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.rooting-col h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid;
+}
+
+.root-for h3 {
+  color: #006747;
+  border-color: #006747;
+}
+
+.root-against h3 {
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.rooting-subtitle {
+  font-size: 0.78rem;
+  color: #888;
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.rooting-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rooting-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.root-for-item {
+  background: #e8f5e9;
+  border-left: 3px solid #006747;
+}
+
+.root-against-item {
+  background: #fce4ec;
+  border-left: 3px solid #d32f2f;
+}
+
+.rooting-name {
+  font-weight: bold;
+  min-width: 140px;
+}
+
+.rooting-score {
+  font-weight: bold;
+  min-width: 40px;
+}
+
+.root-for-item .rooting-score { color: #006747; }
+.root-against-item .rooting-score { color: #d32f2f; }
+
+.rooting-pos {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.rooting-entries {
+  color: #888;
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.rooting-note {
+  font-size: 0.75rem;
+  color: #999;
+  font-style: italic;
+}
+
+.rooting-item.golfer-cut,
+.rooting-item.golfer-wd,
+.rooting-item.golfer-nif {
+  opacity: 0.5;
+}
+
+/* Mobile responsive for live tracker */
+@media (max-width: 768px) {
+  .live-header {
+    flex-direction: column;
+  }
+
+  .live-controls {
+    flex-wrap: wrap;
+  }
+
+  .live-table {
+    font-size: 0.8rem;
+  }
+
+  .live-golfer {
+    font-size: 0.7rem;
+  }
+
+  .rooting-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .rooting-name {
+    min-width: auto;
+  }
+
+  .rooting-entries {
+    max-width: 150px;
+  }
+}
