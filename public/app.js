@@ -122,6 +122,13 @@ function setupTabs() {
       document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
 
       if (tab.dataset.tab === 'board') renderSubmissions();
+      if (tab.dataset.tab === 'live') {
+        if (!liveData) {
+          loadLiveLeaderboard().then(() => renderLiveTracker());
+        } else {
+          renderLiveTracker();
+        }
+      }
       if (tab.dataset.tab === 'stats') renderAllStats();
     });
   });
@@ -975,6 +982,297 @@ function renderOwnershipGrid() {
       </table>
     </div>
   `;
+}
+
+// --- Live Tournament Tracker ---
+let liveData = null;
+
+// Client-side name normalization (mirrors server logic)
+const CLIENT_NAME_ALIASES = {
+  'matthew fitzpatrick': 'matt fitzpatrick',
+  'christopher gotterup': 'chris gotterup',
+  'nico echavarria': 'nicolas echavarria',
+  'john keefer': 'johnny keefer',
+  'pongsapak laopakdee': 'fifa laopakdee',
+  'j j spaun': 'jj spaun',
+  'william zalatoris': 'will zalatoris',
+};
+
+function normalizeGolferName(name) {
+  let n = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  return CLIENT_NAME_ALIASES[n] || n;
+}
+
+function lookupGolferScore(golferName, scoreMap) {
+  const key = normalizeGolferName(golferName);
+  return scoreMap[key] || null;
+}
+
+async function loadLiveLeaderboard() {
+  try {
+    const res = await fetch(`${API}/api/live-leaderboard`);
+    liveData = await res.json();
+  } catch {
+    liveData = null;
+  }
+}
+
+async function refreshLiveLeaderboard() {
+  const btn = document.getElementById('refreshLeaderboardBtn');
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  await loadLiveLeaderboard();
+  renderLiveTracker();
+  btn.disabled = false;
+  btn.textContent = 'Refresh';
+}
+
+function scoreEntries(scoreMap) {
+  const MC_PENALTY = 10; // +10 for golfers who missed cut or aren't in the field
+
+  return submissions.map(s => {
+    const golferScores = s.golfers.map(name => {
+      const data = lookupGolferScore(name, scoreMap);
+      let score, display, status, thru, today, position;
+
+      if (!data) {
+        // Not in tournament field
+        score = MC_PENALTY;
+        display = 'N/F';
+        status = 'not_in_field';
+        thru = '-';
+        today = null;
+        position = '-';
+      } else if (data.status === 'cut') {
+        score = data.score;
+        display = data.scoreDisplay;
+        status = 'cut';
+        thru = 'MC';
+        today = null;
+        position = 'MC';
+      } else if (data.status === 'wd') {
+        score = Math.max(data.score, MC_PENALTY);
+        display = data.scoreDisplay;
+        status = 'wd';
+        thru = 'WD';
+        today = null;
+        position = 'WD';
+      } else {
+        score = data.score;
+        display = data.scoreDisplay;
+        status = 'active';
+        thru = data.thru;
+        today = data.today;
+        position = data.position;
+      }
+
+      return { name, score, display, status, thru, today, position };
+    });
+
+    // Sort by score ascending (best first), drop worst (index 4)
+    const sorted = [...golferScores].sort((a, b) => a.score - b.score);
+    const best4 = sorted.slice(0, 4);
+    const dropped = sorted[4];
+    const totalScore = best4.reduce((sum, g) => sum + g.score, 0);
+
+    return {
+      userName: s.userName || 'Unknown',
+      entryName: s.entryName || '',
+      id: s.id,
+      golferScores,
+      best4Names: new Set(best4.map(g => g.name)),
+      droppedGolfer: dropped?.name,
+      totalScore,
+      poolPosition: null // user fills in later
+    };
+  }).sort((a, b) => a.totalScore - b.totalScore);
+}
+
+function renderLiveTracker() {
+  const container = document.getElementById('liveStandings');
+  const tourneyName = document.getElementById('liveTournamentName');
+  const tourneyStatus = document.getElementById('liveTournamentStatus');
+
+  if (!liveData || !liveData.tournament) {
+    tourneyName.textContent = 'No tournament data available';
+    tourneyStatus.textContent = '';
+    container.innerHTML = '<div class="no-stats">Could not load tournament leaderboard. Try refreshing.</div>';
+    return;
+  }
+
+  // Tournament header
+  tourneyName.textContent = liveData.tournament.name;
+  const stateMap = { 'in': 'LIVE', 'post': 'FINAL', 'pre': 'UPCOMING' };
+  const stateLabel = stateMap[liveData.tournament.state] || liveData.tournament.status;
+  const stateClass = liveData.tournament.state === 'in' ? 'live-badge-live' : 'live-badge-final';
+  tourneyStatus.innerHTML = `<span class="${stateClass}">${stateLabel}</span>`;
+  if (liveData.tournament.detail) {
+    tourneyStatus.innerHTML += ` <span class="live-detail">${escapeHtml(liveData.tournament.detail)}</span>`;
+  }
+
+  const scoreMap = liveData.scoreMap;
+
+  if (submissions.length === 0) {
+    container.innerHTML = '<div class="no-stats">No entries submitted yet.</div>';
+    return;
+  }
+
+  // Score and rank all entries
+  const standings = scoreEntries(scoreMap);
+
+  // Assign ranks (handle ties)
+  let rank = 1;
+  standings.forEach((entry, i) => {
+    if (i > 0 && entry.totalScore > standings[i - 1].totalScore) {
+      rank = i + 1;
+    }
+    entry.rank = rank;
+  });
+
+  // Find our leading portfolio entry (all current submissions are "ours" for now)
+  const leadEntry = standings[0]; // best score = first after sort
+
+  // Render standings table
+  const rows = standings.map(entry => {
+    const isLead = entry.id === leadEntry.id;
+    const highlightClass = isLead ? ' live-row-highlight' : '';
+    const totalDisplay = entry.totalScore > 0 ? `+${entry.totalScore}` : entry.totalScore === 0 ? 'E' : String(entry.totalScore);
+    const entryLabel = entry.entryName ? `${escapeHtml(entry.userName)} — ${escapeHtml(entry.entryName)}` : escapeHtml(entry.userName);
+    const leadBadge = isLead ? ' <span class="lead-badge">OUR BEST</span>' : '';
+
+    const golferCells = entry.golferScores
+      .sort((a, b) => a.score - b.score)
+      .map(g => {
+        const isDrop = g.name === entry.droppedGolfer;
+        const statusClass = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
+        const dropClass = isDrop ? ' golfer-dropped' : '';
+        const lastName = g.name.split(' ').slice(-1)[0];
+        const thruStr = g.thru === 'F' ? '' : g.thru === '-' ? '' : ` (${g.thru})`;
+        const todayStr = g.today ? ` today: ${g.today}` : '';
+        return `<span class="live-golfer${statusClass}${dropClass}" title="${escapeHtml(g.name)}: ${g.display}${thruStr}${todayStr}${isDrop ? ' (dropped)' : ''}">${escapeHtml(lastName)} <span class="live-golfer-score">${g.display}</span>${isDrop ? '<span class="drop-x">&#10005;</span>' : ''}</span>`;
+      }).join('');
+
+    const poolPosCell = '<span class="pool-pos-placeholder">—</span>';
+
+    return `
+      <tr class="live-entry-row${highlightClass}">
+        <td class="live-rank">${entry.rank}</td>
+        <td class="live-entry-name">${entryLabel}${leadBadge}</td>
+        <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
+        <td class="live-golfers">${golferCells}</td>
+        <td class="live-pool-pos">${poolPosCell}</td>
+      </tr>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <table class="live-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Entry</th>
+          <th>Best 4</th>
+          <th>Golfers (best → worst, &#10005; = dropped)</th>
+          <th>Pool Pos</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  // Rooting interests — always shown, based on our leading entry
+  renderRootingInterests(standings, leadEntry, scoreMap);
+}
+
+function renderRootingInterests(standings, leadEntry, scoreMap) {
+  const rootingHeader = document.getElementById('rootingHeader');
+  const rootForList = document.getElementById('rootForList');
+  const rootAgainstList = document.getElementById('rootAgainstList');
+
+  const leadLabel = leadEntry.entryName
+    ? `${leadEntry.userName} — ${leadEntry.entryName}`
+    : leadEntry.userName;
+  const leadScoreDisplay = leadEntry.totalScore > 0 ? `+${leadEntry.totalScore}` : leadEntry.totalScore === 0 ? 'E' : String(leadEntry.totalScore);
+  rootingHeader.innerHTML = `<div class="rooting-callout">Our leading entry: <strong>${escapeHtml(leadLabel)}</strong> (ranked #${leadEntry.rank}, best-4 score: ${leadScoreDisplay})</div>`;
+
+  // Golfers on our leading entry (the counting 4, not the dropped one)
+  const leadGolferNames = new Set(leadEntry.golferScores.map(g => g.name));
+  const leadBest4Names = leadEntry.best4Names;
+
+  // Golfers on entries ranked above our leader
+  const entriesAbove = standings.filter(e => e.rank < leadEntry.rank);
+  const aboveGolferNames = new Set();
+  entriesAbove.forEach(e => {
+    e.golferScores.forEach(g => {
+      if (e.droppedGolfer !== g.name) aboveGolferNames.add(g.name);
+    });
+  });
+
+  // Root For: golfers on our leading entry who are NOT on any higher-ranked entry
+  const rootForGolfers = [];
+  leadGolferNames.forEach(name => {
+    if (aboveGolferNames.has(name)) return; // shared with an entry above — rooting is neutral
+    const data = lookupGolferScore(name, scoreMap);
+    const isDropped = leadEntry.droppedGolfer === name;
+    rootForGolfers.push({
+      name,
+      score: data ? data.score : 10,
+      display: data ? data.scoreDisplay : 'N/F',
+      position: data ? data.position : '-',
+      status: data ? data.status : 'not_in_field',
+      isDropped
+    });
+  });
+  rootForGolfers.sort((a, b) => a.score - b.score);
+
+  if (rootForGolfers.length === 0) {
+    rootForList.innerHTML = '<div class="no-stats">All our golfers are shared with entries above us.</div>';
+  } else {
+    rootForList.innerHTML = rootForGolfers.map(g => {
+      const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
+      const dropNote = g.isDropped ? ' <span class="rooting-note">(currently dropped)</span>' : '';
+      return `<div class="rooting-item root-for-item${statusCls}">
+        <span class="rooting-name">${escapeHtml(g.name)}</span>
+        <span class="rooting-score">${g.display}</span>
+        <span class="rooting-pos">T${g.position}</span>
+        ${dropNote}
+      </div>`;
+    }).join('');
+  }
+
+  // Root Against: golfers on entries above ours who are NOT on our leading entry
+  const threatGolfers = new Map();
+  entriesAbove.forEach(entry => {
+    entry.golferScores.forEach(g => {
+      if (leadGolferNames.has(g.name)) return; // shared — neutral
+      if (entry.droppedGolfer === g.name) return; // dropped from their scoring
+      if (!threatGolfers.has(g.name)) {
+        threatGolfers.set(g.name, { ...g, inEntries: [] });
+      }
+      const label = entry.entryName ? `${entry.userName} — ${entry.entryName}` : entry.userName;
+      const existing = threatGolfers.get(g.name);
+      if (!existing.inEntries.includes(label)) {
+        existing.inEntries.push(label);
+      }
+    });
+  });
+
+  const threats = [...threatGolfers.values()].sort((a, b) => a.score - b.score);
+
+  if (threats.length === 0) {
+    rootAgainstList.innerHTML = '<div class="no-stats">We\'re in first! No one to root against.</div>';
+  } else {
+    rootAgainstList.innerHTML = threats.map(g => {
+      const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : '';
+      const entriesStr = g.inEntries.map(e => escapeHtml(e)).join(', ');
+      return `<div class="rooting-item root-against-item${statusCls}">
+        <span class="rooting-name">${escapeHtml(g.name)}</span>
+        <span class="rooting-score">${g.display}</span>
+        <span class="rooting-entries" title="${entriesStr}">in: ${entriesStr}</span>
+      </div>`;
+    }).join('');
+  }
 }
 
 // --- Duplicate Detection ---
