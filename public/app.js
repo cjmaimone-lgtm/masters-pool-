@@ -1364,8 +1364,8 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
   const rootForList = document.getElementById('rootForList');
   const rootAgainstList = document.getElementById('rootAgainstList');
 
-  // All non-portfolio entries ranked above our best entry
-  const entriesAbove = standings.filter(e => !e.isPortfolio && e.rank < leadEntry.rank);
+  // All non-portfolio, non-DQ entries ranked above our best entry
+  const entriesAbove = standings.filter(e => !e.isPortfolio && !e.isDQ && e.rank != null && e.rank < leadEntry.rank);
   const entriesAboveCount = entriesAbove.length;
 
   // Build top entries display (up to 5)
@@ -1383,35 +1383,39 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
     ${entriesAboveCount > 0 ? `<div class="rooting-rival">${entriesAboveCount} entr${entriesAboveCount === 1 ? 'y' : 'ies'} ahead of us</div>` : '<div class="rooting-rival">We\'re in first!</div>'}
   </div>`;
 
-  // Our counting golfers (not dropped) — keyed by normalized name for cross-entry comparison
-  const ourGolferNames = leadEntry.golferScores.filter(g => g.name !== leadEntry.droppedGolfer).map(g => g.name);
+  // Our ACTIVE counting golfers (not dropped, not cut/wd/nif)
+  const ourGolferNames = leadEntry.golferScores
+    .filter(g => g.name !== leadEntry.droppedGolfer && g.status === 'active')
+    .map(g => g.name);
   const ourNormSet = new Set(ourGolferNames.map(n => normalizeGolferName(n)));
 
-  // Count how many entries above us have each golfer in their counting 4 (normalized keys)
+  // Count how many entries above us have each ACTIVE golfer in their counting 4
   const golferFreqAbove = new Map(); // normalizedName -> count
   const golferDisplayAbove = new Map(); // normalizedName -> display name (first seen)
   entriesAbove.forEach(entry => {
     entry.golferScores.forEach(g => {
       if (entry.droppedGolfer === g.name) return;
+      if (g.status !== 'active') return; // skip cut/wd/nif — they can't move
       const norm = normalizeGolferName(g.name);
       golferFreqAbove.set(norm, (golferFreqAbove.get(norm) || 0) + 1);
       if (!golferDisplayAbove.has(norm)) golferDisplayAbove.set(norm, g.name);
     });
   });
 
-  // Also include entries just behind us that could catch up
-  const entriesBehind = standings.filter(e => !e.isPortfolio && e.rank > leadEntry.rank && e.rank <= leadEntry.rank + 10);
+  // Also include non-DQ entries just behind us that could catch up
+  const entriesBehind = standings.filter(e => !e.isPortfolio && !e.isDQ && e.rank != null && e.rank > leadEntry.rank && e.rank <= leadEntry.rank + 10);
   const golferFreqBehind = new Map();
   entriesBehind.forEach(entry => {
     entry.golferScores.forEach(g => {
       if (entry.droppedGolfer === g.name) return;
+      if (g.status !== 'active') return; // skip cut/wd/nif
       const norm = normalizeGolferName(g.name);
       golferFreqBehind.set(norm, (golferFreqBehind.get(norm) || 0) + 1);
       if (!golferDisplayAbove.has(norm)) golferDisplayAbove.set(norm, g.name);
     });
   });
 
-  // ROOT FOR: Our golfers that are most unique — fewest entries above share them.
+  // ROOT FOR: Our ACTIVE golfers that are most unique — fewest entries above share them.
   // Impact = how many entries above us DON'T have this golfer (we gain on them when this golfer improves)
   const rootForGolfers = [];
   ourGolferNames.forEach(name => {
@@ -1453,12 +1457,11 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
     }).join('');
   }
 
-  // ROOT AGAINST: Golfers NOT on our entry that appear most across entries above us.
-  // A stroke lost by this golfer hurts the most entries ahead of us simultaneously.
-  // Also consider entries just behind — their golfers improving could overtake us.
+  // ROOT AGAINST: Active golfers NOT on our entry that appear most across entries above us.
+  // A bogey by this golfer hurts the most entries ahead of us simultaneously.
   const rootAgainstGolfers = new Map(); // normalizedName -> data
 
-  // Entries above: their golfers doing worse helps us climb
+  // Only count active golfers from entries above us
   golferFreqAbove.forEach((count, norm) => {
     if (ourNormSet.has(norm)) return; // on our team — never root against
     const displayName = golferDisplayAbove.get(norm) || norm;
@@ -1470,31 +1473,8 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
       position: data ? data.position : '-',
       status: data ? data.status : 'not_in_field',
       roundIndicator: getRoundIndicatorFromMap(displayName, scoreMap, tournamentState),
-      impact: count,
-      direction: 'above'
+      impact: count
     });
-  });
-
-  // Entries behind: their unique golfers improving could let them catch us
-  golferFreqBehind.forEach((count, norm) => {
-    if (ourNormSet.has(norm)) return; // on our team — never root against
-    if (rootAgainstGolfers.has(norm)) {
-      // Already tracked from above — add the behind impact
-      rootAgainstGolfers.get(norm).impact += count;
-    } else {
-      const displayName = golferDisplayAbove.get(norm) || norm;
-      const data = lookupGolferScore(displayName, scoreMap);
-      rootAgainstGolfers.set(norm, {
-        name: displayName,
-        score: data ? data.score : 10,
-        display: data ? data.scoreDisplay : 'N/F',
-        position: data ? data.position : '-',
-        status: data ? data.status : 'not_in_field',
-        roundIndicator: getRoundIndicatorFromMap(displayName, scoreMap, tournamentState),
-        impact: count,
-        direction: 'behind'
-      });
-    }
   });
 
   // Sort by impact descending (most widespread = max damage per stroke), then by score ascending
@@ -1508,7 +1488,7 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
       const statusCls = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : '';
       const lastName = g.name.split(' ').slice(-1)[0];
       const indicatorStr = g.roundIndicator ? ` (${g.roundIndicator})` : '';
-      const impactLabel = `<span class="rooting-impact">in ${g.impact} entr${g.impact === 1 ? 'y' : 'ies'}</span>`;
+      const impactLabel = `<span class="rooting-impact">in ${g.impact} ahead</span>`;
       return `<div class="rooting-item root-against-item${statusCls}">
         <span class="rooting-name">${escapeHtml(lastName)}</span>
         <span class="rooting-score">${g.display}</span>
