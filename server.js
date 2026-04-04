@@ -641,54 +641,86 @@ app.get('/api/live-leaderboard', async (req, res) => {
       let scoreToPar = 0;
       if (scoreStr !== 'E') scoreToPar = parseInt(scoreStr) || 0;
 
-      // Round scores (completed rounds only)
+      // Round scores (completed rounds only — 18 holes or value with no hole detail)
       const rounds = (c.linescores || [])
-        .filter(ls => ls.value != null)
+        .filter(ls => ls.value != null && ((ls.linescores?.length || 0) === 18 || (ls.linescores?.length || 0) === 0))
         .map(ls => ({ round: ls.period, strokes: ls.value, toPar: ls.displayValue }));
 
-      // Determine "thru" for current round
+      // Determine "thru" and round status from linescores
+      // ESPN structure: each linescore = one round
+      //   Completed round: value = total strokes, linescores = 18 holes
+      //   Mid-round: value = partial strokes, linescores = holes completed (1-17)
+      //   Not started: value = undefined, no nested linescores
       let thru = 'F';
       let todayScore = null;
       let teeTime = null;
+      let currentPeriod = null;
 
-      // Primary: try detailed hole-by-hole linescores
-      const inProgressRound = (c.linescores || []).find(ls => ls.value == null && ls.period != null);
-      if (inProgressRound && inProgressRound.linescores && inProgressRound.linescores.length > 0) {
-        thru = String(inProgressRound.linescores.length);
-        todayScore = inProgressRound.linescores.reduce((sum, h) => {
-          const v = parseInt(h.scoreType?.displayValue);
-          return isNaN(v) ? sum : sum + v;
-        }, 0);
-      } else if (inProgressRound) {
+      const roundScores = c.linescores || [];
+
+      // Find the latest round with activity
+      // Walk rounds in reverse to find current state
+      let foundMidRound = false;
+      let foundNotStarted = false;
+      let completedRounds = 0;
+
+      for (const ls of roundScores) {
+        const holeCount = ls.linescores ? ls.linescores.length : 0;
+
+        if (ls.value == null && holeCount === 0) {
+          // Not started this round
+          foundNotStarted = true;
+          currentPeriod = ls.period;
+        } else if (holeCount > 0 && holeCount < 18) {
+          // Mid-round: has some holes but not all 18
+          foundMidRound = true;
+          thru = String(holeCount);
+          currentPeriod = ls.period;
+          // Calculate today's score from hole-by-hole data
+          todayScore = ls.linescores.reduce((sum, h) => {
+            const v = parseInt(h.scoreType?.displayValue);
+            return isNaN(v) ? sum : sum + v;
+          }, 0);
+        } else if (holeCount === 18 || (ls.value != null && holeCount === 0)) {
+          // Completed round (18 holes, or has a value but no hole detail)
+          completedRounds++;
+        }
+      }
+
+      if (foundMidRound) {
+        // thru already set above
+      } else if (foundNotStarted) {
         thru = '-';
+      } else {
+        // All rounds are complete — thru stays 'F'
+        currentPeriod = completedRounds;
       }
 
-      // Fallback: use ESPN's status.displayValue (e.g. "F", "Thru 12", "1:30 PM ET")
-      const statusDisplay = c.status?.displayValue || c.status?.type?.shortDetail || '';
-      if (thru === 'F' && statusDisplay) {
-        const thruMatch = statusDisplay.match(/thru\s+(\d+)/i);
-        const timeMatch = statusDisplay.match(/\d{1,2}:\d{2}\s*(AM|PM)/i);
-        if (thruMatch) {
-          thru = thruMatch[1]; // mid-round hole number
-        } else if (timeMatch) {
-          thru = '-'; // hasn't started, tee time available
-          teeTime = statusDisplay;
-        } else if (statusDisplay === 'F' || statusDisplay === 'Final') {
-          thru = 'F';
+      // For completed rounds, set currentPeriod to the number of completed rounds
+      if (!currentPeriod && completedRounds > 0) {
+        currentPeriod = completedRounds;
+      }
+
+      // Extract today's round strokes for completed current round
+      // (displayValue from the most recent completed round)
+      let todayStrokes = null;
+      if (thru === 'F' && roundScores.length > 0) {
+        const lastCompleted = [...roundScores].reverse().find(ls => ls.value != null);
+        if (lastCompleted) {
+          todayStrokes = lastCompleted.value;
         }
+      } else if (foundMidRound) {
+        // For mid-round, todayStrokes is the partial stroke count
+        const midRound = roundScores.find(ls => (ls.linescores?.length || 0) > 0 && (ls.linescores?.length || 0) < 18);
+        if (midRound) todayStrokes = midRound.value;
       }
 
-      // Extract tee time if available (for golfers who haven't started)
-      if (!teeTime) {
-        if (c.status?.teeTime) {
-          teeTime = c.status.teeTime;
-        } else if (c.status?.startDate) {
-          teeTime = c.status.startDate;
-        }
+      // Extract tee time if available
+      if (c.status?.teeTime) {
+        teeTime = c.status.teeTime;
+      } else if (c.status?.startDate) {
+        teeTime = c.status.startDate;
       }
-
-      // Capture the current round period from ESPN
-      const currentPeriod = c.status?.period || null;
 
       // Player status
       let playerStatus = 'active';
@@ -704,6 +736,7 @@ app.get('/api/live-leaderboard', async (req, res) => {
         thru,
         teeTime,
         currentPeriod,
+        todayStrokes: todayStrokes,
         today: todayScore !== null ? (todayScore > 0 ? `+${todayScore}` : todayScore === 0 ? 'E' : String(todayScore)) : null,
         status: playerStatus
       };
