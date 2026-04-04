@@ -1342,12 +1342,13 @@ h2 {
 }
 
 .live-entry-row.live-row-highlight {
-  background: rgba(0, 103, 71, 0.1);
+  background: rgba(0, 103, 71, 0.28);
   font-weight: bold;
+  border-left: 4px solid #ffd700;
 }
 
 .live-entry-row.live-row-highlight:hover {
-  background: rgba(0, 103, 71, 0.15);
+  background: rgba(0, 103, 71, 0.34);
 }
 
 .live-entry-row.live-row-portfolio {
