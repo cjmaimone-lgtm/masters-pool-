@@ -635,6 +635,9 @@ app.get('/api/live-leaderboard', async (req, res) => {
 
     const scoreMap = {};
 
+    // Competition period tells us which round the tournament is in
+    const competitionPeriod = competition.status?.period || 1;
+
     const competitorList = competitors.map((c, idx) => {
       const displayName = c.athlete?.displayName || c.athlete?.fullName || 'Unknown';
       const scoreStr = c.score || 'E';
@@ -724,8 +727,18 @@ app.get('/api/live-leaderboard', async (req, res) => {
 
       // Player status
       let playerStatus = 'active';
-      if (c.status?.type?.name === 'cut' || c.status?.period === 99) playerStatus = 'cut';
-      if (c.status?.type?.name === 'wd' || c.status?.type?.description === 'Withdrawn') playerStatus = 'wd';
+      if (c.status?.type?.name === 'cut' || c.status?.type?.name === 'STATUS_CUT' || c.status?.period === 99) {
+        playerStatus = 'cut';
+      } else if (c.status?.type?.name === 'wd' || c.status?.type?.description === 'Withdrawn') {
+        playerStatus = 'wd';
+      }
+      // Heuristic: when tournament is in R3+, golfers with no R3/R4 linescore entries were CUT
+      if (playerStatus === 'active' && competitionPeriod >= 3) {
+        const maxRound = Math.max(...roundScores.map(ls => ls.period || 0), 0);
+        if (maxRound <= 2) {
+          playerStatus = 'cut';
+        }
+      }
 
       const entry = {
         name: displayName,
