@@ -1329,8 +1329,7 @@ h2 {
 }
 
 .live-table thead th:last-child {
-  width: 70px;
-  text-align: center;
+  text-align: left;
 }
 
 .live-entry-row {
@@ -1352,7 +1351,12 @@ h2 {
 }
 
 .live-entry-row.live-row-portfolio {
-  background: rgba(0, 103, 71, 0.12);
+  background: rgba(0, 103, 71, 0.22);
+  border-left: 3px solid #006747;
+}
+
+.live-entry-row.live-row-portfolio:hover {
+  background: rgba(0, 103, 71, 0.28);
 }
 
 .live-rank {
@@ -1422,6 +1426,12 @@ h2 {
   color: #999;
 }
 
+.live-golfer-indicator {
+  font-size: 0.65rem;
+  color: #666;
+  margin-left: 0.15rem;
+}
+
 .live-golfer.golfer-win-pick {
   background: #fff8e1;
   border-color: #ffd700;
@@ -1448,7 +1458,7 @@ h2 {
 }
 
 .live-win-score::before {
-  content: 'TB: ';
+  content: 'TB ';
   font-weight: bold;
   color: #999;
 }
@@ -1459,15 +1469,7 @@ h2 {
   margin-left: 0.15rem;
 }
 
-.live-pool-pos {
-  text-align: center;
-  padding: 0.6rem 0.4rem;
-  color: #999;
-}
-
-.pool-pos-placeholder {
-  font-style: italic;
-}
+/* Pool Pos column removed */
 
 .lead-badge {
   display: inline-block;
@@ -1498,9 +1500,37 @@ h2 {
   line-height: 1.6;
 }
 
+.rooting-top-label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #006747;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
+}
+
+.rooting-top-entry {
+  font-size: 0.9rem;
+  padding: 0.15rem 0;
+}
+
+.rooting-top-entry.rooting-top-lead {
+  font-size: 1rem;
+}
+
+.rooting-top-rank {
+  color: #006747;
+  font-weight: bold;
+  min-width: 30px;
+  display: inline-block;
+}
+
 .rooting-rival {
   font-size: 0.85rem;
   color: #555;
+  margin-top: 0.4rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(0,103,71,0.15);
 }
 
 .rooting-columns {
