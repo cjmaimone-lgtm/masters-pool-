@@ -1152,7 +1152,8 @@ function scoreEntries(scoreMap) {
       }
 
       const rounds = data ? (data.rounds || []) : [];
-      return { name, score, display, status, thru, today, position, teeTime, rounds };
+      const currentPeriod = data ? (data.currentPeriod || null) : null;
+      return { name, score, display, status, thru, today, position, teeTime, rounds, currentPeriod };
     });
 
     // Sort by score ascending (best first), drop worst (index 4)
@@ -1192,17 +1193,27 @@ function getGolferRoundIndicator(golferData, tournamentState) {
   // Not started yet: show tee time if available
   if (golferData.thru === '-') {
     if (golferData.teeTime) {
+      // If teeTime is already a display string like "1:30 PM ET", use it directly
+      if (typeof golferData.teeTime === 'string' && /\d{1,2}:\d{2}\s*(AM|PM)/i.test(golferData.teeTime)) {
+        return golferData.teeTime.replace(/\s*ET$/i, '').trim();
+      }
       try {
         const d = new Date(golferData.teeTime);
-        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-      } catch { return ''; }
+        if (!isNaN(d)) return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      } catch { /* fall through */ }
     }
     return '';
   }
 
-  // Finished round (thru === 'F'): show RX based on completed rounds
-  if (golferData.thru === 'F' && golferData.rounds && golferData.rounds.length > 0) {
-    return `R${golferData.rounds.length}`;
+  // Finished round (thru === 'F'): show RX based on completed rounds or currentPeriod
+  if (golferData.thru === 'F') {
+    if (golferData.rounds && golferData.rounds.length > 0) {
+      return `R${golferData.rounds.length}`;
+    }
+    // Fallback: use ESPN's period (the round the golfer just completed)
+    if (golferData.currentPeriod && golferData.currentPeriod < 99) {
+      return `R${golferData.currentPeriod}`;
+    }
   }
   return '';
 }
