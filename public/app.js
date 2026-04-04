@@ -1128,12 +1128,12 @@ function scoreEntries(scoreMap) {
         today = null;
         position = '-';
       } else if (data.status === 'cut') {
-        score = data.score;
+        score = Math.max(data.score, MC_PENALTY);
         display = data.scoreDisplay;
         status = 'cut';
-        thru = 'MC';
+        thru = 'CUT';
         today = null;
-        position = 'MC';
+        position = 'CUT';
       } else if (data.status === 'wd') {
         score = Math.max(data.score, MC_PENALTY);
         display = data.scoreDisplay;
@@ -1163,6 +1163,10 @@ function scoreEntries(scoreMap) {
     const dropped = sorted[4];
     const totalScore = best4.reduce((sum, g) => sum + g.score, 0);
 
+    // DQ check: need at least 4 active golfers (not cut/wd/nif) to be a contender
+    const activeCount = golferScores.filter(g => g.status === 'active').length;
+    const isDQ = activeCount < 4;
+
     return {
       userName: s.userName || 'Unknown',
       entryName: s.entryName || '',
@@ -1171,11 +1175,16 @@ function scoreEntries(scoreMap) {
       best4Names: new Set(best4.map(g => g.name)),
       droppedGolfer: dropped?.name,
       totalScore,
+      isDQ,
       winningGolfer: s.winningGolfer || null,
       winningScore: s.winningScore != null ? s.winningScore : null,
       isPortfolio: s.isPortfolio
     };
-  }).sort((a, b) => a.totalScore - b.totalScore);
+  }).sort((a, b) => {
+    // DQ entries sink to the bottom
+    if (a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
+    return a.totalScore - b.totalScore;
+  });
 }
 
 // Helper: get round indicator string for a golfer
@@ -1185,7 +1194,7 @@ function scoreEntries(scoreMap) {
 // Tournament over: "F"
 function getGolferRoundIndicator(golferData, tournamentState) {
   if (!golferData) return '';
-  if (golferData.status === 'cut') return 'MC';
+  if (golferData.status === 'cut') return 'CUT';
   if (golferData.status === 'wd') return 'WD';
 
   // Tournament over — show F for final
@@ -1261,19 +1270,27 @@ function renderLiveTracker() {
   // Score and rank all entries
   const standings = scoreEntries(scoreMap);
 
-  // Assign ranks (handle ties)
+  // Assign ranks (handle ties) — DQ entries get no rank
   let rank = 1;
-  standings.forEach((entry, i) => {
-    if (i > 0 && entry.totalScore > standings[i - 1].totalScore) {
-      rank = i + 1;
+  let prevScore = null;
+  let rankedCount = 0;
+  standings.forEach(entry => {
+    if (entry.isDQ) {
+      entry.rank = null;
+      return;
+    }
+    rankedCount++;
+    if (prevScore !== null && entry.totalScore > prevScore) {
+      rank = rankedCount;
     }
     entry.rank = rank;
+    prevScore = entry.totalScore;
   });
 
-  // Find our top portfolio entries (up to 5)
-  const ourEntries = standings.filter(e => e.isPortfolio);
+  // Find our top portfolio entries (up to 5), excluding DQ
+  const ourEntries = standings.filter(e => e.isPortfolio && !e.isDQ);
   const topOurEntries = ourEntries.slice(0, 5);
-  const leadEntry = topOurEntries[0] || standings[0];
+  const leadEntry = topOurEntries[0] || standings.find(e => !e.isDQ) || standings[0];
 
   // Rooting interests — rendered first (above standings)
   renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, liveData.tournament.state);
@@ -1285,11 +1302,13 @@ function renderLiveTracker() {
 
   // Render standings table
   const rows = displayEntries.map(entry => {
-    const isLead = entry.id === leadEntry.id;
+    const isLead = entry.id === leadEntry.id && !entry.isDQ;
     const isOurs = entry.isPortfolio;
-    const highlightClass = isLead ? ' live-row-highlight' : isOurs ? ' live-row-portfolio' : '';
-    const totalDisplay = entry.totalScore > 0 ? `+${entry.totalScore}` : entry.totalScore === 0 ? 'E' : String(entry.totalScore);
+    const dqClass = entry.isDQ ? ' live-row-dq' : '';
+    const highlightClass = isLead ? ' live-row-highlight' : isOurs && !entry.isDQ ? ' live-row-portfolio' : '';
+    const totalDisplay = entry.isDQ ? 'DQ' : entry.totalScore > 0 ? `+${entry.totalScore}` : entry.totalScore === 0 ? 'E' : String(entry.totalScore);
     const entryLabel = entry.entryName ? `${escapeHtml(entry.userName)} — ${escapeHtml(entry.entryName)}` : escapeHtml(entry.userName);
+    const dqBadge = entry.isDQ ? ' <span class="dq-badge">DQ</span>' : '';
     const leadBadge = isLead ? ' <span class="lead-badge">OUR BEST</span>' : '';
 
     const tournamentState = liveData.tournament.state;
@@ -1297,9 +1316,10 @@ function renderLiveTracker() {
       .sort((a, b) => a.score - b.score)
       .map(g => {
         const isDrop = g.name === entry.droppedGolfer;
+        const isOut = g.status === 'cut' || g.status === 'wd' || g.status === 'not_in_field';
         const isWinPick = entry.winningGolfer && normalizeGolferName(g.name) === normalizeGolferName(entry.winningGolfer);
         const statusClass = g.status === 'cut' ? ' golfer-cut' : g.status === 'wd' ? ' golfer-wd' : g.status === 'not_in_field' ? ' golfer-nif' : '';
-        const dropClass = isDrop ? ' golfer-dropped' : '';
+        const dropClass = (isDrop || isOut) ? ' golfer-dropped' : '';
         const winClass = isWinPick ? ' golfer-win-pick' : '';
         const lastName = g.name.split(' ').slice(-1)[0];
         const roundIndicator = getGolferRoundIndicator(g, tournamentState);
@@ -1315,9 +1335,9 @@ function renderLiveTracker() {
       : '';
 
     return `
-      <tr class="live-entry-row${highlightClass}">
-        <td class="live-rank">${entry.rank}</td>
-        <td class="live-entry-name">${entryLabel}${leadBadge}</td>
+      <tr class="live-entry-row${highlightClass}${dqClass}">
+        <td class="live-rank">${entry.isDQ ? '—' : entry.rank}</td>
+        <td class="live-entry-name">${entryLabel}${leadBadge}${dqBadge}</td>
         <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
         <td class="live-golfers">${golferCells}${winScoreBadge}</td>
       </tr>
