@@ -650,6 +650,8 @@ app.get('/api/live-leaderboard', async (req, res) => {
       let thru = 'F';
       let todayScore = null;
       let teeTime = null;
+
+      // Primary: try detailed hole-by-hole linescores
       const inProgressRound = (c.linescores || []).find(ls => ls.value == null && ls.period != null);
       if (inProgressRound && inProgressRound.linescores && inProgressRound.linescores.length > 0) {
         thru = String(inProgressRound.linescores.length);
@@ -661,12 +663,32 @@ app.get('/api/live-leaderboard', async (req, res) => {
         thru = '-';
       }
 
-      // Extract tee time if available (for golfers who haven't started)
-      if (c.status?.teeTime) {
-        teeTime = c.status.teeTime;
-      } else if (c.status?.startDate) {
-        teeTime = c.status.startDate;
+      // Fallback: use ESPN's status.displayValue (e.g. "F", "Thru 12", "1:30 PM ET")
+      const statusDisplay = c.status?.displayValue || c.status?.type?.shortDetail || '';
+      if (thru === 'F' && statusDisplay) {
+        const thruMatch = statusDisplay.match(/thru\s+(\d+)/i);
+        const timeMatch = statusDisplay.match(/\d{1,2}:\d{2}\s*(AM|PM)/i);
+        if (thruMatch) {
+          thru = thruMatch[1]; // mid-round hole number
+        } else if (timeMatch) {
+          thru = '-'; // hasn't started, tee time available
+          teeTime = statusDisplay;
+        } else if (statusDisplay === 'F' || statusDisplay === 'Final') {
+          thru = 'F';
+        }
       }
+
+      // Extract tee time if available (for golfers who haven't started)
+      if (!teeTime) {
+        if (c.status?.teeTime) {
+          teeTime = c.status.teeTime;
+        } else if (c.status?.startDate) {
+          teeTime = c.status.startDate;
+        }
+      }
+
+      // Capture the current round period from ESPN
+      const currentPeriod = c.status?.period || null;
 
       // Player status
       let playerStatus = 'active';
@@ -681,6 +703,7 @@ app.get('/api/live-leaderboard', async (req, res) => {
         rounds,
         thru,
         teeTime,
+        currentPeriod,
         today: todayScore !== null ? (todayScore > 0 ? `+${todayScore}` : todayScore === 0 ? 'E' : String(todayScore)) : null,
         status: playerStatus
       };
