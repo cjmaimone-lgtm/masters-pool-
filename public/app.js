@@ -1153,7 +1153,8 @@ function scoreEntries(scoreMap) {
 
       const rounds = data ? (data.rounds || []) : [];
       const currentPeriod = data ? (data.currentPeriod || null) : null;
-      return { name, score, display, status, thru, today, position, teeTime, rounds, currentPeriod };
+      const todayStrokes = data ? (data.todayStrokes || null) : null;
+      return { name, score, display, status, thru, today, position, teeTime, rounds, currentPeriod, todayStrokes };
     });
 
     // Sort by score ascending (best first), drop worst (index 4)
@@ -1178,22 +1179,26 @@ function scoreEntries(scoreMap) {
 }
 
 // Helper: get round indicator string for a golfer
-// Returns e.g. "thru 12", "2:30 PM", "R1", "R2", or "" if tournament is over
+// Mid-round: hole number e.g. "12"
+// Not started: tee time e.g. "7:00 AM"
+// Finished round for day: strokes e.g. "68"
+// Tournament over: "F"
 function getGolferRoundIndicator(golferData, tournamentState) {
   if (!golferData) return '';
   if (golferData.status === 'cut') return 'MC';
   if (golferData.status === 'wd') return 'WD';
-  if (tournamentState === 'post') return ''; // tournament over, hide indicator
 
-  // Mid-round: show "thru X"
+  // Tournament over — show F for final
+  if (tournamentState === 'post') return 'F';
+
+  // Mid-round: show hole number
   if (golferData.thru && golferData.thru !== 'F' && golferData.thru !== '-') {
-    return `thru ${golferData.thru}`;
+    return golferData.thru;
   }
 
   // Not started yet: show tee time if available
   if (golferData.thru === '-') {
     if (golferData.teeTime) {
-      // If teeTime is already a display string like "1:30 PM ET", use it directly
       if (typeof golferData.teeTime === 'string' && /\d{1,2}:\d{2}\s*(AM|PM)/i.test(golferData.teeTime)) {
         return golferData.teeTime.replace(/\s*ET$/i, '').trim();
       }
@@ -1205,14 +1210,14 @@ function getGolferRoundIndicator(golferData, tournamentState) {
     return '';
   }
 
-  // Finished round (thru === 'F'): show RX based on completed rounds or currentPeriod
+  // Finished round for the day (thru === 'F'): show today's strokes
   if (golferData.thru === 'F') {
-    if (golferData.rounds && golferData.rounds.length > 0) {
-      return `R${golferData.rounds.length}`;
+    if (golferData.todayStrokes) {
+      return String(golferData.todayStrokes);
     }
-    // Fallback: use ESPN's period (the round the golfer just completed)
-    if (golferData.currentPeriod && golferData.currentPeriod < 99) {
-      return `R${golferData.currentPeriod}`;
+    // Fallback: last completed round strokes
+    if (golferData.rounds && golferData.rounds.length > 0) {
+      return String(golferData.rounds[golferData.rounds.length - 1].strokes);
     }
   }
   return '';
