@@ -524,7 +524,7 @@ async function deleteSubmission(id) {
       showToast(data.error || 'Error removing submission');
       return;
     }
-    submissions = submissions.filter(s => s.id !== id);
+    submissions = submissions.filter(s => String(s.id) !== String(id));
     renderSubmissions();
     updateSubmissionCount();
     showToast('Fivesome removed');
@@ -1261,8 +1261,64 @@ function scoreEntries(scoreMap) {
   }).sort((a, b) => {
     // DQ entries sink to the bottom
     if (a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
-    return a.totalScore - b.totalScore;
+
+    // Primary: total score (lower is better)
+    if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
+
+    // --- Tiebreakers (only apply during/after tournament) ---
+
+    // TB1: Picked the actual tournament winner
+    const actualWinner = _findTournamentWinner(scoreMap);
+    if (actualWinner) {
+      const aPickedWinner = a.winningGolfer && _normName(a.winningGolfer) === _normName(actualWinner);
+      const bPickedWinner = b.winningGolfer && _normName(b.winningGolfer) === _normName(actualWinner);
+      if (aPickedWinner !== bPickedWinner) return aPickedWinner ? -1 : 1;
+    }
+
+    // TB2: Winning score — Price is Right rules (closest without going over)
+    // "Going over" = predicting a score further under par than actual (more negative)
+    // e.g. actual -10: prediction -11 is "over", -9 is valid
+    const actualScore = _findWinningScore(scoreMap);
+    if (actualScore != null && (a.winningScore != null || b.winningScore != null)) {
+      const aValid = a.winningScore != null && a.winningScore >= actualScore; // not further under par
+      const bValid = b.winningScore != null && b.winningScore >= actualScore;
+      if (aValid !== bValid) return aValid ? -1 : 1;
+      if (aValid && bValid) {
+        // Closer to actual wins (smaller difference is better)
+        const aDiff = a.winningScore - actualScore;
+        const bDiff = b.winningScore - actualScore;
+        if (aDiff !== bDiff) return aDiff - bDiff;
+      }
+    }
+
+    // TB3: 4th best golfer score (lower is better)
+    const a4th = [...a.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
+    const b4th = [...b.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
+    if (a4th !== b4th) return a4th - b4th;
+
+    return 0;
   });
+}
+
+function _normName(name) {
+  return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function _findTournamentWinner(scoreMap) {
+  if (!liveData || !liveData.tournament || liveData.tournament.state !== 'post') return null;
+  // Position "1" or "T1" in a completed tournament
+  for (const [name, data] of Object.entries(scoreMap)) {
+    if (data.position === '1' || data.position === 1) return name;
+  }
+  return null;
+}
+
+function _findWinningScore(scoreMap) {
+  if (!liveData || !liveData.tournament || liveData.tournament.state !== 'post') return null;
+  for (const [name, data] of Object.entries(scoreMap)) {
+    if (data.position === '1' || data.position === 1) return data.score;
+  }
+  return null;
 }
 
 // Helper: get round indicator string for a golfer
@@ -1470,21 +1526,42 @@ function renderLiveTracker() {
   // Score and rank all entries
   const standings = scoreEntries(scoreMap);
 
-  // Assign ranks (handle ties) — DQ entries get no rank
+  // Assign ranks — since standings are fully sorted (with tiebreakers),
+  // entries only share a rank if they're identical on all tiebreaker dimensions
   let rank = 1;
-  let prevScore = null;
   let rankedCount = 0;
-  standings.forEach(entry => {
+  standings.forEach((entry, i) => {
     if (entry.isDQ) {
       entry.rank = null;
       return;
     }
     rankedCount++;
-    if (prevScore !== null && entry.totalScore > prevScore) {
-      rank = rankedCount;
+    if (i > 0) {
+      const prev = standings[i - 1];
+      if (!prev.isDQ && entry.totalScore > prev.totalScore) {
+        rank = rankedCount;
+      }
+      // Same total score — tiebreaker sort already separated them,
+      // but if they remain adjacent with same score, they're truly tied
+      // only if all tiebreaker values match
+      if (!prev.isDQ && entry.totalScore === prev.totalScore) {
+        const scoreMap = liveData?.scoreMap || {};
+        const winner = _findTournamentWinner(scoreMap);
+        const actualScore = _findWinningScore(scoreMap);
+        const aPicked = prev.winningGolfer && winner && _normName(prev.winningGolfer) === _normName(winner);
+        const bPicked = entry.winningGolfer && winner && _normName(entry.winningGolfer) === _normName(winner);
+        const aWS = prev.winningScore, bWS = entry.winningScore;
+        const a4th = [...prev.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
+        const b4th = [...entry.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
+        const sameOnAllTB = aPicked === bPicked
+          && aWS === bWS
+          && a4th === b4th;
+        if (!sameOnAllTB) {
+          rank = rankedCount;
+        }
+      }
     }
     entry.rank = rank;
-    prevScore = entry.totalScore;
   });
 
   // Find our top portfolio entries (up to 5), excluding DQ
@@ -1710,7 +1787,7 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
 let editGolfers = [];
 
 function openEditModal(id) {
-  const sub = submissions.find(s => s.id === id);
+  const sub = submissions.find(s => String(s.id) === String(id));
   if (!sub) return;
 
   document.getElementById('editId').value = id;
@@ -1837,7 +1914,7 @@ async function saveEdit() {
     }
 
     // Update local submissions array
-    const idx = submissions.findIndex(s => s.id === id);
+    const idx = submissions.findIndex(s => String(s.id) === String(id));
     if (idx >= 0) submissions[idx] = data;
 
     closeEditModal();
