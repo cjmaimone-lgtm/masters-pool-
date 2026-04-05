@@ -361,6 +361,13 @@ main {
   opacity: 0.45;
 }
 
+.golfer-table tbody tr.not-in-field {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+  color: #999;
+}
+
 .withdrawn-badge {
   font-size: 0.7em;
   font-weight: bold;
