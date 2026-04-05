@@ -1257,8 +1257,14 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
   const outPar = holeNums.slice(0, 9).reduce((s, h) => s + pars[h], 0);
   const inPar = holeNums.slice(9).reduce((s, h) => s + pars[h], 0);
 
+  // Determine round label
+  const roundNum = entry.golferScores.find(g => g.currentPeriod)?.currentPeriod || '';
+  const roundLabel = roundNum ? `Round ${roundNum}` : '';
+
   // Header row: HOLE | 1-9 | OUT | (name repeat on mobile) | 10-18 | IN | TOT
-  let html = '<div class="scorecard-wrapper"><table class="scorecard-table"><thead>';
+  let html = '<div class="scorecard-wrapper">';
+  if (roundLabel) html += `<div class="sc-round-label">${roundLabel}</div>`;
+  html += '<table class="scorecard-table"><thead>';
   html += '<tr class="scorecard-header"><th class="sc-label">HOLE</th>';
   for (let i = 1; i <= 9; i++) html += `<th>${i}</th>`;
   html += '<th class="sc-summary">OUT</th>';
@@ -1270,7 +1276,7 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
   html += '<tr class="scorecard-par"><td class="sc-label">Par</td>';
   for (let i = 1; i <= 9; i++) html += `<td>${pars[i]}</td>`;
   html += `<td class="sc-summary">${outPar}</td>`;
-  html += `<td class="sc-name-repeat sc-summary">${outPar + inPar}</td>`;
+  html += `<td class="sc-name-repeat"></td>`;
   for (let i = 10; i <= 18; i++) html += `<td>${pars[i]}</td>`;
   html += `<td class="sc-summary">${inPar}</td><td class="sc-summary">${outPar + inPar}</td></tr>`;
   html += '</thead><tbody>';
@@ -1287,7 +1293,13 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
 
     if (isCutWd) {
       const label = g.status === 'cut' ? 'CUT' : g.status === 'wd' ? 'WD' : 'N/F';
-      html += `<td colspan="22" class="sc-status">${label}</td></tr>`;
+      for (let i = 1; i <= 9; i++) html += '<td></td>';
+      html += '<td class="sc-golfer-summary"></td>';
+      html += `<td class="sc-name-repeat sc-label">${escapeHtml(lastName)}</td>`;
+      for (let i = 10; i <= 18; i++) html += '<td></td>';
+      html += `<td class="sc-golfer-summary"></td>`;
+      html += `<td class="sc-golfer-summary sc-status">${label}</td>`;
+      html += '</tr>';
       continue;
     }
 
@@ -1308,7 +1320,7 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
         html += '<td></td>';
       }
     }
-    html += `<td class="sc-summary">${outCount === 9 ? outStrokes : outCount > 0 ? outStrokes : ''}</td>`;
+    html += `<td class="sc-golfer-summary">${outCount === 9 ? outStrokes : outCount > 0 ? outStrokes : ''}</td>`;
     html += `<td class="sc-name-repeat sc-label">${escapeHtml(lastName)}</td>`;
 
     for (let i = 10; i <= 18; i++) {
@@ -1322,11 +1334,11 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
         html += '<td></td>';
       }
     }
-    html += `<td class="sc-summary">${inCount === 9 ? inStrokes : inCount > 0 ? inStrokes : ''}</td>`;
+    html += `<td class="sc-golfer-summary">${inCount === 9 ? inStrokes : inCount > 0 ? inStrokes : ''}</td>`;
 
     const totalCount = outCount + inCount;
     const totalStrokes = outStrokes + inStrokes;
-    html += `<td class="sc-summary">${totalCount > 0 ? totalStrokes : ''}</td>`;
+    html += `<td class="sc-golfer-summary">${totalCount > 0 ? totalStrokes : ''}</td>`;
     html += '</tr>';
   }
 
