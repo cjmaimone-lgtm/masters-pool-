@@ -1760,15 +1760,14 @@ h2 {
   font-size: 0.7rem;
   text-align: center;
   min-width: 540px;
-  
 }
 
 .scorecard-table th,
 .scorecard-table td {
-  padding: 0.2rem 0.3rem;
+  padding: 0.2rem 0.35rem;
   border: 1px solid #e0e0e0;
   min-width: 22px;
-  max-width: 30px;
+  text-align: center;
 }
 
 .scorecard-header th {
@@ -1789,8 +1788,6 @@ h2 {
   text-align: left !important;
   font-weight: 600;
   white-space: nowrap;
-  min-width: 50px !important;
-  max-width: 70px !important;
   padding-left: 0.4rem !important;
   color: #333;
 }
