@@ -1760,13 +1760,15 @@ h2 {
   font-size: 0.7rem;
   text-align: center;
   min-width: 540px;
+  table-layout: fixed;
 }
 
 .scorecard-table th,
 .scorecard-table td {
   padding: 0.2rem 0.3rem;
   border: 1px solid #e0e0e0;
-  min-width: 22px;
+  width: 26px;
+  overflow: hidden;
 }
 
 .scorecard-header th {
@@ -1787,7 +1789,7 @@ h2 {
   text-align: left !important;
   font-weight: 600;
   white-space: nowrap;
-  min-width: 60px !important;
+  width: 60px !important;
   padding-left: 0.4rem !important;
   color: #333;
 }
@@ -1796,6 +1798,19 @@ h2 {
   font-weight: 700 !important;
   background: #d9d9d9 !important;
   color: #222 !important;
+}
+
+.sc-golfer-summary {
+  font-weight: 700;
+  background: #fff;
+  color: #222;
+}
+
+.sc-round-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #555;
+  padding: 0 0 0.25rem 0.4rem;
 }
 
 /* Hole score color coding — matches ESPN */
