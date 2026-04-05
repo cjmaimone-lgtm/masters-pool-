@@ -645,8 +645,9 @@ app.get('/api/live-leaderboard', async (req, res) => {
       if (scoreStr !== 'E') scoreToPar = parseInt(scoreStr) || 0;
 
       // Round scores (completed rounds only — 18 holes or value with no hole detail)
+      // Exclude "not started" rounds where ESPN sends value=0 with no hole data
       const rounds = (c.linescores || [])
-        .filter(ls => ls.value != null && ((ls.linescores?.length || 0) === 18 || (ls.linescores?.length || 0) === 0))
+        .filter(ls => ls.value != null && ls.value > 0 && ((ls.linescores?.length || 0) === 18 || (ls.linescores?.length || 0) === 0))
         .map(ls => ({ round: ls.period, strokes: ls.value, toPar: ls.displayValue }));
 
       // Determine "thru" and round status from linescores
@@ -670,8 +671,8 @@ app.get('/api/live-leaderboard', async (req, res) => {
       for (const ls of roundScores) {
         const holeCount = ls.linescores ? ls.linescores.length : 0;
 
-        if (ls.value == null && holeCount === 0) {
-          // Not started this round
+        if ((ls.value == null || (ls.value === 0 && holeCount === 0)) && holeCount === 0) {
+          // Not started this round (ESPN sends value=0 with no hole data for unstarted rounds)
           foundNotStarted = true;
           currentPeriod = ls.period;
         } else if (holeCount > 0 && holeCount < 18) {
@@ -684,8 +685,8 @@ app.get('/api/live-leaderboard', async (req, res) => {
             const v = parseInt(h.scoreType?.displayValue);
             return isNaN(v) ? sum : sum + v;
           }, 0);
-        } else if (holeCount === 18 || (ls.value != null && holeCount === 0)) {
-          // Completed round (18 holes, or has a value but no hole detail)
+        } else if (holeCount === 18 || (ls.value != null && ls.value > 0 && holeCount === 0)) {
+          // Completed round (18 holes, or has a non-zero value but no hole detail)
           completedRounds++;
         }
       }
@@ -708,7 +709,7 @@ app.get('/api/live-leaderboard', async (req, res) => {
       // (displayValue from the most recent completed round)
       let todayStrokes = null;
       if (thru === 'F' && roundScores.length > 0) {
-        const lastCompleted = [...roundScores].reverse().find(ls => ls.value != null);
+        const lastCompleted = [...roundScores].reverse().find(ls => ls.value != null && ls.value > 0);
         if (lastCompleted) {
           todayStrokes = lastCompleted.value;
         }
@@ -723,6 +724,20 @@ app.get('/api/live-leaderboard', async (req, res) => {
         teeTime = c.status.teeTime;
       } else if (c.status?.startDate) {
         teeTime = c.status.startDate;
+      }
+      // ESPN embeds tee time in the not-started round's statistics (last stat entry)
+      if (!teeTime && foundNotStarted) {
+        const notStartedRound = roundScores.find(ls => {
+          const hc = ls.linescores ? ls.linescores.length : 0;
+          return (ls.value == null || (ls.value === 0 && hc === 0)) && hc === 0;
+        });
+        const stats = notStartedRound?.statistics?.categories?.[0]?.stats;
+        if (stats && stats.length > 0) {
+          const lastStat = stats[stats.length - 1];
+          if (lastStat.displayValue && /\d{4}/.test(lastStat.displayValue)) {
+            teeTime = lastStat.displayValue;
+          }
+        }
       }
 
       // Player status
