@@ -1062,6 +1062,165 @@ h2 {
   cursor: help;
 }
 
+/* Edit Modal */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.edit-modal h3 {
+  color: #006747;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.edit-field {
+  margin-bottom: 1rem;
+}
+
+.edit-field label {
+  display: block;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.edit-field input[type="text"],
+.edit-field input[type="number"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.edit-golfer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.edit-golfer-tag {
+  background: #006747;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-golfer-tag:hover {
+  background: #c00;
+}
+
+.edit-golfer-tag::after {
+  content: ' \00d7';
+  font-weight: bold;
+}
+
+.edit-golfer-search {
+  position: relative;
+}
+
+.edit-golfer-results {
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.edit-golfer-result {
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eee;
+}
+
+.edit-golfer-result:hover {
+  background: #e8f5e9;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.edit-save-btn {
+  flex: 1;
+  padding: 0.6rem;
+  background: #006747;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-save-btn:hover {
+  background: #004d35;
+}
+
+.edit-cancel-btn {
+  flex: 1;
+  padding: 0.6rem;
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.edit-cancel-btn:hover {
+  background: #ddd;
+}
+
+.submission-card.editable {
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.submission-card.editable:hover {
+  border-color: #006747;
+  box-shadow: 0 2px 8px rgba(0,103,71,0.15);
+}
+
+.edit-badge {
+  font-size: 0.7rem;
+  color: #006747;
+  border: 1px solid #006747;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-top: 0.3rem;
+  display: inline-block;
+}
+
 /* Toast */
 .toast {
   position: fixed;
