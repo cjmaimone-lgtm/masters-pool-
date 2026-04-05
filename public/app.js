@@ -482,6 +482,9 @@ function renderSubmissions() {
     keyCounts[key] = (keyCounts[key] || 0) + 1;
   });
 
+  const locked = isTournamentLocked();
+  const canEdit = !locked || IS_ADMIN;
+
   container.innerHTML = sorted.map(s => {
     const date = new Date(s.submittedAt);
     const timeStr = date.toLocaleDateString('en-US', {
@@ -492,16 +495,19 @@ function renderSubmissions() {
     const entryLabel = s.entryName ? ` — ${escapeHtml(s.entryName)}` : '';
     const tbGolfer = s.winningGolfer ? escapeHtml(s.winningGolfer) : '—';
     const tbScore = s.winningScore != null ? (s.winningScore > 0 ? `+${s.winningScore}` : s.winningScore === 0 ? 'E' : String(s.winningScore)) : '—';
+    const editableClass = canEdit ? ' editable' : '';
+    const editClick = canEdit ? ` onclick="openEditModal('${s.id}')"` : '';
     return `
-      <div class="submission-card ${isDupe ? 'duplicate' : ''}">
+      <div class="submission-card${isDupe ? ' duplicate' : ''}${editableClass}"${editClick}>
         <div>
           <div class="user-name">${escapeHtml(s.userName)}${entryLabel}${isDupe ? ' <span class="dupe-badge">DUPLICATE</span>' : ''}</div>
           <div class="golfer-list">${[...s.golfers].sort((a, b) => a.localeCompare(b)).map(g => escapeHtml(g)).join(' &bull; ')}</div>
           <div class="tiebreaker-display">Tiebreakers: ${tbGolfer} wins at ${tbScore}</div>
+          ${canEdit ? '<div class="edit-badge">Click to edit</div>' : ''}
         </div>
-        <div style="text-align:right;">
+        <div style="text-align:right;" onclick="event.stopPropagation()">
           <div class="timestamp">${timeStr}</div>
-          ${isTournamentLocked() && !IS_ADMIN ? '' : `<button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>`}
+          ${canEdit ? `<button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>` : ''}
         </div>
       </div>
     `;
@@ -1697,6 +1703,148 @@ function renderRootingInterests(standings, leadEntry, topOurEntries, scoreMap, t
         ${impactLabel}
       </div>`;
     }).join('');
+  }
+}
+
+// --- Edit Modal ---
+let editGolfers = [];
+
+function openEditModal(id) {
+  const sub = submissions.find(s => s.id === id);
+  if (!sub) return;
+
+  document.getElementById('editId').value = id;
+  document.getElementById('editEntryName').value = sub.entryName || '';
+  document.getElementById('editWinningGolfer').value = sub.winningGolfer || '';
+  document.getElementById('editWinningScore').value = sub.winningScore != null ? sub.winningScore : '';
+
+  editGolfers = [...sub.golfers];
+  renderEditGolferTags();
+  updateEditTiebreakerDatalist();
+
+  // Show/hide golfer search depending on whether we need more golfers
+  toggleEditGolferSearch();
+
+  document.getElementById('editModal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+  editGolfers = [];
+}
+
+function renderEditGolferTags() {
+  const container = document.getElementById('editGolferTags');
+  container.innerHTML = editGolfers
+    .sort((a, b) => a.localeCompare(b))
+    .map(name => `<span class="edit-golfer-tag" onclick="removeEditGolfer('${name.replace(/'/g, "\\'")}')">${escapeHtml(name)}</span>`)
+    .join('');
+}
+
+function removeEditGolfer(name) {
+  editGolfers = editGolfers.filter(g => g !== name);
+  renderEditGolferTags();
+  toggleEditGolferSearch();
+  updateEditTiebreakerDatalist();
+  // Clear winning golfer if removed
+  const winInput = document.getElementById('editWinningGolfer');
+  if (winInput.value && !editGolfers.includes(winInput.value)) {
+    winInput.value = '';
+  }
+}
+
+function toggleEditGolferSearch() {
+  const searchDiv = document.getElementById('editGolferSearch');
+  if (editGolfers.length < 5) {
+    searchDiv.style.display = 'block';
+    const input = document.getElementById('editGolferInput');
+    input.value = '';
+    input.oninput = () => renderEditGolferSearchResults(input.value);
+    renderEditGolferSearchResults('');
+  } else {
+    searchDiv.style.display = 'none';
+  }
+}
+
+function renderEditGolferSearchResults(query) {
+  const container = document.getElementById('editGolferResults');
+  const q = query.toLowerCase();
+  const results = golfers
+    .filter(g => !g.withdrawn && isInField(g.name) && !editGolfers.includes(g.name) && g.name.toLowerCase().includes(q))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 15);
+
+  container.innerHTML = results
+    .map(g => `<div class="edit-golfer-result" onclick="addEditGolfer('${g.name.replace(/'/g, "\\'")}')">${escapeHtml(g.name)} <span style="color:#999;font-size:0.8rem">${g.odds || ''}</span></div>`)
+    .join('');
+}
+
+function addEditGolfer(name) {
+  if (editGolfers.length >= 5) return;
+  if (editGolfers.includes(name)) return;
+  editGolfers.push(name);
+  renderEditGolferTags();
+  toggleEditGolferSearch();
+  updateEditTiebreakerDatalist();
+}
+
+function updateEditTiebreakerDatalist() {
+  const datalist = document.getElementById('editGolferDatalist');
+  datalist.innerHTML = editGolfers
+    .sort((a, b) => a.localeCompare(b))
+    .map(name => `<option value="${name}">`)
+    .join('');
+}
+
+async function saveEdit() {
+  const id = document.getElementById('editId').value;
+  const entryName = document.getElementById('editEntryName').value.trim();
+  const winningGolfer = document.getElementById('editWinningGolfer').value.trim();
+  const winningScoreVal = document.getElementById('editWinningScore').value;
+
+  if (editGolfers.length !== 5) {
+    showToast('You need exactly 5 golfers!');
+    return;
+  }
+  if (!entryName) {
+    showToast('Please enter an entry name!');
+    return;
+  }
+  if (!winningGolfer) {
+    showToast('Please pick a winning golfer for your tiebreaker!');
+    return;
+  }
+  if (winningScoreVal === '') {
+    showToast('Please enter a predicted winning score!');
+    return;
+  }
+
+  const winningScore = parseInt(winningScoreVal);
+  const adminParam = IS_ADMIN ? '?admin=1' : '';
+
+  try {
+    const res = await fetch(`${API}/api/submissions/${id}${adminParam}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ entryName, golfers: editGolfers, winningGolfer, winningScore })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.error || 'Failed to save changes');
+      return;
+    }
+
+    // Update local submissions array
+    const idx = submissions.findIndex(s => s.id === id);
+    if (idx >= 0) submissions[idx] = data;
+
+    closeEditModal();
+    renderSubmissions();
+    showToast('Entry updated!');
+  } catch {
+    showToast('Error saving changes. Is the server running?');
   }
 }
 
