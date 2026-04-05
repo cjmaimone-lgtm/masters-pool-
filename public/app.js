@@ -4,6 +4,43 @@ let selectedGolfers = new Set();
 let submissions = [];
 let fieldEntries = [];
 
+// --- Admin mode: append ?admin=1 to URL to retain edit/remove during tournament ---
+const IS_ADMIN = new URLSearchParams(window.location.search).has('admin');
+
+// --- 2026 Masters Official Field ---
+// This list gates which golfers appear in the Pick Your Fivesome tab.
+// On a go-forward basis, this will be populated from the Vegas odds API;
+// for this tournament we lock it to the confirmed invite list.
+const MASTERS_2026_FIELD = [
+  'Ludvig Aberg', 'Daniel Berger', 'Akshay Bhatia', 'Keegan Bradley', 'Michael Brennan',
+  'Jacob Bridgeman', 'Sam Burns', 'Angel Cabrera', 'Ben Campbell', 'Patrick Cantlay',
+  'Wyndham Clark', 'Corey Conners', 'Fred Couples', 'Jason Day', 'Bryson DeChambeau',
+  'Nicolas Echavarria', 'Harris English', 'Matt Fitzpatrick', 'Tommy Fleetwood',
+  'Ryan Fox', 'Sergio Garcia', 'Ryan Gerard', 'Chris Gotterup', 'Max Greyserman',
+  'Ben Griffin', 'Harry Hall', 'Brian Harman', 'Tyrrell Hatton', 'Russell Henley',
+  'Nicolai Hojgaard', 'Rasmus Hojgaard', 'Max Homa', 'Viktor Hovland',
+  'Sungjae Im', 'Casey Jarvis', 'Dustin Johnson', 'Zach Johnson', 'Naoyuki Kataoka',
+  'Johnny Keefer', 'Michael Kim', 'Si Woo Kim', 'Kurt Kitayama', 'Jake Knapp',
+  'Brooks Koepka', 'Min Woo Lee', 'Haotong Li', 'Shane Lowry', 'Robert MacIntyre',
+  'Hideki Matsuyama', 'Matt McCarty', 'Rory McIlroy', 'Tom McKibbin', 'Maverick McNealy',
+  'Phil Mickelson', 'Collin Morikawa', 'Rasmus Neergaard-Petersen', 'Alex Noren',
+  'Andrew Novak', 'Jose Maria Olazabal', 'Carlos Ortiz', 'Marco Penge',
+  'Aldrich Potgieter', 'Jon Rahm', 'Aaron Rai', 'Patrick Reed', 'Kristoffer Reitan',
+  'Davis Riley', 'Justin Rose', 'Xander Schauffele', 'Scottie Scheffler',
+  'Charl Schwartzel', 'Adam Scott', 'Vijay Singh', 'Cameron Smith', 'J.J. Spaun',
+  'Jordan Spieth', 'Sam Stevens', 'Sepp Straka', 'Nick Taylor', 'Justin Thomas',
+  'Sami Valimaki', 'Bubba Watson', 'Mike Weir', 'Danny Willett', 'Gary Woodland',
+  'Cameron Young',
+  // Amateurs
+  'Ethan Fang', 'Jackson Herrington', 'Brandon Holtz', 'Mason Howell',
+  'Fifa Laopakdee', 'Mateo Pulcini',
+];
+
+// Build a normalized lookup set for field matching
+const FIELD_NORM = new Set(MASTERS_2026_FIELD.map(n =>
+  n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase()
+));
+
 // --- Init ---
 document.addEventListener('DOMContentLoaded', async () => {
   await Promise.all([loadGolfers(), loadSubmissions(), loadFieldEntries(), loadRefreshStatus()]);
@@ -110,11 +147,16 @@ async function loadGolfers() {
   const datalist = document.getElementById('golferDatalist');
   if (datalist) {
     datalist.innerHTML = golfers
-      .filter(g => !g.withdrawn)
+      .filter(g => !g.withdrawn && isInField(g.name))
       .sort((a, b) => a.name.localeCompare(b.name))
       .map(g => `<option value="${g.name}">`)
       .join('');
   }
+}
+
+function isInField(name) {
+  const norm = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  return FIELD_NORM.has(norm);
 }
 
 async function loadSubmissions() {
@@ -140,7 +182,11 @@ function setupTabs() {
       tab.classList.add('active');
       document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
 
-      if (tab.dataset.tab === 'board') renderSubmissions();
+      if (tab.dataset.tab === 'board') {
+        // Fetch live data if needed so tournament lock check works
+        if (!liveData) loadLiveLeaderboard().then(() => renderSubmissions());
+        else renderSubmissions();
+      }
       if (tab.dataset.tab === 'live') {
         if (!liveData) {
           loadLiveLeaderboard().then(() => renderLiveTracker());
@@ -202,6 +248,12 @@ function renderGolferTable() {
   let filtered = golfers.filter(g => g.name.toLowerCase().includes(search));
 
   filtered.sort((a, b) => {
+    // Non-field golfers always sort to bottom
+    const aField = isInField(a.name);
+    const bField = isInField(b.name);
+    if (aField && !bField) return -1;
+    if (!aField && bField) return 1;
+
     switch (sortBy) {
       case 'name': return a.name.localeCompare(b.name);
       case 'odds': return parseOdds(a.odds) - parseOdds(b.odds);
@@ -219,11 +271,14 @@ function renderGolferTable() {
     const formHtml = formatForm(g.form, g.recentFinishes);
     const augustaHtml = formatAugusta(g.augusta);
     const age = g.birthYear ? new Date().getFullYear() - g.birthYear : '—';
+    const inField = isInField(g.name);
     const withdrawnClass = g.withdrawn ? ' withdrawn' : '';
+    const notInFieldClass = !inField ? ' not-in-field' : '';
     const withdrawnLabel = g.withdrawn ? ' <span class="withdrawn-badge">WD</span>' : '';
+    const onclick = inField ? `onclick="toggleGolfer('${g.name.replace(/'/g, "\\'")}')"` : '';
     return `
-    <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}${withdrawnClass}"
-        onclick="toggleGolfer('${g.name.replace(/'/g, "\\'")}')">
+    <tr class="${selectedGolfers.has(g.name) ? 'selected' : ''}${withdrawnClass}${notInFieldClass}"
+        ${onclick}>
       <td><span class="checkmark">${selectedGolfers.has(g.name) ? '\u2713' : ''}</span></td>
       <td class="golfer-name">${g.name}${withdrawnLabel}</td>
       <td class="age-cell">${age}</td>
@@ -321,7 +376,7 @@ function updateSelectedDisplay() {
     if (count === 0) {
       // Show all golfers when none selected
       datalist.innerHTML = golfers
-        .filter(g => !g.withdrawn)
+        .filter(g => !g.withdrawn && isInField(g.name))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(g => `<option value="${g.name}">`)
         .join('');
@@ -446,7 +501,7 @@ function renderSubmissions() {
         </div>
         <div style="text-align:right;">
           <div class="timestamp">${timeStr}</div>
-          ${liveData && liveData.tournament && (liveData.tournament.state === 'in' || liveData.tournament.state === 'post') ? '' : `<button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>`}
+          ${isTournamentLocked() && !IS_ADMIN ? '' : `<button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>`}
         </div>
       </div>
     `;
@@ -456,7 +511,8 @@ function renderSubmissions() {
 async function deleteSubmission(id) {
   if (!confirm('Remove this fivesome?')) return;
   try {
-    const res = await fetch(`${API}/api/submissions/${id}`, { method: 'DELETE' });
+    const deleteUrl = IS_ADMIN ? `${API}/api/submissions/${id}?admin=1` : `${API}/api/submissions/${id}`;
+    const res = await fetch(deleteUrl, { method: 'DELETE' });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       showToast(data.error || 'Error removing submission');
@@ -1053,6 +1109,16 @@ function renderOwnershipGrid() {
       </table>
     </div>
   `;
+}
+
+// --- Tournament Lock ---
+// Returns true if the Masters (specifically) is in progress or finished
+function isTournamentLocked() {
+  if (!liveData || !liveData.tournament) return false;
+  const name = (liveData.tournament.name || '').toLowerCase();
+  // Only lock for the Masters, not other PGA events
+  if (!name.includes('masters')) return false;
+  return liveData.tournament.state === 'in' || liveData.tournament.state === 'post';
 }
 
 // --- Live Tournament Tracker ---
