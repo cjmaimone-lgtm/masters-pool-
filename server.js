@@ -257,8 +257,22 @@ app.post('/api/submissions', async (req, res) => {
   }
 });
 
-// DELETE a submission
+// DELETE a submission (blocked once tournament is live)
 app.delete('/api/submissions/:id', async (req, res) => {
+  try {
+    // Check if tournament has started — block deletions once it's live or finished
+    const sbRes = await fetch(`${ESPN_PGA}/scoreboard`);
+    const sbData = await sbRes.json();
+    const events = sbData.events || [];
+    const liveEvent = events.find(e => e.status?.type?.state === 'in')
+                   || events.find(e => e.status?.type?.state === 'post');
+    if (liveEvent) {
+      return res.status(403).json({ error: 'Entries are locked — the tournament has started!' });
+    }
+  } catch {
+    // If ESPN check fails, allow deletion rather than locking everyone out
+  }
+
   const { error } = await supabase
     .from('submissions')
     .delete()
@@ -755,6 +769,19 @@ app.get('/api/live-leaderboard', async (req, res) => {
         }
       }
 
+      // Extract hole-by-hole data for the current/latest round
+      let holes = [];
+      const currentRoundLS = foundMidRound
+        ? roundScores.find(ls => (ls.linescores?.length || 0) > 0 && (ls.linescores?.length || 0) < 18)
+        : roundScores.filter(ls => ls.linescores?.length === 18).pop();
+      if (currentRoundLS?.linescores) {
+        holes = currentRoundLS.linescores.map(h => ({
+          hole: h.period,
+          strokes: h.value,
+          toPar: h.scoreType?.displayValue || 'E'
+        }));
+      }
+
       const entry = {
         name: displayName,
         score: scoreToPar,
@@ -766,7 +793,8 @@ app.get('/api/live-leaderboard', async (req, res) => {
         currentPeriod,
         todayStrokes: todayStrokes,
         today: todayScore !== null ? (todayScore > 0 ? `+${todayScore}` : todayScore === 0 ? 'E' : String(todayScore)) : null,
-        status: playerStatus
+        status: playerStatus,
+        holes
       };
 
       // Build scoreMap keyed by normalized name for client-side matching
@@ -775,6 +803,19 @@ app.get('/api/live-leaderboard', async (req, res) => {
 
       return entry;
     });
+
+    // Derive course pars from hole-by-hole data (first golfer with 18 holes)
+    let coursePars = null;
+    for (const comp of competitorList) {
+      if (comp.holes && comp.holes.length === 18) {
+        coursePars = {};
+        for (const h of comp.holes) {
+          const toParNum = h.toPar === 'E' ? 0 : parseInt(h.toPar) || 0;
+          coursePars[h.hole] = h.strokes - toParNum;
+        }
+        break;
+      }
+    }
 
     res.json({
       tournament: {
@@ -785,7 +826,8 @@ app.get('/api/live-leaderboard', async (req, res) => {
         state: event.status?.type?.state
       },
       competitors: competitorList,
-      scoreMap
+      scoreMap,
+      coursePars
     });
   } catch (err) {
     res.status(500).json({ error: `Failed to fetch live leaderboard: ${err.message}` });
