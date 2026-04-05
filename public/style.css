@@ -1715,16 +1715,32 @@ h2 {
 
 .scorecard-toggle {
   cursor: pointer;
-  font-size: 0.6rem;
-  color: #888;
-  user-select: none;
-  display: inline-block;
-  margin-left: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 0.25rem;
   vertical-align: middle;
-  transition: color 0.15s;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #444;
+  background: linear-gradient(180deg, #f2f2f2 0%, #d0d0d0 100%);
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+  user-select: none;
+  transition: all 0.15s;
 }
 .scorecard-toggle:hover {
-  color: #333;
+  color: #222;
+  background: linear-gradient(180deg, #e8e8e8 0%, #c8c8c8 100%);
+  border-color: #999;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.scorecard-toggle:active {
+  background: linear-gradient(180deg, #ccc 0%, #ddd 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
 }
 
 .scorecard-row > td {
@@ -1762,9 +1778,9 @@ h2 {
 }
 
 .scorecard-par td {
-  background: #fafafa;
-  color: #888;
-  font-weight: 500;
+  background: #d9d9d9;
+  color: #222;
+  font-weight: 600;
 }
 
 .sc-label {
@@ -1778,8 +1794,8 @@ h2 {
 
 .sc-summary {
   font-weight: 700 !important;
-  background: #f5f5f5 !important;
-  color: #333;
+  background: #d9d9d9 !important;
+  color: #222 !important;
 }
 
 /* Hole score color coding — matches ESPN */
@@ -1833,3 +1849,14 @@ h2 {
 .sc-leg-birdie { color: #4caf50; }
 .sc-leg-bogey { color: #e53935; }
 .sc-leg-dbl { color: #1565c0; }
+
+/* Name repeat column: hidden on desktop, shown on mobile */
+.sc-name-repeat {
+  display: none;
+}
+@media (max-width: 768px) {
+  .sc-name-repeat {
+    display: table-cell;
+    min-width: 50px !important;
+  }
+}
