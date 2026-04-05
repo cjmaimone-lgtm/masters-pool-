@@ -446,7 +446,7 @@ function renderSubmissions() {
         </div>
         <div style="text-align:right;">
           <div class="timestamp">${timeStr}</div>
-          <button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>
+          ${liveData && liveData.tournament && (liveData.tournament.state === 'in' || liveData.tournament.state === 'post') ? '' : `<button class="delete-btn" onclick="deleteSubmission('${s.id}')">Remove</button>`}
         </div>
       </div>
     `;
@@ -456,7 +456,12 @@ function renderSubmissions() {
 async function deleteSubmission(id) {
   if (!confirm('Remove this fivesome?')) return;
   try {
-    await fetch(`${API}/api/submissions/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API}/api/submissions/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      showToast(data.error || 'Error removing submission');
+      return;
+    }
     submissions = submissions.filter(s => s.id !== id);
     renderSubmissions();
     updateSubmissionCount();
@@ -1154,7 +1159,8 @@ function scoreEntries(scoreMap) {
       const rounds = data ? (data.rounds || []) : [];
       const currentPeriod = data ? (data.currentPeriod || null) : null;
       const todayStrokes = data ? (data.todayStrokes || null) : null;
-      return { name, score, display, status, thru, today, position, teeTime, rounds, currentPeriod, todayStrokes };
+      const holes = data ? (data.holes || []) : [];
+      return { name, score, display, status, thru, today, position, teeTime, rounds, currentPeriod, todayStrokes, holes };
     });
 
     // Sort by score ascending (best first), drop worst (index 4)
@@ -1232,6 +1238,113 @@ function getGolferRoundIndicator(golferData, tournamentState) {
   return '';
 }
 
+// Toggle scorecard expand/collapse
+function toggleScorecard(id, btn) {
+  const row = document.getElementById(id);
+  if (!row) return;
+  const isHidden = row.style.display === 'none';
+  row.style.display = isHidden ? 'table-row' : 'none';
+  btn.innerHTML = isHidden ? '&#9650;' : '&#9660;';
+  btn.title = isHidden ? 'Hide scorecard' : 'Show scorecard';
+}
+
+// Build ESPN-style scorecard HTML for an entry's 5 golfers
+function buildScorecardHTML(entry, coursePars, tournamentState) {
+  const holeNums = Array.from({ length: 18 }, (_, i) => i + 1);
+  const pars = {};
+  for (let i = 1; i <= 18; i++) pars[i] = coursePars?.[i] || (i <= 9 ? 4 : 4); // fallback par 4
+
+  const outPar = holeNums.slice(0, 9).reduce((s, h) => s + pars[h], 0);
+  const inPar = holeNums.slice(9).reduce((s, h) => s + pars[h], 0);
+
+  // Header row: HOLE | 1-9 | OUT | 10-18 | IN | TOT
+  let html = '<div class="scorecard-wrapper"><table class="scorecard-table"><thead>';
+  html += '<tr class="scorecard-header"><th class="sc-label">HOLE</th>';
+  for (let i = 1; i <= 9; i++) html += `<th>${i}</th>`;
+  html += '<th class="sc-summary">OUT</th>';
+  for (let i = 10; i <= 18; i++) html += `<th>${i}</th>`;
+  html += '<th class="sc-summary">IN</th><th class="sc-summary">TOT</th></tr>';
+
+  // Par row
+  html += '<tr class="scorecard-par"><td class="sc-label">Par</td>';
+  for (let i = 1; i <= 9; i++) html += `<td>${pars[i]}</td>`;
+  html += `<td class="sc-summary">${outPar}</td>`;
+  for (let i = 10; i <= 18; i++) html += `<td>${pars[i]}</td>`;
+  html += `<td class="sc-summary">${inPar}</td><td class="sc-summary">${outPar + inPar}</td></tr>`;
+  html += '</thead><tbody>';
+
+  // Golfer rows sorted by score (same order as the main row)
+  const sorted = [...entry.golferScores].sort((a, b) => a.score - b.score);
+  for (const g of sorted) {
+    const lastName = g.name.split(' ').slice(-1)[0];
+    const isDrop = g.name === entry.droppedGolfer;
+    const rowClass = isDrop ? ' sc-dropped' : '';
+    const isCutWd = g.status === 'cut' || g.status === 'wd' || g.status === 'not_in_field';
+
+    html += `<tr class="scorecard-golfer${rowClass}"><td class="sc-label">${escapeHtml(lastName)}${isDrop ? ' <span class="sc-drop">&#10005;</span>' : ''}</td>`;
+
+    if (isCutWd) {
+      const label = g.status === 'cut' ? 'CUT' : g.status === 'wd' ? 'WD' : 'N/F';
+      html += `<td colspan="21" class="sc-status">${label}</td></tr>`;
+      continue;
+    }
+
+    // Build hole lookup from golfer's holes array
+    const holeMap = {};
+    for (const h of (g.holes || [])) holeMap[h.hole] = h;
+
+    let outStrokes = 0, outCount = 0, inStrokes = 0, inCount = 0;
+
+    for (let i = 1; i <= 9; i++) {
+      const h = holeMap[i];
+      if (h) {
+        const cls = getHoleClass(h.toPar);
+        html += `<td class="${cls}">${h.strokes}</td>`;
+        outStrokes += h.strokes;
+        outCount++;
+      } else {
+        html += '<td></td>';
+      }
+    }
+    html += `<td class="sc-summary">${outCount === 9 ? outStrokes : outCount > 0 ? outStrokes : ''}</td>`;
+
+    for (let i = 10; i <= 18; i++) {
+      const h = holeMap[i];
+      if (h) {
+        const cls = getHoleClass(h.toPar);
+        html += `<td class="${cls}">${h.strokes}</td>`;
+        inStrokes += h.strokes;
+        inCount++;
+      } else {
+        html += '<td></td>';
+      }
+    }
+    html += `<td class="sc-summary">${inCount === 9 ? inStrokes : inCount > 0 ? inStrokes : ''}</td>`;
+
+    const totalCount = outCount + inCount;
+    const totalStrokes = outStrokes + inStrokes;
+    html += `<td class="sc-summary">${totalCount > 0 ? totalStrokes : ''}</td>`;
+    html += '</tr>';
+  }
+
+  // Legend
+  html += '</tbody></table>';
+  html += '<div class="sc-legend"><span class="sc-leg-eagle">&#9632;</span> EAGLE&nbsp;&nbsp;<span class="sc-leg-birdie">&#9632;</span> BIRDIE&nbsp;&nbsp;<span class="sc-leg-bogey">&#9632;</span> BOGEY&nbsp;&nbsp;<span class="sc-leg-dbl">&#9632;</span> DBL BOGEY+</div>';
+  html += '</div>';
+  return html;
+}
+
+function getHoleClass(toPar) {
+  if (!toPar || toPar === 'E') return 'sc-par';
+  const n = parseInt(toPar);
+  if (isNaN(n)) return 'sc-par';
+  if (n <= -2) return 'sc-eagle';
+  if (n === -1) return 'sc-birdie';
+  if (n === 1) return 'sc-bogey';
+  if (n >= 2) return 'sc-dbl';
+  return 'sc-par';
+}
+
 // Wrapper for rooting display — looks up from scoreMap
 function getRoundIndicatorFromMap(golferName, scoreMap, tournamentState) {
   const data = lookupGolferScore(golferName, scoreMap);
@@ -1301,7 +1414,7 @@ function renderLiveTracker() {
     : standings;
 
   // Render standings table
-  const rows = displayEntries.map(entry => {
+  const rows = displayEntries.map((entry, idx) => {
     const isLead = entry.id === leadEntry.id && !entry.isDQ;
     const isOurs = entry.isPortfolio;
     const dqClass = entry.isDQ ? ' live-row-dq' : '';
@@ -1334,12 +1447,19 @@ function renderLiveTracker() {
       ? `<span class="live-win-score" title="Predicted winning score">${entry.winningScore > 0 ? '+' + entry.winningScore : entry.winningScore === 0 ? 'E' : entry.winningScore}</span>`
       : '';
 
+    const entryId = entry.id || idx;
+    const hasHoles = entry.golferScores.some(g => g.holes && g.holes.length > 0);
+    const expandBtn = hasHoles ? `<span class="scorecard-toggle" onclick="toggleScorecard('sc-${entryId}', this)" title="Show scorecard">&#9660;</span>` : '';
+
     return `
       <tr class="live-entry-row${highlightClass}${dqClass}">
-        <td class="live-rank">${entry.isDQ ? '—' : entry.rank}</td>
+        <td class="live-rank">${entry.isDQ ? '—' : entry.rank} ${expandBtn}</td>
         <td class="live-entry-name">${entryLabel}${leadBadge}${dqBadge}</td>
         <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
         <td class="live-golfers">${golferCells}${winScoreBadge}</td>
+      </tr>
+      <tr class="scorecard-row" id="sc-${entryId}" style="display:none;">
+        <td colspan="4">${buildScorecardHTML(entry, liveData.coursePars, tournamentState)}</td>
       </tr>
     `;
   }).join('');
