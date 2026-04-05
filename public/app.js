@@ -1244,7 +1244,7 @@ function toggleScorecard(id, btn) {
   if (!row) return;
   const isHidden = row.style.display === 'none';
   row.style.display = isHidden ? 'table-row' : 'none';
-  btn.innerHTML = isHidden ? '&#9650;' : '&#9660;';
+  btn.innerHTML = isHidden ? '&#9652;' : '&#9662;';
   btn.title = isHidden ? 'Hide scorecard' : 'Show scorecard';
 }
 
@@ -1257,11 +1257,12 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
   const outPar = holeNums.slice(0, 9).reduce((s, h) => s + pars[h], 0);
   const inPar = holeNums.slice(9).reduce((s, h) => s + pars[h], 0);
 
-  // Header row: HOLE | 1-9 | OUT | 10-18 | IN | TOT
+  // Header row: HOLE | 1-9 | OUT | (name repeat on mobile) | 10-18 | IN | TOT
   let html = '<div class="scorecard-wrapper"><table class="scorecard-table"><thead>';
   html += '<tr class="scorecard-header"><th class="sc-label">HOLE</th>';
   for (let i = 1; i <= 9; i++) html += `<th>${i}</th>`;
   html += '<th class="sc-summary">OUT</th>';
+  html += '<th class="sc-name-repeat"></th>';
   for (let i = 10; i <= 18; i++) html += `<th>${i}</th>`;
   html += '<th class="sc-summary">IN</th><th class="sc-summary">TOT</th></tr>';
 
@@ -1269,6 +1270,7 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
   html += '<tr class="scorecard-par"><td class="sc-label">Par</td>';
   for (let i = 1; i <= 9; i++) html += `<td>${pars[i]}</td>`;
   html += `<td class="sc-summary">${outPar}</td>`;
+  html += `<td class="sc-name-repeat sc-summary">${outPar + inPar}</td>`;
   for (let i = 10; i <= 18; i++) html += `<td>${pars[i]}</td>`;
   html += `<td class="sc-summary">${inPar}</td><td class="sc-summary">${outPar + inPar}</td></tr>`;
   html += '</thead><tbody>';
@@ -1285,7 +1287,7 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
 
     if (isCutWd) {
       const label = g.status === 'cut' ? 'CUT' : g.status === 'wd' ? 'WD' : 'N/F';
-      html += `<td colspan="21" class="sc-status">${label}</td></tr>`;
+      html += `<td colspan="22" class="sc-status">${label}</td></tr>`;
       continue;
     }
 
@@ -1307,6 +1309,7 @@ function buildScorecardHTML(entry, coursePars, tournamentState) {
       }
     }
     html += `<td class="sc-summary">${outCount === 9 ? outStrokes : outCount > 0 ? outStrokes : ''}</td>`;
+    html += `<td class="sc-name-repeat sc-label">${escapeHtml(lastName)}</td>`;
 
     for (let i = 10; i <= 18; i++) {
       const h = holeMap[i];
@@ -1449,7 +1452,7 @@ function renderLiveTracker() {
 
     const entryId = entry.id || idx;
     const hasHoles = entry.golferScores.some(g => g.holes && g.holes.length > 0);
-    const expandBtn = hasHoles ? `<span class="scorecard-toggle" onclick="toggleScorecard('sc-${entryId}', this)" title="Show scorecard">&#9660;</span>` : '';
+    const expandBtn = hasHoles ? `<span class="scorecard-toggle" onclick="toggleScorecard('sc-${entryId}', this)" title="Show scorecard">&#9662;</span>` : '';
 
     return `
       <tr class="live-entry-row${highlightClass}${dqClass}">
