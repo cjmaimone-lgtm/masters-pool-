@@ -257,20 +257,72 @@ app.post('/api/submissions', async (req, res) => {
   }
 });
 
-// DELETE a submission (blocked once tournament is live)
-app.delete('/api/submissions/:id', async (req, res) => {
+// Shared helper: check if the Masters is live or finished
+async function isMastersLocked() {
   try {
-    // Check if tournament has started — block deletions once it's live or finished
     const sbRes = await fetch(`${ESPN_PGA}/scoreboard`);
     const sbData = await sbRes.json();
     const events = sbData.events || [];
-    const liveEvent = events.find(e => e.status?.type?.state === 'in')
-                   || events.find(e => e.status?.type?.state === 'post');
-    if (liveEvent) {
-      return res.status(403).json({ error: 'Entries are locked — the tournament has started!' });
+    const mastersEvent = events.find(e => {
+      const name = (e.name || e.shortName || '').toLowerCase();
+      return name.includes('masters');
+    });
+    if (mastersEvent && (mastersEvent.status?.type?.state === 'in' || mastersEvent.status?.type?.state === 'post')) {
+      return true;
     }
   } catch {
-    // If ESPN check fails, allow deletion rather than locking everyone out
+    // If ESPN check fails, allow the action rather than locking everyone out
+  }
+  return false;
+}
+
+// PUT (edit) a submission (blocked once the Masters is live, unless admin)
+app.put('/api/submissions/:id', async (req, res) => {
+  const isAdmin = req.query.admin === '1';
+
+  if (!isAdmin && await isMastersLocked()) {
+    return res.status(403).json({ error: 'Entries are locked — the Masters has started!' });
+  }
+
+  const { entryName, golfers, winningGolfer, winningScore } = req.body;
+
+  if (!golfers || golfers.length !== 5) {
+    return res.status(400).json({ error: 'You must select exactly 5 golfers' });
+  }
+
+  const updates = {
+    golfers,
+    winning_golfer: winningGolfer ? winningGolfer.trim() : null,
+    winning_score: winningScore != null ? Number(winningScore) : null
+  };
+  if (entryName !== undefined) updates.entry_name = entryName.trim();
+
+  const { data, error } = await supabase
+    .from('submissions')
+    .update(updates)
+    .eq('id', req.params.id)
+    .select()
+    .single();
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  res.json({
+    id: data.id,
+    userName: data.user_name,
+    entryName: data.entry_name || '',
+    golfers: data.golfers,
+    winningGolfer: data.winning_golfer || null,
+    winningScore: data.winning_score != null ? data.winning_score : null,
+    submittedAt: data.submitted_at
+  });
+});
+
+// DELETE a submission (blocked once the Masters is live, unless admin)
+app.delete('/api/submissions/:id', async (req, res) => {
+  const isAdmin = req.query.admin === '1';
+
+  if (!isAdmin && await isMastersLocked()) {
+    return res.status(403).json({ error: 'Entries are locked — the Masters has started!' });
   }
 
   const { error } = await supabase
