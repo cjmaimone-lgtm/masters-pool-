@@ -355,6 +355,13 @@ function toggleGolfer(name) {
   }
   renderGolferTable();
   updateSelectedDisplay();
+
+  // Auto-scroll to tiebreaker section after selecting 5th golfer
+  if (selectedGolfers.size === 5) {
+    setTimeout(() => {
+      document.querySelector('.submit-area')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }
 }
 
 function updateSelectedDisplay() {
@@ -1612,8 +1619,7 @@ function renderLiveTracker() {
       : '';
 
     const entryId = entry.id || idx;
-    const hasHoles = entry.golferScores.some(g => g.holes && g.holes.length > 0);
-    const expandBtn = hasHoles ? `<span class="scorecard-toggle" onclick="toggleScorecard('sc-${entryId}', this)" title="Show scorecard">&#9662;</span>` : '';
+    const expandBtn = `<span class="scorecard-toggle" onclick="toggleScorecard('sc-${entryId}', this)" title="Show scorecard">&#9662;</span>`;
 
     return `
       <tr class="live-entry-row${highlightClass}${dqClass}">
