@@ -1317,6 +1317,32 @@ h2 {
     white-space: nowrap;
   }
 
+  /* Ownership grid — tighten golfer column on mobile */
+  .og-golfer-header {
+    min-width: 70px;
+    max-width: 70px;
+  }
+  .og-golfer {
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.7rem;
+  }
+  .og-first {
+    display: none;
+  }
+  .og-table {
+    font-size: 0.75rem;
+  }
+  .og-cell {
+    width: 28px;
+    height: 24px;
+  }
+  .og-table thead th {
+    padding: 0.3rem 0.2rem;
+    font-size: 0.6rem;
+  }
+
   /* Fivesome uniqueness — hide bar labels on mobile, tap to reveal */
   .bar-label {
     display: none;
