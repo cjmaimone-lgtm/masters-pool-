@@ -240,6 +240,26 @@ function updateSubmissionCount() {
   }
 }
 
+// --- Country flags ---
+const COUNTRY_FLAGS = {
+  USA: ['🇺🇸','United States'], ENG: ['🏴󠁧󠁢󠁥󠁮󠁧󠁿','England'], SCO: ['🏴󠁧󠁢󠁳󠁣󠁴󠁿','Scotland'],
+  NIR: ['🇬🇧','Northern Ireland'], IRL: ['🇮🇪','Ireland'], ESP: ['🇪🇸','Spain'],
+  AUS: ['🇦🇺','Australia'], JPN: ['🇯🇵','Japan'], KOR: ['🇰🇷','South Korea'],
+  SWE: ['🇸🇪','Sweden'], NOR: ['🇳🇴','Norway'], DEN: ['🇩🇰','Denmark'],
+  AUT: ['🇦🇹','Austria'], FIN: ['🇫🇮','Finland'], BEL: ['🇧🇪','Belgium'],
+  CAN: ['🇨🇦','Canada'], NZL: ['🇳🇿','New Zealand'], RSA: ['🇿🇦','South Africa'],
+  COL: ['🇨🇴','Colombia'], MEX: ['🇲🇽','Mexico'], ARG: ['🇦🇷','Argentina'],
+  CHI: ['🇨🇱','Chile'], CHN: ['🇨🇳','China'], THA: ['🇹🇭','Thailand'],
+  FJI: ['🇫🇯','Fiji']
+};
+
+function formatCountryFlag(code) {
+  if (!code) return '—';
+  const entry = COUNTRY_FLAGS[code];
+  if (!entry) return code;
+  return `<span title="${entry[1]}">${entry[0]}</span>`;
+}
+
 // --- Golfer Table ---
 function renderGolferTable() {
   const search = document.getElementById('golferSearch').value.toLowerCase();
@@ -281,6 +301,7 @@ function renderGolferTable() {
         ${onclick}>
       <td><span class="checkmark">${selectedGolfers.has(g.name) ? '\u2713' : ''}</span></td>
       <td class="golfer-name">${g.name}${withdrawnLabel}</td>
+      <td class="country-cell">${formatCountryFlag(g.country)}</td>
       <td class="age-cell">${age}</td>
       <td class="rank-cell">${g.ranking ? '#' + g.ranking : '—'}</td>
       <td class="opening-odds-cell">${formatOddsDisplay(g.openingOdds)}</td>
@@ -377,29 +398,8 @@ function updateSelectedDisplay() {
       Array.from(selectedGolfers).join(', ');
   }
 
-  // Update tiebreaker datalist to only show selected golfers
-  const datalist = document.getElementById('golferDatalist');
-  if (datalist) {
-    if (count === 0) {
-      // Show all golfers when none selected
-      datalist.innerHTML = golfers
-        .filter(g => !g.withdrawn && isInField(g.name))
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map(g => `<option value="${g.name}">`)
-        .join('');
-    } else {
-      // Only show golfers from the current fivesome
-      datalist.innerHTML = Array.from(selectedGolfers)
-        .sort((a, b) => a.localeCompare(b))
-        .map(name => `<option value="${name}">`)
-        .join('');
-    }
-    // Clear winning golfer input if it's not in the selection
-    const winInput = document.getElementById('winningGolfer');
-    if (winInput.value && count > 0 && !selectedGolfers.has(winInput.value)) {
-      winInput.value = '';
-    }
-  }
+  // Tiebreaker datalist always shows all eligible golfers (not restricted to fivesome)
+  // It's already populated by loadGolfers(), no update needed here
 }
 
 // --- Submit ---
@@ -1829,11 +1829,6 @@ function removeEditGolfer(name) {
   renderEditGolferTags();
   toggleEditGolferSearch();
   updateEditTiebreakerDatalist();
-  // Clear winning golfer if removed
-  const winInput = document.getElementById('editWinningGolfer');
-  if (winInput.value && !editGolfers.includes(winInput.value)) {
-    winInput.value = '';
-  }
 }
 
 function toggleEditGolferSearch() {
@@ -1872,10 +1867,12 @@ function addEditGolfer(name) {
 }
 
 function updateEditTiebreakerDatalist() {
+  // Show all eligible golfers (not restricted to fivesome)
   const datalist = document.getElementById('editGolferDatalist');
-  datalist.innerHTML = editGolfers
-    .sort((a, b) => a.localeCompare(b))
-    .map(name => `<option value="${name}">`)
+  datalist.innerHTML = golfers
+    .filter(g => !g.withdrawn && isInField(g.name))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(g => `<option value="${g.name}">`)
     .join('');
 }
 
