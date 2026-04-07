@@ -1318,23 +1318,22 @@ h2 {
   }
 
   /* Ownership grid — tighten golfer column on mobile */
-  .og-golfer-header {
-    min-width: 60px;
-    max-width: 70px;
+  .og-table {
+    table-layout: fixed;
+    font-size: 0.75rem;
   }
+  .og-golfer-header,
   .og-golfer {
-    min-width: 0 !important;
-    max-width: 70px;
-    white-space: nowrap;
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 0.7rem;
   }
   .og-first {
     display: none;
-  }
-  .og-table {
-    font-size: 0.75rem;
   }
   .og-cell {
     width: 28px;
