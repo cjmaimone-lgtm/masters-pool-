@@ -23,7 +23,8 @@
       12,
       31,
       22
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Rory McIlroy",
@@ -49,12 +50,13 @@
       3,
       71,
       46
-    ]
+    ],
+    "country": "NIR"
   },
   {
     "name": "Cameron Young",
     "ranking": 3,
-    "odds": "+2000",
+    "odds": "+1800",
     "form": {
       "events": 5,
       "wins": 1,
@@ -75,7 +77,8 @@
       8,
       4,
       1
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Tommy Fleetwood",
@@ -101,7 +104,8 @@
       10,
       49,
       8
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Xander Schauffele",
@@ -127,7 +131,8 @@
       32,
       3,
       4
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Matt Fitzpatrick",
@@ -153,7 +158,8 @@
       43,
       2,
       1
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Justin Rose",
@@ -179,7 +185,8 @@
       64,
       67,
       17
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Collin Morikawa",
@@ -205,7 +212,8 @@
       7,
       5,
       123
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Russell Henley",
@@ -231,7 +239,8 @@
       56,
       7,
       18
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Chris Gotterup",
@@ -252,12 +261,13 @@
       23,
       57,
       7
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Robert MacIntyre",
     "ranking": 11,
-    "odds": "+3300",
+    "odds": "+2800",
     "form": {
       "events": 4,
       "wins": 0,
@@ -276,7 +286,8 @@
       21,
       25,
       4
-    ]
+    ],
+    "country": "SCO"
   },
   {
     "name": "Sepp Straka",
@@ -302,7 +313,8 @@
       51,
       17,
       9
-    ]
+    ],
+    "country": "AUT"
   },
   {
     "name": "J.J. Spaun",
@@ -326,7 +338,8 @@
       56,
       24,
       107
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Hideki Matsuyama",
@@ -352,7 +365,8 @@
       30,
       41,
       27
-    ]
+    ],
+    "country": "JPN"
   },
   {
     "name": "Justin Thomas",
@@ -378,7 +392,8 @@
       70,
       10,
       30
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Ben Griffin",
@@ -399,7 +414,8 @@
       91,
       84,
       29
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jacob Bridgeman",
@@ -420,12 +436,13 @@
       20,
       6,
       15
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Ludvig Aberg",
     "ranking": 18,
-    "odds": "+1600",
+    "odds": "+1400",
     "form": {
       "events": 4,
       "wins": 0,
@@ -444,7 +461,8 @@
       20,
       3,
       7
-    ]
+    ],
+    "country": "SWE"
   },
   {
     "name": "Alexander Noren",
@@ -456,7 +474,8 @@
     },
     "birthYear": 1982,
     "openingOdds": "+10000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "SWE"
   },
   {
     "name": "Harris English",
@@ -481,7 +500,8 @@
       30,
       104,
       22
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Viktor Hovland",
@@ -507,7 +527,8 @@
       16,
       20,
       90
-    ]
+    ],
+    "country": "NOR"
   },
   {
     "name": "Akshay Bhatia",
@@ -531,7 +552,8 @@
       1,
       14,
       69
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Patrick Reed",
@@ -557,7 +579,8 @@
       1,
       33,
       10
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Bryson DeChambeau",
@@ -583,7 +606,8 @@
       26,
       1,
       1
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Keegan Bradley",
@@ -608,7 +632,8 @@
       65,
       55,
       56
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Maverick McNealy",
@@ -631,7 +656,8 @@
       55,
       14,
       40
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Ryan Gerard",
@@ -652,12 +678,13 @@
       51,
       30,
       89
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jon Rahm",
     "ranking": 28,
-    "odds": "+1200",
+    "odds": "+1100",
     "form": {
       "events": 5,
       "wins": 1,
@@ -678,7 +705,8 @@
       1,
       5,
       2
-    ]
+    ],
+    "country": "ESP"
   },
   {
     "name": "Si Woo Kim",
@@ -703,7 +731,8 @@
       34,
       15,
       54
-    ]
+    ],
+    "country": "KOR"
   },
   {
     "name": "Tyrrell Hatton",
@@ -729,7 +758,8 @@
       47,
       13,
       38
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Min Woo Lee",
@@ -755,7 +785,8 @@
       8,
       39,
       4
-    ]
+    ],
+    "country": "AUS"
   },
   {
     "name": "Shane Lowry",
@@ -781,7 +812,8 @@
       55,
       94,
       32
-    ]
+    ],
+    "country": "IRL"
   },
   {
     "name": "Sam Burns",
@@ -807,7 +839,8 @@
       61,
       13,
       21
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Patrick Cantlay",
@@ -833,7 +866,8 @@
       62,
       34,
       9
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Kurt Kitayama",
@@ -857,12 +891,13 @@
       19,
       97,
       60
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Marco Penge",
     "ranking": 36,
-    "odds": "+9000",
+    "odds": "+8000",
     "form": {
       "events": 6,
       "wins": 0,
@@ -878,7 +913,8 @@
       106,
       5,
       88
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Nicolas Echavarria",
@@ -896,7 +932,8 @@
     },
     "birthYear": 1994,
     "openingOdds": "+15000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "COL"
   },
   {
     "name": "Aaron Rai",
@@ -919,7 +956,8 @@
       30,
       88,
       93
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Corey Conners",
@@ -945,7 +983,8 @@
       35,
       21,
       17
-    ]
+    ],
+    "country": "CAN"
   },
   {
     "name": "Jason Day",
@@ -971,7 +1010,8 @@
       60,
       61,
       9
-    ]
+    ],
+    "country": "AUS"
   },
   {
     "name": "Michael Brennan",
@@ -992,7 +1032,8 @@
       69,
       85,
       34
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Ryan Fox",
@@ -1016,7 +1057,8 @@
       9,
       27,
       113
-    ]
+    ],
+    "country": "NZL"
   },
   {
     "name": "Brian Harman",
@@ -1042,7 +1084,8 @@
       50,
       50,
       12
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Kristoffer Reitan",
@@ -1063,7 +1106,8 @@
       66,
       75,
       120
-    ]
+    ],
+    "country": "NOR"
   },
   {
     "name": "Andrew Novak",
@@ -1084,7 +1128,8 @@
       40,
       101,
       55
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Sam Stevens",
@@ -1105,7 +1150,8 @@
       66,
       58,
       5
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Adam Scott",
@@ -1131,7 +1177,8 @@
       11,
       56,
       27
-    ]
+    ],
+    "country": "AUS"
   },
   {
     "name": "Rasmus Hojgaard",
@@ -1143,7 +1190,8 @@
     },
     "birthYear": 2000,
     "openingOdds": "+15000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "DEN"
   },
   {
     "name": "Michael Kim",
@@ -1166,7 +1214,8 @@
       34,
       117,
       31
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Sami Valimaki",
@@ -1187,7 +1236,8 @@
       37,
       117,
       111
-    ]
+    ],
+    "country": "FIN"
   },
   {
     "name": "Max Greyserman",
@@ -1210,7 +1260,8 @@
       18,
       116,
       124
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jordan Spieth",
@@ -1236,7 +1287,8 @@
       12,
       33,
       13
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Harry Hall",
@@ -1257,7 +1309,8 @@
       9,
       85,
       30
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Nick Taylor",
@@ -1281,7 +1334,8 @@
       38,
       43,
       100
-    ]
+    ],
+    "country": "CAN"
   },
   {
     "name": "Rasmus Neergaard-Petersen",
@@ -1302,7 +1356,8 @@
       68,
       63,
       85
-    ]
+    ],
+    "country": "DEN"
   },
   {
     "name": "Sungjae Im",
@@ -1328,7 +1383,8 @@
       80,
       6,
       61
-    ]
+    ],
+    "country": "KOR"
   },
   {
     "name": "Casey Jarvis",
@@ -1349,7 +1405,8 @@
       1,
       2,
       15
-    ]
+    ],
+    "country": "RSA"
   },
   {
     "name": "Wyndham Clark",
@@ -1373,7 +1430,8 @@
       44,
       83,
       105
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Johnny Keefer",
@@ -1394,7 +1452,8 @@
       86,
       134,
       3
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Aldrich Potgieter",
@@ -1417,7 +1476,8 @@
       68,
       108,
       23
-    ]
+    ],
+    "country": "RSA"
   },
   {
     "name": "Hao-Tong Li",
@@ -1438,7 +1498,8 @@
       52,
       89,
       94
-    ]
+    ],
+    "country": "CHN"
   },
   {
     "name": "Tom McKibbin",
@@ -1459,7 +1520,8 @@
       30,
       24,
       24
-    ]
+    ],
+    "country": "NIR"
   },
   {
     "name": "Ben Campbell",
@@ -1482,7 +1544,8 @@
       56,
       45,
       45
-    ]
+    ],
+    "country": "NZL"
   },
   {
     "name": "Davis Riley",
@@ -1505,7 +1568,8 @@
       122,
       108,
       63
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Max Homa",
@@ -1531,7 +1595,8 @@
       14,
       38,
       130
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Carlos Ortiz",
@@ -1552,12 +1617,13 @@
       6,
       26,
       8
-    ]
+    ],
+    "country": "MEX"
   },
   {
     "name": "Brooks Koepka",
     "ranking": 162,
-    "odds": "+4000",
+    "odds": "+3300",
     "form": {
       "events": 5,
       "wins": 0,
@@ -1578,7 +1644,8 @@
       15,
       21,
       118
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jackson Herrington",
@@ -1588,7 +1655,8 @@
     "augusta": {},
     "birthYear": 2004,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "USA"
   },
   {
     "name": "Naoyuki Kataoka",
@@ -1598,7 +1666,8 @@
     "augusta": {},
     "birthYear": 2003,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "JPN"
   },
   {
     "name": "Zach Johnson",
@@ -1612,7 +1681,8 @@
     },
     "birthYear": 1976,
     "openingOdds": "+40000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "USA"
   },
   {
     "name": "Tiger Woods",
@@ -1626,7 +1696,8 @@
     },
     "birthYear": 1975,
     "openingOdds": "+15000",
-    "withdrawn": true
+    "withdrawn": true,
+    "country": "USA"
   },
   {
     "name": "Danny Willett",
@@ -1652,7 +1723,8 @@
       44,
       105,
       58
-    ]
+    ],
+    "country": "ENG"
   },
   {
     "name": "Mike Weir",
@@ -1667,7 +1739,8 @@
     },
     "birthYear": 1970,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "CAN"
   },
   {
     "name": "Bubba Watson",
@@ -1692,7 +1765,8 @@
       41,
       28,
       40
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Brandon Holtz",
@@ -1702,7 +1776,8 @@
     "augusta": {},
     "birthYear": 1986,
     "openingOdds": "+100000",
-    "withdrawn": true
+    "withdrawn": true,
+    "country": "USA"
   },
   {
     "name": "Fifa Laopakdee",
@@ -1712,7 +1787,8 @@
     "augusta": {},
     "birthYear": 2005,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "THA"
   },
   {
     "name": "Angel Cabrera",
@@ -1724,7 +1800,8 @@
     },
     "birthYear": 1969,
     "openingOdds": "+50000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "ARG"
   },
   {
     "name": "Phil Mickelson",
@@ -1750,7 +1827,8 @@
       58,
       60,
       49
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Mateo Pulcini",
@@ -1760,7 +1838,8 @@
     "augusta": {},
     "birthYear": 2000,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "ARG"
   },
   {
     "name": "Jose Maria Olazabal",
@@ -1775,7 +1854,8 @@
     },
     "birthYear": 1966,
     "openingOdds": "+200000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "ESP"
   },
   {
     "name": "Cameron Smith",
@@ -1801,7 +1881,8 @@
       48,
       8,
       20
-    ]
+    ],
+    "country": "AUS"
   },
   {
     "name": "Vijay Singh",
@@ -1814,7 +1895,8 @@
     },
     "birthYear": 1963,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "FJI"
   },
   {
     "name": "Dustin Johnson",
@@ -1840,7 +1922,8 @@
       24,
       12,
       35
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Charl Schwartzel",
@@ -1865,7 +1948,8 @@
       38,
       22,
       27
-    ]
+    ],
+    "country": "RSA"
   },
   {
     "name": "Mason Howell",
@@ -1884,7 +1968,8 @@
     "withdrawn": false,
     "recentFinishes": [
       76
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Ethan Fang",
@@ -1894,7 +1979,8 @@
     "augusta": {},
     "birthYear": 2005,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "USA"
   },
   {
     "name": "Sergio Garcia",
@@ -1920,7 +2006,8 @@
       12,
       38,
       21
-    ]
+    ],
+    "country": "ESP"
   },
   {
     "name": "Fred Couples",
@@ -1934,7 +2021,8 @@
     },
     "birthYear": 1959,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "USA"
   },
   {
     "name": "Tony Finau",
@@ -1955,12 +2043,13 @@
     },
     "birthYear": 1989,
     "openingOdds": "+5000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       72,
       22,
       42
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Will Zalatoris",
@@ -1981,10 +2070,11 @@
     },
     "birthYear": 1996,
     "openingOdds": "+8000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       84
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jake Knapp",
@@ -2005,7 +2095,8 @@
       6,
       79,
       6
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Nicolai Hojgaard",
@@ -2021,7 +2112,8 @@
     "augusta": {},
     "birthYear": 2001,
     "openingOdds": "+6600",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "DEN"
   },
   {
     "name": "Gary Woodland",
@@ -2042,7 +2134,8 @@
       87,
       16,
       1
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Daniel Berger",
@@ -2063,7 +2156,8 @@
       34,
       2,
       67
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Matt McCarty",
@@ -2084,7 +2178,8 @@
       42,
       78,
       129
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Brandon Wu",
@@ -2100,7 +2195,8 @@
     "augusta": {},
     "birthYear": 1997,
     "openingOdds": "+100000",
-    "withdrawn": false
+    "withdrawn": false,
+    "country": "USA"
   },
   {
     "name": "Joaquin Niemann",
@@ -2116,12 +2212,13 @@
     "augusta": {},
     "birthYear": 1998,
     "openingOdds": "+6000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       44,
       4,
       15
-    ]
+    ],
+    "country": "CHI"
   },
   {
     "name": "Sahith Theegala",
@@ -2137,12 +2234,13 @@
     "augusta": {},
     "birthYear": 1997,
     "openingOdds": "+8000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       41,
       115,
       11
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Thomas Detry",
@@ -2158,12 +2256,13 @@
     "augusta": {},
     "birthYear": 1993,
     "openingOdds": "+10000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       2,
       15,
       3
-    ]
+    ],
+    "country": "BEL"
   },
   {
     "name": "Joohyung Kim",
@@ -2179,7 +2278,8 @@
     "augusta": {},
     "birthYear": null,
     "openingOdds": "+12500",
-    "withdrawn": false
+    "withdrawn": true,
+    "country": "KOR"
   },
   {
     "name": "Anthony Kim",
@@ -2195,12 +2295,13 @@
     "augusta": {},
     "birthYear": 1985,
     "openingOdds": "+12500",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       34,
       18,
       56
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Billy Horschel",
@@ -2216,12 +2317,13 @@
     "augusta": {},
     "birthYear": 1986,
     "openingOdds": "+15000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       13,
       72,
       93
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Taylor Pendrith",
@@ -2237,12 +2339,13 @@
     "augusta": {},
     "birthYear": 1991,
     "openingOdds": "+17500",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       47,
       117,
       130
-    ]
+    ],
+    "country": "CAN"
   },
   {
     "name": "Byeong Hun An",
@@ -2258,12 +2361,13 @@
     "augusta": {},
     "birthYear": 1991,
     "openingOdds": "+17500",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       45,
       44,
       46
-    ]
+    ],
+    "country": "KOR"
   },
   {
     "name": "Davis Thompson",
@@ -2279,12 +2383,13 @@
     "augusta": {},
     "birthYear": 1999,
     "openingOdds": "+17500",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       90,
       47,
       90
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Jayden Trey Schaper",
@@ -2300,7 +2405,8 @@
     "augusta": {},
     "birthYear": null,
     "openingOdds": "+20000",
-    "withdrawn": false
+    "withdrawn": true,
+    "country": "RSA"
   },
   {
     "name": "Pierceson Coody",
@@ -2316,12 +2422,13 @@
     "augusta": {},
     "birthYear": 2000,
     "openingOdds": "+25000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       120,
       57,
       135
-    ]
+    ],
+    "country": "USA"
   },
   {
     "name": "Denny McCarthy",
@@ -2337,11 +2444,12 @@
     "augusta": {},
     "birthYear": 1993,
     "openingOdds": "+30000",
-    "withdrawn": false,
+    "withdrawn": true,
     "recentFinishes": [
       105,
       26,
       13
-    ]
+    ],
+    "country": "USA"
   }
 ]
