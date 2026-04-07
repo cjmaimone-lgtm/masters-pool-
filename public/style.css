@@ -1319,11 +1319,13 @@ h2 {
 
   /* Ownership grid — tighten golfer column on mobile */
   .og-golfer-header {
-    min-width: 70px;
+    min-width: 60px;
     max-width: 70px;
   }
   .og-golfer {
+    min-width: 0 !important;
     max-width: 70px;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.7rem;
