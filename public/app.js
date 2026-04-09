@@ -1387,7 +1387,8 @@ function toggleScorecard(id, btn) {
 function buildScorecardHTML(entry, coursePars, tournamentState) {
   const holeNums = Array.from({ length: 18 }, (_, i) => i + 1);
   const pars = {};
-  for (let i = 1; i <= 18; i++) pars[i] = coursePars?.[i] || (i <= 9 ? 4 : 4); // fallback par 4
+  const augustaPars = [0,4,5,4,3,4,3,4,5,4,4,3,3,5,4,4,4,4,4]; // Augusta National (72: 36 out, 35 in)
+  for (let i = 1; i <= 18; i++) pars[i] = coursePars?.[i] || augustaPars[i];
 
   const outPar = holeNums.slice(0, 9).reduce((s, h) => s + pars[h], 0);
   const inPar = holeNums.slice(9).reduce((s, h) => s + pars[h], 0);
