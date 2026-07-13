@@ -232,11 +232,11 @@ function updateSubmissionCount() {
     return;
   }
   const count = submissions.filter(s => s.userName.toLowerCase() === name).length;
-  document.getElementById('submissionCount').textContent = `(${count}/3 fivesomes submitted)`;
-  // Disable submit if already at max 3
-  if (count >= 3) {
+  document.getElementById('submissionCount').textContent = `(${count}/1 entry submitted)`;
+  // Disable submit if already at max (1 entry per person)
+  if (count >= 1) {
     document.getElementById('submitBtn').disabled = true;
-    document.getElementById('submissionCount').textContent = '(3/3 — max reached)';
+    document.getElementById('submissionCount').textContent = '(1/1 — entry submitted)';
   }
 }
 
