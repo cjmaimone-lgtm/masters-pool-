@@ -214,8 +214,8 @@ app.post('/api/submissions', async (req, res) => {
 
   if (countErr) return res.status(500).json({ error: countErr.message });
 
-  if (existing.length >= 3) {
-    return res.status(400).json({ error: 'You already have 3 fivesomes submitted!' });
+  if (existing.length >= 1) {
+    return res.status(400).json({ error: 'You already have an entry submitted!' });
   }
 
   const newId = Date.now().toString();
