@@ -1,1113 +1,153 @@
 [
   {
-    "name": "Scottie Scheffler",
-    "ranking": 1,
-    "odds": "+500",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 2,
-      "cuts": 5,
-      "avg": 69
-    },
-    "augusta": {
-      "2022": "1",
-      "2023": "T10",
-      "2024": "1",
-      "2025": "4"
-    },
-    "birthYear": 1996,
-    "openingOdds": "+400",
-    "withdrawn": false,
-    "recentFinishes": [
-      12,
-      31,
-      22
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Rory McIlroy",
-    "ranking": 2,
-    "odds": "+1100",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 4,
-      "avg": 60.4
-    },
-    "augusta": {
-      "2022": "2",
-      "2023": "MC",
-      "2024": "T22",
-      "2025": "1"
-    },
-    "birthYear": 1989,
-    "openingOdds": "+700",
-    "withdrawn": false,
-    "recentFinishes": [
-      3,
-      71,
-      46
-    ],
-    "country": "NIR"
-  },
-  {
-    "name": "Cameron Young",
-    "ranking": 3,
-    "odds": "+1800",
-    "form": {
-      "events": 5,
-      "wins": 1,
-      "top10s": 3,
-      "cuts": 5,
-      "avg": 69.2
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T7",
-      "2024": "T9",
-      "2025": "MC"
-    },
-    "birthYear": 1997,
-    "openingOdds": "+2700",
-    "withdrawn": false,
-    "recentFinishes": [
-      8,
-      4,
-      1
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Tommy Fleetwood",
-    "ranking": 4,
-    "odds": "+2000",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 3,
-      "cuts": 4,
-      "avg": 69.6
-    },
-    "augusta": {
-      "2022": "T14",
-      "2023": "33",
-      "2024": "T3",
-      "2025": "T21"
-    },
-    "birthYear": 1991,
-    "openingOdds": "+1800",
-    "withdrawn": false,
-    "recentFinishes": [
-      10,
-      49,
-      8
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Xander Schauffele",
-    "ranking": 5,
-    "odds": "+1600",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 2,
-      "cuts": 6,
-      "avg": 69.3
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T10",
-      "2024": "8",
-      "2025": "T8"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+1800",
-    "withdrawn": false,
-    "recentFinishes": [
-      32,
-      3,
-      4
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Matt Fitzpatrick",
-    "ranking": 6,
-    "odds": "+2000",
-    "form": {
-      "events": 6,
-      "wins": 1,
-      "top10s": 3,
-      "cuts": 6,
-      "avg": 69
-    },
-    "augusta": {
-      "2022": "T14",
-      "2023": "T10",
-      "2024": "T22",
-      "2025": "T40"
-    },
-    "birthYear": 1994,
-    "openingOdds": "+3000",
-    "withdrawn": false,
-    "recentFinishes": [
-      43,
-      2,
-      1
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Justin Rose",
-    "ranking": 7,
-    "odds": "+2800",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 2,
-      "avg": 71.2
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T16",
-      "2024": "MC",
-      "2025": "2"
-    },
-    "birthYear": 1980,
-    "openingOdds": "+3000",
-    "withdrawn": false,
-    "recentFinishes": [
-      64,
-      67,
-      17
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Collin Morikawa",
-    "ranking": 8,
-    "odds": "+3300",
-    "form": {
-      "events": 5,
-      "wins": 1,
-      "top10s": 3,
-      "cuts": 4,
-      "avg": 61.1
-    },
-    "augusta": {
-      "2022": "5",
-      "2023": "T10",
-      "2024": "T3",
-      "2025": "T14"
-    },
-    "birthYear": 1997,
-    "openingOdds": "+2200",
-    "withdrawn": false,
-    "recentFinishes": [
-      7,
-      5,
-      123
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Russell Henley",
-    "ranking": 9,
-    "odds": "+4000",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 3,
-      "avg": 69.8
-    },
-    "augusta": {
-      "2022": "T30",
-      "2023": "T4",
-      "2024": "T38",
-      "2025": "MC"
-    },
-    "birthYear": 1989,
-    "openingOdds": "+6600",
-    "withdrawn": false,
-    "recentFinishes": [
-      56,
-      7,
-      18
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Chris Gotterup",
-    "ranking": 10,
-    "odds": "+4500",
-    "form": {
-      "events": 6,
-      "wins": 1,
-      "top10s": 2,
-      "cuts": 5,
-      "avg": 66.7
-    },
-    "augusta": {},
-    "birthYear": 1999,
-    "openingOdds": "+3500",
-    "withdrawn": false,
-    "recentFinishes": [
-      23,
-      57,
-      7
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Robert MacIntyre",
-    "ranking": 11,
-    "odds": "+2800",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 4,
-      "avg": 69.8
-    },
-    "augusta": {
-      "2022": "T23",
-      "2025": "MC"
-    },
-    "birthYear": 1996,
-    "openingOdds": "+4000",
-    "withdrawn": false,
-    "recentFinishes": [
-      21,
-      25,
-      4
-    ],
-    "country": "SCO"
-  },
-  {
-    "name": "Sepp Straka",
-    "ranking": 12,
-    "odds": "+5000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 2,
-      "cuts": 5,
-      "avg": 69.7
-    },
-    "augusta": {
-      "2022": "T30",
-      "2023": "T46",
-      "2024": "T16",
-      "2025": "MC"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+7000",
-    "withdrawn": false,
-    "recentFinishes": [
-      51,
-      17,
-      9
-    ],
-    "country": "AUT"
-  },
-  {
-    "name": "J.J. Spaun",
-    "ranking": 13,
-    "odds": "+8000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 2,
-      "avg": 71.6
-    },
-    "augusta": {
-      "2022": "T23",
-      "2025": "50"
-    },
-    "birthYear": 1990,
-    "openingOdds": "+9000",
-    "withdrawn": false,
-    "recentFinishes": [
-      56,
-      24,
-      107
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Hideki Matsuyama",
-    "ranking": 14,
-    "odds": "+3300",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 66.2
-    },
-    "augusta": {
-      "2022": "T14",
-      "2023": "T16",
-      "2024": "T38",
-      "2025": "T21"
-    },
-    "birthYear": 1992,
-    "openingOdds": "+3500",
-    "withdrawn": false,
-    "recentFinishes": [
-      30,
-      41,
-      27
-    ],
-    "country": "JPN"
-  },
-  {
-    "name": "Justin Thomas",
-    "ranking": 15,
-    "odds": "+6600",
-    "form": {
-      "events": 3,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 2,
-      "avg": 72
-    },
-    "augusta": {
-      "2022": "T8",
-      "2023": "MC",
-      "2024": "MC",
-      "2025": "T36"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+4000",
-    "withdrawn": false,
-    "recentFinishes": [
-      70,
-      10,
-      30
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Ben Griffin",
-    "ranking": 16,
-    "odds": "+6600",
-    "form": {
-      "events": 7,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70.3
-    },
-    "augusta": {},
-    "birthYear": 1995,
-    "openingOdds": "+5500",
-    "withdrawn": false,
-    "recentFinishes": [
-      91,
-      84,
-      29
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jacob Bridgeman",
-    "ranking": 17,
-    "odds": "+6600",
-    "form": {
-      "events": 6,
-      "wins": 1,
-      "top10s": 2,
-      "cuts": 6,
-      "avg": 68.9
-    },
-    "augusta": {},
-    "birthYear": 2000,
-    "openingOdds": "+9000",
-    "withdrawn": false,
-    "recentFinishes": [
-      20,
-      6,
-      15
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Ludvig Aberg",
-    "ranking": 18,
-    "odds": "+1400",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 2,
-      "cuts": 4,
-      "avg": 69.2
-    },
-    "augusta": {
-      "2024": "2",
-      "2025": "7"
-    },
-    "birthYear": 1999,
-    "openingOdds": "+1600",
-    "withdrawn": false,
-    "recentFinishes": [
-      20,
-      3,
-      7
-    ],
-    "country": "SWE"
-  },
-  {
-    "name": "Alexander Noren",
-    "ranking": 19,
-    "odds": "+10000",
-    "form": null,
-    "augusta": {
-      "2023": "MC"
-    },
-    "birthYear": 1982,
-    "openingOdds": "+10000",
-    "withdrawn": false,
-    "country": "SWE"
-  },
-  {
-    "name": "Harris English",
-    "ranking": 20,
-    "odds": "+6600",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 69.8
-    },
-    "augusta": {
-      "2023": "T43",
-      "2024": "T22",
-      "2025": "T12"
-    },
-    "birthYear": 1989,
-    "openingOdds": "+9000",
-    "withdrawn": false,
-    "recentFinishes": [
-      30,
-      104,
-      22
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Viktor Hovland",
-    "ranking": 21,
-    "odds": "+4500",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 70.2
-    },
-    "augusta": {
-      "2022": "T27",
-      "2023": "T7",
-      "2024": "MC",
-      "2025": "T21"
-    },
-    "birthYear": 1997,
-    "openingOdds": "+3500",
-    "withdrawn": false,
-    "recentFinishes": [
-      16,
-      20,
-      90
-    ],
-    "country": "NOR"
-  },
-  {
-    "name": "Akshay Bhatia",
-    "ranking": 22,
-    "odds": "+5000",
-    "form": {
-      "events": 6,
-      "wins": 1,
-      "top10s": 3,
-      "cuts": 5,
-      "avg": 63.3
-    },
-    "augusta": {
-      "2024": "T35",
-      "2025": "T42"
-    },
-    "birthYear": 2002,
-    "openingOdds": "+6000",
-    "withdrawn": false,
-    "recentFinishes": [
-      1,
-      14,
-      69
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Patrick Reed",
-    "ranking": 23,
-    "odds": "+3300",
-    "form": {
-      "events": 3,
-      "wins": 1,
-      "top10s": 2,
-      "cuts": 3,
-      "avg": 68.3
-    },
-    "augusta": {
-      "2022": "T35",
-      "2023": "T4",
-      "2024": "T12",
-      "2025": "3"
-    },
-    "birthYear": 1990,
-    "openingOdds": "+3000",
-    "withdrawn": false,
-    "recentFinishes": [
-      1,
-      33,
-      10
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Bryson DeChambeau",
-    "ranking": 24,
-    "odds": "+1000",
-    "form": {
-      "events": 5,
-      "wins": 2,
-      "top10s": 3,
-      "cuts": 5,
-      "avg": 61.3
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "MC",
-      "2024": "T6",
-      "2025": "T5"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+1000",
-    "withdrawn": false,
-    "recentFinishes": [
-      26,
-      1,
-      1
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Keegan Bradley",
-    "ranking": 25,
-    "odds": "+10000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 3,
-      "avg": 71.4
-    },
-    "augusta": {
-      "2023": "T23",
-      "2024": "T22",
-      "2025": "MC"
-    },
-    "birthYear": 1986,
-    "openingOdds": "+12000",
-    "withdrawn": false,
-    "recentFinishes": [
-      65,
-      55,
-      56
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Maverick McNealy",
-    "ranking": 26,
-    "odds": "+6600",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70
-    },
-    "augusta": {
-      "2025": "T32"
-    },
-    "birthYear": 1995,
-    "openingOdds": "+11000",
-    "withdrawn": false,
-    "recentFinishes": [
-      55,
-      14,
-      40
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Ryan Gerard",
-    "ranking": 27,
-    "odds": "+10000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70.3
-    },
-    "augusta": {},
-    "birthYear": 2000,
-    "openingOdds": "+11000",
-    "withdrawn": false,
-    "recentFinishes": [
-      51,
-      30,
-      89
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jon Rahm",
-    "ranking": 28,
-    "odds": "+1100",
-    "form": {
-      "events": 5,
-      "wins": 1,
-      "top10s": 5,
-      "cuts": 5,
-      "avg": 63
-    },
-    "augusta": {
-      "2022": "T27",
-      "2023": "1",
-      "2024": "T45",
-      "2025": "T14"
-    },
-    "birthYear": 1994,
-    "openingOdds": "+1200",
-    "withdrawn": false,
-    "recentFinishes": [
-      1,
-      5,
-      2
-    ],
-    "country": "ESP"
-  },
-  {
-    "name": "Si Woo Kim",
-    "ranking": 29,
-    "odds": "+5000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 69.9
-    },
-    "augusta": {
-      "2022": "T39",
-      "2023": "T29",
-      "2024": "T30"
-    },
-    "birthYear": 1995,
-    "openingOdds": "+6000",
-    "withdrawn": false,
-    "recentFinishes": [
-      34,
-      15,
-      54
-    ],
-    "country": "KOR"
-  },
-  {
-    "name": "Tyrrell Hatton",
-    "ranking": 30,
-    "odds": "+8000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 68.8
-    },
-    "augusta": {
-      "2022": "52",
-      "2023": "T34",
-      "2024": "T9",
-      "2025": "T14"
-    },
-    "birthYear": 1991,
-    "openingOdds": "+4000",
-    "withdrawn": false,
-    "recentFinishes": [
-      47,
-      13,
-      38
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Min Woo Lee",
-    "ranking": 31,
-    "odds": "+4000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 3,
-      "cuts": 6,
-      "avg": 68.6
-    },
-    "augusta": {
-      "2022": "T14",
-      "2023": "MC",
-      "2024": "T22",
-      "2025": "49"
-    },
-    "birthYear": 1998,
-    "openingOdds": "+6600",
-    "withdrawn": false,
-    "recentFinishes": [
-      8,
-      39,
-      4
-    ],
-    "country": "AUS"
-  },
-  {
-    "name": "Shane Lowry",
-    "ranking": 32,
-    "odds": "+5000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 2,
-      "cuts": 4,
-      "avg": 69.3
-    },
-    "augusta": {
-      "2022": "T3",
-      "2023": "T16",
-      "2024": "T43",
-      "2025": "T42"
-    },
-    "birthYear": 1987,
-    "openingOdds": "+4500",
-    "withdrawn": false,
-    "recentFinishes": [
-      55,
-      94,
-      32
-    ],
-    "country": "IRL"
-  },
-  {
-    "name": "Sam Burns",
-    "ranking": 33,
-    "odds": "+6600",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 3,
-      "avg": 70.1
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T29",
-      "2024": "MC",
-      "2025": "T46"
-    },
-    "birthYear": 1996,
-    "openingOdds": "+7000",
-    "withdrawn": false,
-    "recentFinishes": [
-      61,
-      13,
-      21
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Patrick Cantlay",
-    "ranking": 34,
-    "odds": "+5000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 4,
-      "avg": 70.1
-    },
-    "augusta": {
-      "2022": "T39",
-      "2023": "T14",
-      "2024": "T22",
-      "2025": "T36"
-    },
-    "birthYear": 1992,
-    "openingOdds": "+5000",
-    "withdrawn": false,
-    "recentFinishes": [
-      62,
-      34,
-      9
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Kurt Kitayama",
-    "ranking": 35,
-    "odds": "+10000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 69.8
-    },
-    "augusta": {
-      "2023": "MC",
-      "2024": "T35"
-    },
-    "birthYear": 1992,
-    "openingOdds": "+15000",
-    "withdrawn": false,
-    "recentFinishes": [
-      19,
-      97,
-      60
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Marco Penge",
-    "ranking": 36,
-    "odds": "+8000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 3,
-      "avg": 70.6
-    },
-    "augusta": {},
-    "birthYear": 1997,
-    "openingOdds": "+8000",
-    "withdrawn": false,
-    "recentFinishes": [
-      106,
-      5,
-      88
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Nicolas Echavarria",
-    "ranking": 38,
+    "name": "Thomas Detry",
+    "ranking": null,
     "odds": "+20000",
     "form": {
       "events": 8,
-      "wins": 1,
-      "top10s": 2,
-      "cuts": 4,
-      "avg": 70.7
-    },
-    "augusta": {
-      "2025": "51"
-    },
-    "birthYear": 1994,
-    "openingOdds": "+15000",
-    "withdrawn": false,
-    "country": "COL"
-  },
-  {
-    "name": "Aaron Rai",
-    "ranking": 39,
-    "odds": "+15000",
-    "form": {
-      "events": 5,
       "wins": 0,
-      "top10s": 0,
-      "cuts": 3,
-      "avg": 71.1
+      "top10s": 4,
+      "cuts": 7,
+      "avg": 68.8
     },
-    "augusta": {
-      "2025": "T27"
-    },
-    "birthYear": 1994,
-    "openingOdds": "+13000",
+    "birthYear": 1993,
+    "openingOdds": "+20000",
     "withdrawn": false,
     "recentFinishes": [
-      30,
-      88,
-      93
+      7,
+      41,
+      8
     ],
-    "country": "ENG"
+    "country": "BEL",
+    "espnId": "4837"
   },
   {
-    "name": "Corey Conners",
-    "ranking": 40,
-    "odds": "+8000",
+    "name": "Matthew Baldwin",
+    "ranking": null,
+    "odds": "+100000",
     "form": {
       "events": 6,
       "wins": 0,
       "top10s": 0,
-      "cuts": 5,
-      "avg": 70.8
+      "cuts": 3,
+      "avg": 64.1
     },
-    "augusta": {
-      "2022": "T6",
-      "2023": "MC",
-      "2024": "T38",
-      "2025": "T8"
-    },
-    "birthYear": 1992,
-    "openingOdds": "+6000",
+    "birthYear": 1986,
+    "openingOdds": "+100000",
     "withdrawn": false,
     "recentFinishes": [
-      35,
-      21,
-      17
+      67,
+      117,
+      91
     ],
-    "country": "CAN"
+    "country": "ENG",
+    "espnId": "5832"
   },
   {
-    "name": "Jason Day",
-    "ranking": 41,
-    "odds": "+7000",
+    "name": "James Nicholas",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1997,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "4683800"
+  },
+  {
+    "name": "Andy Sullivan",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 61.4
+    },
+    "birthYear": 1987,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      115,
+      26,
+      49
+    ],
+    "country": "ENG",
+    "espnId": "5956"
+  },
+  {
+    "name": "Michael Kim",
+    "ranking": 54,
+    "odds": "+20000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 71.5
+    },
+    "birthYear": 1993,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      117,
+      31,
+      3
+    ],
+    "country": "USA",
+    "espnId": "8974"
+  },
+  {
+    "name": "Daniel Hillier",
+    "ranking": null,
+    "odds": "+25000",
     "form": {
       "events": 5,
       "wins": 0,
       "top10s": 1,
-      "cuts": 3,
-      "avg": 70.5
+      "cuts": 2,
+      "avg": 60.9
     },
-    "augusta": {
-      "2022": "T39",
-      "2023": "T39",
-      "2024": "T30",
-      "2025": "T8"
-    },
-    "birthYear": 1987,
-    "openingOdds": "+6600",
+    "birthYear": 1998,
+    "openingOdds": "+25000",
     "withdrawn": false,
     "recentFinishes": [
-      60,
-      61,
-      9
+      18,
+      86,
+      100
     ],
-    "country": "AUS"
-  },
-  {
-    "name": "Michael Brennan",
-    "ranking": 43,
-    "odds": "+25000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 70.6
-    },
-    "augusta": {},
-    "birthYear": 2002,
-    "openingOdds": "+40000",
-    "withdrawn": false,
-    "recentFinishes": [
-      69,
-      85,
-      34
-    ],
-    "country": "USA"
+    "country": "NZL",
+    "espnId": "4425899"
   },
   {
     "name": "Ryan Fox",
     "ranking": 45,
-    "odds": "+12500",
+    "odds": "+15000",
     "form": {
-      "events": 5,
+      "events": 4,
       "wins": 0,
       "top10s": 1,
-      "cuts": 4,
-      "avg": 69.5
-    },
-    "augusta": {
-      "2023": "T26",
-      "2024": "T38"
+      "cuts": 3,
+      "avg": 69.6
     },
     "birthYear": 1986,
-    "openingOdds": "+12000",
+    "openingOdds": "+15000",
     "withdrawn": false,
     "recentFinishes": [
       9,
       27,
       113
     ],
-    "country": "NZL"
-  },
-  {
-    "name": "Brian Harman",
-    "ranking": 46,
-    "odds": "+15000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 71.6
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "MC",
-      "2024": "MC",
-      "2025": "T36"
-    },
-    "birthYear": 1987,
-    "openingOdds": "+15000",
-    "withdrawn": false,
-    "recentFinishes": [
-      50,
-      50,
-      12
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Kristoffer Reitan",
-    "ranking": 48,
-    "odds": "+25000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 3,
-      "avg": 71.1
-    },
-    "augusta": {},
-    "birthYear": 1999,
-    "openingOdds": "+30000",
-    "withdrawn": false,
-    "recentFinishes": [
-      66,
-      75,
-      120
-    ],
-    "country": "NOR"
+    "country": "NZL",
+    "espnId": "4251"
   },
   {
     "name": "Andrew Novak",
@@ -1117,23 +157,1660 @@
       "events": 6,
       "wins": 0,
       "top10s": 0,
-      "cuts": 4,
-      "avg": 71.8
+      "cuts": 5,
+      "avg": 71.1
     },
-    "augusta": {},
+    "birthYear": 1996,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      101,
+      55,
+      14
+    ],
+    "country": "USA",
+    "espnId": "11332"
+  },
+  {
+    "name": "Matthew Jordan",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 56.2
+    },
+    "birthYear": 1996,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      42,
+      75,
+      39
+    ],
+    "country": "ENG",
+    "espnId": "4390719"
+  },
+  {
+    "name": "Henrik Stenson",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1976,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "SWE",
+    "espnId": "576"
+  },
+  {
+    "name": "Joe Dean",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.4
+    },
+    "birthYear": 1994,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      3,
+      87,
+      10
+    ],
+    "country": "ENG",
+    "espnId": "6970"
+  },
+  {
+    "name": "Max Homa",
+    "ranking": 148,
+    "odds": "+15000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 71
+    },
+    "birthYear": 1990,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      38,
+      130,
+      84
+    ],
+    "country": "USA",
+    "espnId": "8973"
+  },
+  {
+    "name": "Rickie Fowler",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 70.2
+    },
+    "birthYear": 1988,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      42,
+      97,
+      109
+    ],
+    "country": "USA",
+    "espnId": "3702"
+  },
+  {
+    "name": "Robert MacIntyre",
+    "ranking": 11,
+    "odds": "+3000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.4
+    },
+    "birthYear": 1996,
+    "openingOdds": "+3000",
+    "withdrawn": false,
+    "recentFinishes": [
+      25,
+      4,
+      4
+    ],
+    "country": "SCO",
+    "espnId": "11378"
+  },
+  {
+    "name": "Alex Fitzpatrick",
+    "ranking": null,
+    "odds": "+6600",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1999,
+    "openingOdds": "+6600",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "ENG",
+    "espnId": "4364865"
+  },
+  {
+    "name": "David Duval",
+    "ranking": null,
+    "odds": "+200000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1971,
+    "openingOdds": "+200000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "115"
+  },
+  {
+    "name": "Matthew Southgate",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 2,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": 48
+    },
+    "birthYear": 1988,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      87,
+      119
+    ],
+    "country": "ENG",
+    "espnId": "5852"
+  },
+  {
+    "name": "Martin Couvra",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 5,
+      "avg": 60.4
+    },
+    "birthYear": 2003,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      110,
+      59,
+      87
+    ],
+    "country": "FRA",
+    "espnId": "5102625"
+  },
+  {
+    "name": "Daniel Brown",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 65.6
+    },
+    "birthYear": 1994,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      111,
+      103,
+      76
+    ],
+    "country": "ENG",
+    "espnId": "1407"
+  },
+  {
+    "name": "Sungjae Im",
+    "ranking": 67,
+    "odds": "+25000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 2,
+      "avg": 70.8
+    },
+    "birthYear": 1998,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      80,
+      6,
+      61
+    ],
+    "country": "KOR",
+    "espnId": "11382"
+  },
+  {
+    "name": "Fifa Laopakdee",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 2005,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "THA",
+    "espnId": "5327297"
+  },
+  {
+    "name": "Gary Woodland",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 4,
+      "wins": 1,
+      "top10s": 1,
+      "cuts": 2,
+      "avg": 69.2
+    },
+    "birthYear": 1984,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      87,
+      16,
+      1
+    ],
+    "country": "USA",
+    "espnId": "3550"
+  },
+  {
+    "name": "Jordan Smith",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70.2
+    },
+    "birthYear": 1992,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      3,
+      45,
+      87
+    ],
+    "country": "ENG",
+    "espnId": "9506"
+  },
+  {
+    "name": "Jake Knapp",
+    "ranking": null,
+    "odds": "+17500",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 3,
+      "avg": 68.2
+    },
+    "birthYear": 1994,
+    "openingOdds": "+17500",
+    "withdrawn": false,
+    "recentFinishes": [
+      6,
+      79,
+      6
+    ],
+    "country": "USA",
+    "espnId": "9843"
+  },
+  {
+    "name": "Francesco Molinari",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 3,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 64
+    },
+    "birthYear": 1982,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      136,
+      36,
+      130
+    ],
+    "country": "ITA",
+    "espnId": "1483"
+  },
+  {
+    "name": "Tom McKibbin",
+    "ranking": 97,
+    "odds": "+15000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 7,
+      "avg": 69.3
+    },
+    "birthYear": 2002,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      21,
+      27,
+      21
+    ],
+    "country": "NIR",
+    "espnId": "4348444"
+  },
+  {
+    "name": "Lev Grinberg",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 1,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 70.8
+    },
+    "birthYear": 2007,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      74
+    ],
+    "country": "FRA",
+    "espnId": "5062278"
+  },
+  {
+    "name": "Hennie Du Plessis",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 58.4
+    },
     "birthYear": 1996,
     "openingOdds": "+20000",
     "withdrawn": false,
     "recentFinishes": [
       40,
-      101,
+      77,
+      2
+    ],
+    "country": "RSA",
+    "espnId": "9899"
+  },
+  {
+    "name": "Dan Bradbury",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 65.7
+    },
+    "birthYear": 1999,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      65,
+      42,
+      117
+    ],
+    "country": "ENG",
+    "espnId": "5081630"
+  },
+  {
+    "name": "Josele Ballester",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 9,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 6,
+      "avg": 65.3
+    },
+    "birthYear": 2003,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      5,
+      35,
       55
     ],
-    "country": "USA"
+    "country": "ESP",
+    "espnId": "5152205"
+  },
+  {
+    "name": "Victor Perez",
+    "ranking": null,
+    "odds": "+10000",
+    "form": {
+      "events": 8,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 8,
+      "avg": 69.1
+    },
+    "birthYear": 1992,
+    "openingOdds": "+10000",
+    "withdrawn": false,
+    "recentFinishes": [
+      11,
+      25,
+      17
+    ],
+    "country": "FRA",
+    "espnId": "11340"
+  },
+  {
+    "name": "Angel Ayora",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 2,
+      "avg": 59.6
+    },
+    "birthYear": 2004,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      4,
+      5,
+      120
+    ],
+    "country": "ESP",
+    "espnId": "5105333"
+  },
+  {
+    "name": "Mateo Pulcini",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 2000,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "ARG",
+    "espnId": "5344763"
+  },
+  {
+    "name": "Stewart Cink",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1973,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "78"
+  },
+  {
+    "name": "Joakim Lagergren",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 53.5
+    },
+    "birthYear": 1991,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      113,
+      4,
+      127
+    ],
+    "country": "SWE",
+    "espnId": "5727"
+  },
+  {
+    "name": "Scott Vincent",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 6,
+      "avg": 68.5
+    },
+    "birthYear": 1992,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      10,
+      5,
+      15
+    ],
+    "country": "ZIM",
+    "espnId": "9963"
+  },
+  {
+    "name": "Travis Smyth",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 3,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 71.4
+    },
+    "birthYear": 1994,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [
+      51,
+      8,
+      48
+    ],
+    "country": "AUS",
+    "espnId": "11345"
+  },
+  {
+    "name": "Michael Thorbjornsen",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 71.2
+    },
+    "birthYear": 2001,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      23,
+      18,
+      102
+    ],
+    "country": "USA",
+    "espnId": "4425904"
+  },
+  {
+    "name": "Kota Kaneko",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 5,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 3,
+      "avg": 60.4
+    },
+    "birthYear": null,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      1,
+      15,
+      103
+    ],
+    "country": "JPN",
+    "espnId": "5312609"
+  },
+  {
+    "name": "Alex Smalley",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": 69.7
+    },
+    "birthYear": 1996,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      54,
+      24,
+      20
+    ],
+    "country": "USA",
+    "espnId": "9484"
   },
   {
     "name": "Sam Stevens",
     "ranking": 50,
+    "odds": "+35000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 70.1
+    },
+    "birthYear": 2000,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      66,
+      58,
+      5
+    ],
+    "country": "USA",
+    "espnId": "4426181"
+  },
+  {
+    "name": "Ryo Hisatsune",
+    "ranking": null,
+    "odds": "+15000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 70
+    },
+    "birthYear": 2002,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      16,
+      36,
+      9
+    ],
+    "country": "JPN",
+    "espnId": "4858572"
+  },
+  {
+    "name": "Harris English",
+    "ranking": 20,
+    "odds": "+9000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 69.9
+    },
+    "birthYear": 1989,
+    "openingOdds": "+9000",
+    "withdrawn": false,
+    "recentFinishes": [
+      30,
+      104,
+      22
+    ],
+    "country": "USA",
+    "espnId": "5408"
+  },
+  {
+    "name": "Rasmus Højgaard",
+    "ranking": null,
+    "odds": "+15000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70.6
+    },
+    "birthYear": 2001,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      76,
+      69,
+      31
+    ],
+    "country": "DEN",
+    "espnId": "11253"
+  },
+  {
+    "name": "Akshay Bhatia",
+    "ranking": 22,
+    "odds": "+10000",
+    "form": {
+      "events": 4,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 64.8
+    },
+    "birthYear": 2002,
+    "openingOdds": "+10000",
+    "withdrawn": false,
+    "recentFinishes": [
+      18,
+      1,
+      14
+    ],
+    "country": "USA",
+    "espnId": "4419142"
+  },
+  {
+    "name": "Hideki Matsuyama",
+    "ranking": 14,
+    "odds": "+8000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.1
+    },
+    "birthYear": 1992,
+    "openingOdds": "+8000",
+    "withdrawn": false,
+    "recentFinishes": [
+      41,
+      27,
+      23
+    ],
+    "country": "JPN",
+    "espnId": "5860"
+  },
+  {
+    "name": "Ben Griffin",
+    "ranking": 16,
+    "odds": "+9000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 70.6
+    },
+    "birthYear": 1995,
+    "openingOdds": "+9000",
+    "withdrawn": false,
+    "recentFinishes": [
+      91,
+      84,
+      29
+    ],
+    "country": "USA",
+    "espnId": "4404992"
+  },
+  {
+    "name": "Min Woo Lee",
+    "ranking": 31,
+    "odds": "+4500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 5,
+      "avg": 68.5
+    },
+    "birthYear": 1998,
+    "openingOdds": "+4500",
+    "withdrawn": false,
+    "recentFinishes": [
+      8,
+      39,
+      4
+    ],
+    "country": "AUS",
+    "espnId": "4410932"
+  },
+  {
+    "name": "Justin Rose",
+    "ranking": 7,
+    "odds": "+3300",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 2,
+      "avg": 71.2
+    },
+    "birthYear": 1980,
+    "openingOdds": "+3300",
+    "withdrawn": false,
+    "recentFinishes": [
+      64,
+      67,
+      17
+    ],
+    "country": "ENG",
+    "espnId": "569"
+  },
+  {
+    "name": "Russell Henley",
+    "ranking": 9,
+    "odds": "+4500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70
+    },
+    "birthYear": 1989,
+    "openingOdds": "+4500",
+    "withdrawn": false,
+    "recentFinishes": [
+      7,
+      18,
+      74
+    ],
+    "country": "USA",
+    "espnId": "5409"
+  },
+  {
+    "name": "Viktor Hovland",
+    "ranking": 21,
+    "odds": "+2800",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.7
+    },
+    "birthYear": 1997,
+    "openingOdds": "+2800",
+    "withdrawn": false,
+    "recentFinishes": [
+      16,
+      20,
+      90
+    ],
+    "country": "NOR",
+    "espnId": "4364873"
+  },
+  {
+    "name": "Jason Day",
+    "ranking": 41,
+    "odds": "+15000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70.5
+    },
+    "birthYear": 1987,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      60,
+      61,
+      9
+    ],
+    "country": "AUS",
+    "espnId": "1680"
+  },
+  {
+    "name": "Alex Noren",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.1
+    },
+    "birthYear": 1982,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      29,
+      37,
+      34
+    ],
+    "country": "SWE",
+    "espnId": "3832"
+  },
+  {
+    "name": "Justin Thomas",
+    "ranking": 15,
+    "odds": "+5000",
+    "form": {
+      "events": 3,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 2,
+      "avg": 72
+    },
+    "birthYear": 1993,
+    "openingOdds": "+5000",
+    "withdrawn": false,
+    "recentFinishes": [
+      70,
+      10,
+      30
+    ],
+    "country": "USA",
+    "espnId": "4848"
+  },
+  {
+    "name": "Tyrrell Hatton",
+    "ranking": 30,
+    "odds": "+3300",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 62.5
+    },
+    "birthYear": 1991,
+    "openingOdds": "+3300",
+    "withdrawn": false,
+    "recentFinishes": [
+      17,
+      59,
+      1
+    ],
+    "country": "ENG",
+    "espnId": "5553"
+  },
+  {
+    "name": "Scottie Scheffler",
+    "ranking": 1,
+    "odds": "+750",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 69.4
+    },
+    "birthYear": 1996,
+    "openingOdds": "+750",
+    "withdrawn": false,
+    "recentFinishes": [
+      12,
+      31,
+      22
+    ],
+    "country": "USA",
+    "espnId": "9478"
+  },
+  {
+    "name": "Bryson DeChambeau",
+    "ranking": 24,
+    "odds": "+6600",
+    "form": {
+      "events": 6,
+      "wins": 2,
+      "top10s": 4,
+      "cuts": 6,
+      "avg": 60.3
+    },
+    "birthYear": 1993,
+    "openingOdds": "+6600",
+    "withdrawn": false,
+    "recentFinishes": [
+      3,
+      3,
+      13
+    ],
+    "country": "USA",
+    "espnId": "10046"
+  },
+  {
+    "name": "Jordan Spieth",
+    "ranking": 59,
+    "odds": "+8000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": 70.1
+    },
+    "birthYear": 1993,
+    "openingOdds": "+8000",
+    "withdrawn": false,
+    "recentFinishes": [
+      33,
+      13,
+      64
+    ],
+    "country": "USA",
+    "espnId": "5467"
+  },
+  {
+    "name": "Tommy Fleetwood",
+    "ranking": 4,
+    "odds": "+1400",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 5,
+      "avg": 69.6
+    },
+    "birthYear": 1991,
+    "openingOdds": "+1400",
+    "withdrawn": false,
+    "recentFinishes": [
+      49,
+      8,
+      11
+    ],
+    "country": "ENG",
+    "espnId": "5539"
+  },
+  {
+    "name": "Jon Rahm",
+    "ranking": 28,
+    "odds": "+2500",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 5,
+      "cuts": 6,
+      "avg": 64.8
+    },
+    "birthYear": 1994,
+    "openingOdds": "+2500",
+    "withdrawn": false,
+    "recentFinishes": [
+      9,
+      17,
+      2
+    ],
+    "country": "ESP",
+    "espnId": "9780"
+  },
+  {
+    "name": "Brian Harman",
+    "ranking": 46,
+    "odds": "+10000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 71.2
+    },
+    "birthYear": 1987,
+    "openingOdds": "+10000",
+    "withdrawn": false,
+    "recentFinishes": [
+      50,
+      12,
+      42
+    ],
+    "country": "USA",
+    "espnId": "1225"
+  },
+  {
+    "name": "Nick Taylor",
+    "ranking": 64,
+    "odds": "+20000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.6
+    },
+    "birthYear": 1988,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      43,
+      100,
+      28
+    ],
+    "country": "CAN",
+    "espnId": "3792"
+  },
+  {
+    "name": "Si Woo Kim",
+    "ranking": 29,
+    "odds": "+4000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 5,
+      "avg": 70.3
+    },
+    "birthYear": 1995,
+    "openingOdds": "+4000",
+    "withdrawn": false,
+    "recentFinishes": [
+      15,
+      54,
+      10
+    ],
+    "country": "KOR",
+    "espnId": "7081"
+  },
+  {
+    "name": "Maverick McNealy",
+    "ranking": 26,
+    "odds": "+10000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.3
+    },
+    "birthYear": 1995,
+    "openingOdds": "+10000",
+    "withdrawn": false,
+    "recentFinishes": [
+      14,
+      40,
+      24
+    ],
+    "country": "USA",
+    "espnId": "9530"
+  },
+  {
+    "name": "David Puig",
+    "ranking": null,
+    "odds": "+12500",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 7,
+      "avg": 68.5
+    },
+    "birthYear": 2001,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      12,
+      16,
+      5
+    ],
+    "country": "ESP",
+    "espnId": "4895429"
+  },
+  {
+    "name": "Ryan Gerard",
+    "ranking": 27,
+    "odds": "+12500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.3
+    },
+    "birthYear": 2000,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      51,
+      30,
+      89
+    ],
+    "country": "USA",
+    "espnId": "5076021"
+  },
+  {
+    "name": "Thomas Sloman",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1996,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "ENG",
+    "espnId": "11270"
+  },
+  {
+    "name": "Kazuma Kobori",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 59.9
+    },
+    "birthYear": 2001,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      31,
+      22,
+      134
+    ],
+    "country": "NZL",
+    "espnId": "5186648"
+  },
+  {
+    "name": "David Howard",
+    "ranking": null,
+    "odds": "+150000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": null,
+    "openingOdds": "+150000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "IRL",
+    "espnId": "5369476"
+  },
+  {
+    "name": "Antoine Rozner",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 69.8
+    },
+    "birthYear": 1993,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      30,
+      57,
+      60
+    ],
+    "country": "FRA",
+    "espnId": "4407372"
+  },
+  {
+    "name": "Ren Yonezawa",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1999,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "JPN",
+    "espnId": "4699328"
+  },
+  {
+    "name": "Caleb Surratt",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 7,
+      "avg": 70.4
+    },
+    "birthYear": null,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      13,
+      45,
+      49
+    ],
+    "country": "USA",
+    "espnId": "5110034"
+  },
+  {
+    "name": "Jack McDonald",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": null,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "SCO",
+    "espnId": "6849"
+  },
+  {
+    "name": "MJ Daffue",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 3,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 68.9
+    },
+    "birthYear": 1989,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [
+      66,
+      11,
+      37
+    ],
+    "country": "RSA",
+    "espnId": "7110"
+  },
+  {
+    "name": "Frederic LaCroix",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 65.8
+    },
+    "birthYear": 1995,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [
+      70,
+      12,
+      28
+    ],
+    "country": "FRA",
+    "espnId": "4592246"
+  },
+  {
+    "name": "Jeong-Woo Ham",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 1,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 69.8
+    },
+    "birthYear": 1994,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      23
+    ],
+    "country": "KOR",
+    "espnId": "4592199"
+  },
+  {
+    "name": "Ryutaro Nagano",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1988,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "JPN",
+    "espnId": "4699375"
+  },
+  {
+    "name": "Alejandro de Castro Piera",
+    "ranking": null,
+    "odds": "+150000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": null,
+    "openingOdds": "+150000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "ESP",
+    "espnId": "5369475"
+  },
+  {
+    "name": "John Parry",
+    "ranking": null,
+    "odds": "+35000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.1
+    },
+    "birthYear": 1986,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [
+      60,
+      49,
+      15
+    ],
+    "country": "ENG",
+    "espnId": "4671"
+  },
+  {
+    "name": "Eric Cole",
+    "ranking": null,
+    "odds": "+17500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.4
+    },
+    "birthYear": 1988,
+    "openingOdds": "+17500",
+    "withdrawn": false,
+    "recentFinishes": [
+      80,
+      52,
+      18
+    ],
+    "country": "USA",
+    "espnId": "10522"
+  },
+  {
+    "name": "Tiger Christensen",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 2003,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "GER",
+    "espnId": "5146173"
+  },
+  {
+    "name": "Matt Wallace",
+    "ranking": null,
+    "odds": "+15000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.2
+    },
+    "birthYear": 1990,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      54,
+      2,
+      2
+    ],
+    "country": "ENG",
+    "espnId": "10548"
+  },
+  {
+    "name": "Max Greyserman",
+    "ranking": 58,
+    "odds": "+20000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 71
+    },
+    "birthYear": 1995,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      18,
+      116,
+      124
+    ],
+    "country": "USA",
+    "espnId": "11101"
+  },
+  {
+    "name": "Eugenio Chacarra",
+    "ranking": null,
+    "odds": "+15000",
+    "form": {
+      "events": 7,
+      "wins": 2,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 65.6
+    },
+    "birthYear": 2000,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      1,
+      1,
+      68
+    ],
+    "country": "ESP",
+    "espnId": "4565467"
+  },
+  {
+    "name": "Laurie Canter",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": 70.3
+    },
+    "birthYear": 1989,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      48,
+      12,
+      37
+    ],
+    "country": "ENG",
+    "espnId": "5550"
+  },
+  {
+    "name": "Sahith Theegala",
+    "ranking": null,
     "odds": "+20000",
     "form": {
       "events": 6,
@@ -1142,61 +1819,408 @@
       "cuts": 5,
       "avg": 70
     },
-    "augusta": {},
-    "birthYear": 2000,
+    "birthYear": 1997,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      41,
+      115,
+      11
+    ],
+    "country": "USA",
+    "espnId": "10980"
+  },
+  {
+    "name": "Michael Brennan",
+    "ranking": 43,
+    "odds": "+25000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.8
+    },
+    "birthYear": 2002,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      69,
+      85,
+      34
+    ],
+    "country": "USA",
+    "espnId": "4921329"
+  },
+  {
+    "name": "Keith Mitchell",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 5,
+      "avg": 70
+    },
+    "birthYear": 1992,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      49,
+      14,
+      71
+    ],
+    "country": "USA",
+    "espnId": "8906"
+  },
+  {
+    "name": "Cameron Smith",
+    "ranking": null,
+    "odds": "+9000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 69.4
+    },
+    "birthYear": 1993,
+    "openingOdds": "+9000",
+    "withdrawn": false,
+    "recentFinishes": [
+      27,
+      19,
+      7
+    ],
+    "country": "AUS",
+    "espnId": "9131"
+  },
+  {
+    "name": "Stuart Grehan",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": null,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "IRL",
+    "espnId": "5364787"
+  },
+  {
+    "name": "Sepp Straka",
+    "ranking": 12,
+    "odds": "+15000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.6
+    },
+    "birthYear": 1993,
     "openingOdds": "+15000",
     "withdrawn": false,
     "recentFinishes": [
-      66,
-      58,
-      5
+      9,
+      95,
+      14
     ],
-    "country": "USA"
+    "country": "AUT",
+    "espnId": "8961"
   },
   {
-    "name": "Adam Scott",
-    "ranking": 52,
-    "odds": "+6600",
+    "name": "Kurt Kitayama",
+    "ranking": 35,
+    "odds": "+9000",
     "form": {
-      "events": 4,
+      "events": 5,
       "wins": 0,
       "top10s": 1,
       "cuts": 4,
-      "avg": 69.5
+      "avg": 69.9
     },
-    "augusta": {
-      "2022": "T48",
-      "2023": "T39",
-      "2024": "T22",
-      "2025": "MC"
-    },
-    "birthYear": 1980,
-    "openingOdds": "+6600",
+    "birthYear": 1992,
+    "openingOdds": "+9000",
     "withdrawn": false,
     "recentFinishes": [
-      11,
-      56,
-      27
+      19,
+      97,
+      60
     ],
-    "country": "AUS"
+    "country": "USA",
+    "espnId": "10364"
   },
   {
-    "name": "Rasmus Hojgaard",
-    "ranking": 53,
-    "odds": "+10000",
-    "form": null,
-    "augusta": {
-      "2025": "T32"
+    "name": "Joaquín Niemann",
+    "ranking": null,
+    "odds": "+4000",
+    "form": {
+      "events": 8,
+      "wins": 1,
+      "top10s": 5,
+      "cuts": 8,
+      "avg": 66.4
     },
-    "birthYear": 2000,
-    "openingOdds": "+15000",
+    "birthYear": 1998,
+    "openingOdds": "+4000",
     "withdrawn": false,
-    "country": "DEN"
+    "recentFinishes": [
+      8,
+      1,
+      24
+    ],
+    "country": "CHI",
+    "espnId": "11099"
   },
   {
-    "name": "Michael Kim",
-    "ranking": 54,
+    "name": "Shaun Norris",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 2,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 2,
+      "avg": 69.8
+    },
+    "birthYear": 1982,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      2,
+      41
+    ],
+    "country": "RSA",
+    "espnId": "5057"
+  },
+  {
+    "name": "Sami Välimäki",
+    "ranking": 55,
     "odds": "+25000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 70.8
+    },
+    "birthYear": 1998,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      111,
+      17,
+      10
+    ],
+    "country": "FIN",
+    "espnId": "4585548"
+  },
+  {
+    "name": "Jackson Suber",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 2,
+      "avg": 71.4
+    },
+    "birthYear": null,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      98,
+      38,
+      119
+    ],
+    "country": "USA",
+    "espnId": "4982182"
+  },
+  {
+    "name": "Darren Clarke",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1968,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "NIR",
+    "espnId": "82"
+  },
+  {
+    "name": "Bernd Wiesberger",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 69.1
+    },
+    "birthYear": 1985,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      21,
+      122,
+      3
+    ],
+    "country": "AUT",
+    "espnId": "4317"
+  },
+  {
+    "name": "Adrien Saddier",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 2,
+      "avg": 70.9
+    },
+    "birthYear": 1992,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      40,
+      115,
+      88
+    ],
+    "country": "FRA",
+    "espnId": "6962"
+  },
+  {
+    "name": "Keegan Bradley",
+    "ranking": 25,
+    "odds": "+12500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 71.4
+    },
+    "birthYear": 1986,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      65,
+      55,
+      56
+    ],
+    "country": "USA",
+    "espnId": "4513"
+  },
+  {
+    "name": "Corey Conners",
+    "ranking": 40,
+    "odds": "+10000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.7
+    },
+    "birthYear": 1992,
+    "openingOdds": "+10000",
+    "withdrawn": false,
+    "recentFinishes": [
+      35,
+      21,
+      17
+    ],
+    "country": "CAN",
+    "espnId": "9126"
+  },
+  {
+    "name": "Casey Jarvis",
+    "ranking": 69,
+    "odds": "+25000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 57.5
+    },
+    "birthYear": 2003,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      80,
+      85,
+      44
+    ],
+    "country": "RSA",
+    "espnId": "4610056"
+  },
+  {
+    "name": "Haotong Li",
+    "ranking": 78,
+    "odds": "+25000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 71.4
+    },
+    "birthYear": 1995,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      89,
+      94,
+      96
+    ],
+    "country": "CHN",
+    "espnId": "9221"
+  },
+  {
+    "name": "Harry Hall",
+    "ranking": 62,
+    "odds": "+20000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 69.9
+    },
+    "birthYear": 1997,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      9,
+      85,
+      30
+    ],
+    "country": "ENG",
+    "espnId": "4589438"
+  },
+  {
+    "name": "Matt McCarty",
+    "ranking": null,
+    "odds": "+20000",
     "form": {
       "events": 6,
       "wins": 0,
@@ -1204,23 +2228,585 @@
       "cuts": 4,
       "avg": 71.6
     },
-    "augusta": {
-      "2025": "T27"
-    },
-    "birthYear": 1993,
+    "birthYear": 1997,
     "openingOdds": "+20000",
     "withdrawn": false,
     "recentFinishes": [
-      34,
-      117,
-      31
+      78,
+      129,
+      40
     ],
-    "country": "USA"
+    "country": "USA",
+    "espnId": "4901368"
   },
   {
-    "name": "Sami Valimaki",
-    "ranking": 55,
+    "name": "Padraig Harrington",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1971,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "IRL",
+    "espnId": "186"
+  },
+  {
+    "name": "Michael Hollick",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 63.2
+    },
+    "birthYear": 1987,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [
+      28,
+      95,
+      1
+    ],
+    "country": "RSA",
+    "espnId": "7067"
+  },
+  {
+    "name": "Marco Penge",
+    "ranking": 36,
+    "odds": "+20000",
+    "form": {
+      "events": 7,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 5,
+      "avg": 70.1
+    },
+    "birthYear": 1997,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      88,
+      26,
+      12
+    ],
+    "country": "ENG",
+    "espnId": "4585549"
+  },
+  {
+    "name": "Billy Horschel",
+    "ranking": null,
     "odds": "+25000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 70.7
+    },
+    "birthYear": 1986,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      72,
+      93,
+      36
+    ],
+    "country": "USA",
+    "espnId": "1651"
+  },
+  {
+    "name": "Tom Kim",
+    "ranking": null,
+    "odds": "+4500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.2
+    },
+    "birthYear": 2002,
+    "openingOdds": "+4500",
+    "withdrawn": false,
+    "recentFinishes": [
+      23,
+      59,
+      88
+    ],
+    "country": "KOR",
+    "espnId": "4602673"
+  },
+  {
+    "name": "Mason Howell",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 2,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 48.2
+    },
+    "birthYear": 2007,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      76,
+      128
+    ],
+    "country": "USA",
+    "espnId": "5289811"
+  },
+  {
+    "name": "Keita Nakajima",
+    "ranking": null,
+    "odds": "+15000",
+    "form": {
+      "events": 1,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": 24.3
+    },
+    "birthYear": 2000,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      123
+    ],
+    "country": "JPN",
+    "espnId": "4699418"
+  },
+  {
+    "name": "Pierceson Coody",
+    "ranking": null,
+    "odds": "+25000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 67.5
+    },
+    "birthYear": 2000,
+    "openingOdds": "+25000",
+    "withdrawn": false,
+    "recentFinishes": [
+      120,
+      57,
+      135
+    ],
+    "country": "USA",
+    "espnId": "4837368"
+  },
+  {
+    "name": "Johnny Keefer",
+    "ranking": 74,
+    "odds": "+15000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 1,
+      "avg": 71.8
+    },
+    "birthYear": 2003,
+    "openingOdds": "+15000",
+    "withdrawn": false,
+    "recentFinishes": [
+      134,
+      3,
+      114
+    ],
+    "country": "USA",
+    "espnId": "5217048"
+  },
+  {
+    "name": "Louis Oosthuizen",
+    "ranking": null,
+    "odds": "",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": 66.9
+    },
+    "birthYear": 1982,
+    "openingOdds": null,
+    "withdrawn": false,
+    "recentFinishes": [
+      42,
+      37,
+      57
+    ],
+    "country": "RSA",
+    "espnId": "1293"
+  },
+  {
+    "name": "Jesper Svensson",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 2,
+      "avg": 71.4
+    },
+    "birthYear": 1996,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      92,
+      70,
+      126
+    ],
+    "country": "SWE",
+    "espnId": "4699329"
+  },
+  {
+    "name": "Jack Buchanan",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 54
+    },
+    "birthYear": 2002,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      137,
+      37,
+      75
+    ],
+    "country": "RSA",
+    "espnId": "5337673"
+  },
+  {
+    "name": "Bud Cauley",
+    "ranking": null,
+    "odds": "+17500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 5,
+      "avg": 71.1
+    },
+    "birthYear": 1990,
+    "openingOdds": "+17500",
+    "withdrawn": false,
+    "recentFinishes": [
+      35,
+      74,
+      25
+    ],
+    "country": "USA",
+    "espnId": "5338"
+  },
+  {
+    "name": "Lucas Herbert",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 6,
+      "avg": 69.3
+    },
+    "birthYear": 1995,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      1,
+      9,
+      26
+    ],
+    "country": "AUS",
+    "espnId": "10343"
+  },
+  {
+    "name": "Jayden Schaper",
+    "ranking": null,
+    "odds": "+20000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 4,
+      "avg": 70.2
+    },
+    "birthYear": 2001,
+    "openingOdds": "+20000",
+    "withdrawn": false,
+    "recentFinishes": [
+      29,
+      11,
+      60
+    ],
+    "country": "RSA",
+    "espnId": "4604053"
+  },
+  {
+    "name": "Patrick Reed",
+    "ranking": 23,
+    "odds": "+5000",
+    "form": {
+      "events": 2,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 59.9
+    },
+    "birthYear": 1990,
+    "openingOdds": "+5000",
+    "withdrawn": false,
+    "recentFinishes": [
+      45,
+      94
+    ],
+    "country": "USA",
+    "espnId": "5579"
+  },
+  {
+    "name": "J.T. Poston",
+    "ranking": null,
+    "odds": "+17500",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 71.3
+    },
+    "birthYear": 1993,
+    "openingOdds": "+17500",
+    "withdrawn": false,
+    "recentFinishes": [
+      50,
+      80,
+      21
+    ],
+    "country": "USA",
+    "espnId": "10505"
+  },
+  {
+    "name": "Kristoffer Reitan",
+    "ranking": 48,
+    "odds": "+12500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 3,
+      "avg": 70.9
+    },
+    "birthYear": 1999,
+    "openingOdds": "+12500",
+    "withdrawn": false,
+    "recentFinishes": [
+      75,
+      120,
+      13
+    ],
+    "country": "NOR",
+    "espnId": "4348470"
+  },
+  {
+    "name": "Adam Scott",
+    "ranking": 52,
+    "odds": "+9000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 69.5
+    },
+    "birthYear": 1980,
+    "openingOdds": "+9000",
+    "withdrawn": false,
+    "recentFinishes": [
+      11,
+      56,
+      27
+    ],
+    "country": "AUS",
+    "espnId": "388"
+  },
+  {
+    "name": "Sam Burns",
+    "ranking": 33,
+    "odds": "+4500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 69.6
+    },
+    "birthYear": 1996,
+    "openingOdds": "+4500",
+    "withdrawn": false,
+    "recentFinishes": [
+      61,
+      13,
+      21
+    ],
+    "country": "USA",
+    "espnId": "9938"
+  },
+  {
+    "name": "Chris Gotterup",
+    "ranking": 10,
+    "odds": "+2800",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 4,
+      "avg": 70.2
+    },
+    "birthYear": 1999,
+    "openingOdds": "+2800",
+    "withdrawn": false,
+    "recentFinishes": [
+      23,
+      57,
+      7
+    ],
+    "country": "USA",
+    "espnId": "4690755"
+  },
+  {
+    "name": "J.J. Spaun",
+    "ranking": 13,
+    "odds": "+7000",
+    "form": {
+      "events": 6,
+      "wins": 1,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70.8
+    },
+    "birthYear": 1990,
+    "openingOdds": "+7000",
+    "withdrawn": false,
+    "recentFinishes": [
+      24,
+      107,
+      1
+    ],
+    "country": "USA",
+    "espnId": "10166"
+  },
+  {
+    "name": "Collin Morikawa",
+    "ranking": 8,
+    "odds": "+2800",
+    "form": {
+      "events": 4,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 3,
+      "avg": 58.5
+    },
+    "birthYear": 1997,
+    "openingOdds": "+2800",
+    "withdrawn": false,
+    "recentFinishes": [
+      7,
+      5,
+      123
+    ],
+    "country": "USA",
+    "espnId": "10592"
+  },
+  {
+    "name": "Nicolai Højgaard",
+    "ranking": null,
+    "odds": "+9000",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.7
+    },
+    "birthYear": 2001,
+    "openingOdds": "+9000",
+    "withdrawn": false,
+    "recentFinishes": [
+      28,
+      59,
+      2
+    ],
+    "country": "DEN",
+    "espnId": "11250"
+  },
+  {
+    "name": "Shane Lowry",
+    "ranking": 32,
+    "odds": "+6000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 69.3
+    },
+    "birthYear": 1987,
+    "openingOdds": "+6000",
+    "withdrawn": false,
+    "recentFinishes": [
+      55,
+      94,
+      32
+    ],
+    "country": "IRL",
+    "espnId": "4587"
+  },
+  {
+    "name": "Brooks Koepka",
+    "ranking": 162,
+    "odds": "+6000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 1,
+      "cuts": 3,
+      "avg": 70
+    },
+    "birthYear": 1990,
+    "openingOdds": "+6000",
+    "withdrawn": false,
+    "recentFinishes": [
+      15,
+      21,
+      118
+    ],
+    "country": "USA",
+    "espnId": "6798"
+  },
+  {
+    "name": "Aaron Rai",
+    "ranking": 39,
+    "odds": "+6600",
     "form": {
       "events": 5,
       "wins": 0,
@@ -1228,114 +2814,148 @@
       "cuts": 3,
       "avg": 71.1
     },
-    "augusta": {},
-    "birthYear": 1998,
-    "openingOdds": "+30000",
+    "birthYear": 1994,
+    "openingOdds": "+6600",
     "withdrawn": false,
     "recentFinishes": [
-      37,
-      117,
-      111
+      30,
+      88,
+      93
     ],
-    "country": "FIN"
+    "country": "ENG",
+    "espnId": "10906"
   },
   {
-    "name": "Max Greyserman",
-    "ranking": 58,
-    "odds": "+17500",
+    "name": "Wyndham Clark",
+    "ranking": 72,
+    "odds": "+3300",
     "form": {
-      "events": 6,
+      "events": 5,
       "wins": 0,
       "top10s": 0,
       "cuts": 3,
       "avg": 71
     },
-    "augusta": {
-      "2025": "T32"
-    },
-    "birthYear": 1995,
-    "openingOdds": "+25000",
-    "withdrawn": false,
-    "recentFinishes": [
-      18,
-      116,
-      124
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jordan Spieth",
-    "ranking": 59,
-    "odds": "+4000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 70
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T4",
-      "2024": "MC",
-      "2025": "T14"
-    },
     "birthYear": 1993,
-    "openingOdds": "+4000",
+    "openingOdds": "+3300",
     "withdrawn": false,
     "recentFinishes": [
-      12,
-      33,
-      13
+      44,
+      83,
+      105
     ],
-    "country": "USA"
+    "country": "USA",
+    "espnId": "11119"
   },
   {
-    "name": "Harry Hall",
-    "ranking": 62,
-    "odds": "+10000",
+    "name": "Ludvig Åberg",
+    "ranking": 18,
+    "odds": "+3300",
     "form": {
-      "events": 6,
+      "events": 5,
+      "wins": 0,
+      "top10s": 3,
+      "cuts": 5,
+      "avg": 69
+    },
+    "birthYear": 1999,
+    "openingOdds": "+3300",
+    "withdrawn": false,
+    "recentFinishes": [
+      3,
+      7,
+      6
+    ],
+    "country": "SWE",
+    "espnId": "4375972"
+  },
+  {
+    "name": "Cameron Young",
+    "ranking": 3,
+    "odds": "+3500",
+    "form": {
+      "events": 4,
+      "wins": 1,
+      "top10s": 3,
+      "cuts": 4,
+      "avg": 69
+    },
+    "birthYear": 1997,
+    "openingOdds": "+3500",
+    "withdrawn": false,
+    "recentFinishes": [
+      8,
+      4,
+      1
+    ],
+    "country": "USA",
+    "espnId": "4425906"
+  },
+  {
+    "name": "Rory McIlroy",
+    "ranking": 2,
+    "odds": "+850",
+    "form": {
+      "events": 4,
       "wins": 0,
       "top10s": 1,
-      "cuts": 3,
-      "avg": 70.3
+      "cuts": 4,
+      "avg": 60.4
     },
-    "augusta": {},
-    "birthYear": 1997,
-    "openingOdds": "+13000",
+    "birthYear": 1989,
+    "openingOdds": "+850",
     "withdrawn": false,
     "recentFinishes": [
-      9,
-      85,
-      30
+      3,
+      71,
+      46
     ],
-    "country": "ENG"
+    "country": "NIR",
+    "espnId": "3470"
   },
   {
-    "name": "Nick Taylor",
-    "ranking": 64,
-    "odds": "+10000",
+    "name": "Matt Fitzpatrick",
+    "ranking": 6,
+    "odds": "+1400",
     "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
+      "events": 5,
+      "wins": 1,
+      "top10s": 2,
       "cuts": 5,
-      "avg": 70.5
+      "avg": 69.3
     },
-    "augusta": {
-      "2024": "MC",
-      "2025": "T40"
-    },
-    "birthYear": 1988,
-    "openingOdds": "+25000",
+    "birthYear": 1994,
+    "openingOdds": "+1400",
     "withdrawn": false,
     "recentFinishes": [
-      38,
       43,
-      100
+      2,
+      1
     ],
-    "country": "CAN"
+    "country": "ENG",
+    "espnId": "9037"
+  },
+  {
+    "name": "Xander Schauffele",
+    "ranking": 5,
+    "odds": "+2500",
+    "form": {
+      "events": 5,
+      "wins": 0,
+      "top10s": 2,
+      "cuts": 5,
+      "avg": 69.2
+    },
+    "birthYear": 1993,
+    "openingOdds": "+2500",
+    "withdrawn": false,
+    "recentFinishes": [
+      32,
+      3,
+      4
+    ],
+    "country": "USA",
+    "espnId": "10140"
   },
   {
     "name": "Rasmus Neergaard-Petersen",
@@ -1346,762 +2966,45 @@
       "wins": 0,
       "top10s": 0,
       "cuts": 4,
-      "avg": 70.8
+      "avg": 71.3
     },
-    "augusta": {},
     "birthYear": 2001,
-    "openingOdds": "+13000",
-    "withdrawn": false,
-    "recentFinishes": [
-      68,
-      63,
-      85
-    ],
-    "country": "DEN"
-  },
-  {
-    "name": "Sungjae Im",
-    "ranking": 67,
-    "odds": "+10000",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 2,
-      "avg": 70.8
-    },
-    "augusta": {
-      "2022": "T8",
-      "2023": "T16",
-      "2024": "MC",
-      "2025": "T5"
-    },
-    "birthYear": 1998,
-    "openingOdds": "+8000",
-    "withdrawn": false,
-    "recentFinishes": [
-      80,
-      6,
-      61
-    ],
-    "country": "KOR"
-  },
-  {
-    "name": "Casey Jarvis",
-    "ranking": 69,
-    "odds": "+15000",
-    "form": {
-      "events": 5,
-      "wins": 2,
-      "top10s": 3,
-      "cuts": 4,
-      "avg": 64
-    },
-    "augusta": {},
-    "birthYear": 2003,
-    "openingOdds": "+15000",
-    "withdrawn": false,
-    "recentFinishes": [
-      1,
-      2,
-      15
-    ],
-    "country": "RSA"
-  },
-  {
-    "name": "Wyndham Clark",
-    "ranking": 72,
-    "odds": "+15000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70.7
-    },
-    "augusta": {
-      "2024": "MC",
-      "2025": "T46"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+8000",
-    "withdrawn": false,
-    "recentFinishes": [
-      44,
-      83,
-      105
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Johnny Keefer",
-    "ranking": 74,
-    "odds": "+20000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 2,
-      "avg": 70.9
-    },
-    "augusta": {},
-    "birthYear": 2003,
-    "openingOdds": "+13000",
-    "withdrawn": false,
-    "recentFinishes": [
-      86,
-      134,
-      3
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Aldrich Potgieter",
-    "ranking": 77,
-    "odds": "+25000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 3,
-      "avg": 70.9
-    },
-    "augusta": {
-      "2023": "MC"
-    },
-    "birthYear": 2005,
     "openingOdds": "+20000",
     "withdrawn": false,
     "recentFinishes": [
-      68,
-      108,
-      23
+      63,
+      85,
+      56
     ],
-    "country": "RSA"
+    "country": "DEN",
+    "espnId": "4858859"
   },
   {
-    "name": "Hao-Tong Li",
-    "ranking": 78,
-    "odds": "+20000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 1,
-      "avg": 71.5
-    },
-    "augusta": {},
-    "birthYear": 1995,
-    "openingOdds": "+25000",
-    "withdrawn": false,
-    "recentFinishes": [
-      52,
-      89,
-      94
-    ],
-    "country": "CHN"
-  },
-  {
-    "name": "Tom McKibbin",
-    "ranking": 97,
+    "name": "Jacob Bridgeman",
+    "ranking": 17,
     "odds": "+15000",
     "form": {
       "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 68.9
-    },
-    "augusta": {},
-    "birthYear": 2002,
-    "openingOdds": "+14000",
-    "withdrawn": false,
-    "recentFinishes": [
-      30,
-      24,
-      24
-    ],
-    "country": "NIR"
-  },
-  {
-    "name": "Ben Campbell",
-    "ranking": 102,
-    "odds": "+50000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 69.7
-    },
-    "augusta": {
-      "2025": "T32"
-    },
-    "birthYear": 2002,
-    "openingOdds": "+40000",
-    "withdrawn": false,
-    "recentFinishes": [
-      56,
-      45,
-      45
-    ],
-    "country": "NZL"
-  },
-  {
-    "name": "Davis Riley",
-    "ranking": 114,
-    "odds": "+35000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 2,
-      "avg": 72.8
-    },
-    "augusta": {
-      "2025": "T21"
-    },
-    "birthYear": 1996,
-    "openingOdds": "+30000",
-    "withdrawn": false,
-    "recentFinishes": [
-      122,
-      108,
-      63
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Max Homa",
-    "ranking": 148,
-    "odds": "+12500",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70.9
-    },
-    "augusta": {
-      "2022": "T48",
-      "2023": "T43",
-      "2024": "T3",
-      "2025": "T12"
-    },
-    "birthYear": 1990,
-    "openingOdds": "+6600",
-    "withdrawn": false,
-    "recentFinishes": [
-      14,
-      38,
-      130
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Carlos Ortiz",
-    "ranking": 153,
-    "odds": "+10000",
-    "form": {
-      "events": 5,
-      "wins": 0,
+      "wins": 1,
       "top10s": 2,
       "cuts": 5,
-      "avg": 68.2
+      "avg": 69
     },
-    "augusta": {},
-    "birthYear": 1991,
-    "openingOdds": "+15000",
-    "withdrawn": false,
-    "recentFinishes": [
-      6,
-      26,
-      8
-    ],
-    "country": "MEX"
-  },
-  {
-    "name": "Brooks Koepka",
-    "ranking": 162,
-    "odds": "+3300",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 3,
-      "avg": 70.3
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T2",
-      "2024": "T45",
-      "2025": "MC"
-    },
-    "birthYear": 1990,
-    "openingOdds": "+3800",
-    "withdrawn": false,
-    "recentFinishes": [
-      15,
-      21,
-      118
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jackson Herrington",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {},
-    "birthYear": 2004,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "USA"
-  },
-  {
-    "name": "Naoyuki Kataoka",
-    "ranking": null,
-    "odds": "+50000",
-    "form": null,
-    "augusta": {},
-    "birthYear": 2003,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "JPN"
-  },
-  {
-    "name": "Zach Johnson",
-    "ranking": null,
-    "odds": "+50000",
-    "form": null,
-    "augusta": {
-      "2022": "MC",
-      "2023": "T34",
-      "2025": "T8"
-    },
-    "birthYear": 1976,
-    "openingOdds": "+40000",
-    "withdrawn": false,
-    "country": "USA"
-  },
-  {
-    "name": "Tiger Woods",
-    "ranking": null,
-    "odds": "+15000",
-    "form": null,
-    "augusta": {
-      "2022": "47",
-      "2023": "WD",
-      "2024": "60"
-    },
-    "birthYear": 1975,
-    "openingOdds": "+15000",
-    "withdrawn": true,
-    "country": "USA"
-  },
-  {
-    "name": "Danny Willett",
-    "ranking": null,
-    "odds": "+50000",
-    "form": {
-      "events": 4,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 2,
-      "avg": 71
-    },
-    "augusta": {
-      "2022": "T12",
-      "2023": "MC",
-      "2024": "T45",
-      "2025": "T42"
-    },
-    "birthYear": 1987,
-    "openingOdds": "+50000",
-    "withdrawn": false,
-    "recentFinishes": [
-      44,
-      105,
-      58
-    ],
-    "country": "ENG"
-  },
-  {
-    "name": "Mike Weir",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {
-      "2022": "MC",
-      "2023": "MC",
-      "2024": "MC",
-      "2025": "MC"
-    },
-    "birthYear": 1970,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "CAN"
-  },
-  {
-    "name": "Bubba Watson",
-    "ranking": null,
-    "odds": "+25000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 69.6
-    },
-    "augusta": {
-      "2022": "T39",
-      "2023": "MC",
-      "2025": "T14"
-    },
-    "birthYear": 1978,
-    "openingOdds": "+25000",
-    "withdrawn": false,
-    "recentFinishes": [
-      41,
-      28,
-      40
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Brandon Holtz",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {},
-    "birthYear": 1986,
-    "openingOdds": "+100000",
-    "withdrawn": true,
-    "country": "USA"
-  },
-  {
-    "name": "Fifa Laopakdee",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {},
-    "birthYear": 2005,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "THA"
-  },
-  {
-    "name": "Angel Cabrera",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {
-      "2025": "MC"
-    },
-    "birthYear": 1969,
-    "openingOdds": "+50000",
-    "withdrawn": false,
-    "country": "ARG"
-  },
-  {
-    "name": "Phil Mickelson",
-    "ranking": null,
-    "odds": "+20000",
-    "form": {
-      "events": 3,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 2,
-      "avg": 25.2
-    },
-    "augusta": {
-      "2022": "MC",
-      "2023": "T2",
-      "2024": "T43",
-      "2025": "MC"
-    },
-    "birthYear": 1970,
-    "openingOdds": "+20000",
-    "withdrawn": true,
-    "recentFinishes": [
-      58,
-      60,
-      49
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Mateo Pulcini",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {},
     "birthYear": 2000,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "ARG"
-  },
-  {
-    "name": "Jose Maria Olazabal",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {
-      "2022": "MC",
-      "2023": "MC",
-      "2024": "T45",
-      "2025": "MC"
-    },
-    "birthYear": 1966,
-    "openingOdds": "+200000",
-    "withdrawn": false,
-    "country": "ESP"
-  },
-  {
-    "name": "Cameron Smith",
-    "ranking": null,
-    "odds": "+10000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 68.2
-    },
-    "augusta": {
-      "2022": "T3",
-      "2023": "T34",
-      "2024": "T6",
-      "2025": "MC"
-    },
-    "birthYear": 1993,
-    "openingOdds": "+6600",
+    "openingOdds": "+15000",
     "withdrawn": false,
     "recentFinishes": [
-      48,
-      8,
-      20
-    ],
-    "country": "AUS"
-  },
-  {
-    "name": "Vijay Singh",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {
-      "2022": "MC",
-      "2024": "T58"
-    },
-    "birthYear": 1963,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "FJI"
-  },
-  {
-    "name": "Dustin Johnson",
-    "ranking": null,
-    "odds": "+17500",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 68.5
-    },
-    "augusta": {
-      "2022": "T12",
-      "2023": "T48",
-      "2024": "MC",
-      "2025": "MC"
-    },
-    "birthYear": 1984,
-    "openingOdds": "+9000",
-    "withdrawn": false,
-    "recentFinishes": [
-      24,
-      12,
-      35
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Charl Schwartzel",
-    "ranking": null,
-    "odds": "+35000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 66
-    },
-    "augusta": {
-      "2022": "T10",
-      "2023": "T50",
-      "2025": "T36"
-    },
-    "birthYear": 1984,
-    "openingOdds": "+35000",
-    "withdrawn": false,
-    "recentFinishes": [
-      38,
-      22,
-      27
-    ],
-    "country": "RSA"
-  },
-  {
-    "name": "Mason Howell",
-    "ranking": null,
-    "odds": "+100000",
-    "form": {
-      "events": 1,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 0,
-      "avg": 69.5
-    },
-    "augusta": {},
-    "birthYear": 2007,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "recentFinishes": [
-      76
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Ethan Fang",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {},
-    "birthYear": 2005,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "USA"
-  },
-  {
-    "name": "Sergio Garcia",
-    "ranking": null,
-    "odds": "+20000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 68.9
-    },
-    "augusta": {
-      "2022": "T23",
-      "2023": "MC",
-      "2024": "MC",
-      "2025": "MC"
-    },
-    "birthYear": 1980,
-    "openingOdds": "+10000",
-    "withdrawn": false,
-    "recentFinishes": [
-      12,
-      38,
-      21
-    ],
-    "country": "ESP"
-  },
-  {
-    "name": "Fred Couples",
-    "ranking": null,
-    "odds": "+100000",
-    "form": null,
-    "augusta": {
-      "2022": "MC",
-      "2023": "T50",
-      "2025": "MC"
-    },
-    "birthYear": 1959,
-    "openingOdds": "+100000",
-    "withdrawn": false,
-    "country": "USA"
-  },
-  {
-    "name": "Tony Finau",
-    "ranking": null,
-    "odds": "+10000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 70.2
-    },
-    "augusta": {
-      "2022": "T35",
-      "2023": "T26",
-      "2024": "T55",
-      "2025": "MC"
-    },
-    "birthYear": 1989,
-    "openingOdds": "+5000",
-    "withdrawn": true,
-    "recentFinishes": [
-      72,
-      22,
-      42
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Will Zalatoris",
-    "ranking": null,
-    "odds": "+8000",
-    "form": {
-      "events": 1,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 0,
-      "avg": 69.5
-    },
-    "augusta": {
-      "2022": "T6",
-      "2023": "MC",
-      "2024": "T9",
-      "2025": "MC"
-    },
-    "birthYear": 1996,
-    "openingOdds": "+8000",
-    "withdrawn": true,
-    "recentFinishes": [
-      84
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jake Knapp",
-    "ranking": null,
-    "odds": "+5000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 3,
-      "cuts": 4,
-      "avg": 68.1
-    },
-    "augusta": {},
-    "birthYear": 1994,
-    "openingOdds": "+5000",
-    "withdrawn": false,
-    "recentFinishes": [
+      20,
       6,
-      79,
-      6
+      15
     ],
-    "country": "USA"
+    "country": "USA",
+    "espnId": "5054388"
   },
   {
-    "name": "Nicolai Hojgaard",
+    "name": "Tim Wiedemeyer",
     "ranking": null,
-    "odds": "+6600",
+    "odds": "+100000",
     "form": {
       "events": 0,
       "wins": 0,
@@ -2109,80 +3012,197 @@
       "cuts": 0,
       "avg": null
     },
-    "augusta": {},
-    "birthYear": 2001,
-    "openingOdds": "+6600",
+    "birthYear": null,
+    "openingOdds": "+100000",
     "withdrawn": false,
-    "country": "DEN"
+    "recentFinishes": [],
+    "country": "GER",
+    "espnId": "5147926"
   },
   {
-    "name": "Gary Woodland",
-    "ranking": null,
-    "odds": "+8000",
+    "name": "Patrick Cantlay",
+    "ranking": 34,
+    "odds": "+5500",
     "form": {
       "events": 5,
-      "wins": 1,
+      "wins": 0,
       "top10s": 1,
-      "cuts": 3,
-      "avg": 69.6
+      "cuts": 4,
+      "avg": 70.1
     },
-    "augusta": {},
-    "birthYear": 1984,
-    "openingOdds": "+8000",
+    "birthYear": 1992,
+    "openingOdds": "+5500",
     "withdrawn": false,
     "recentFinishes": [
-      87,
-      16,
-      1
+      62,
+      34,
+      9
     ],
-    "country": "USA"
+    "country": "USA",
+    "espnId": "6007"
   },
   {
     "name": "Daniel Berger",
     "ranking": null,
-    "odds": "+10000",
+    "odds": "+20000",
     "form": {
-      "events": 6,
+      "events": 5,
       "wins": 0,
       "top10s": 1,
-      "cuts": 5,
-      "avg": 67.7
+      "cuts": 4,
+      "avg": 67.6
     },
-    "augusta": {},
     "birthYear": 1993,
-    "openingOdds": "+10000",
+    "openingOdds": "+20000",
     "withdrawn": false,
     "recentFinishes": [
       34,
       2,
       67
     ],
-    "country": "USA"
+    "country": "USA",
+    "espnId": "9025"
   },
   {
-    "name": "Matt McCarty",
+    "name": "Nico Echavarria",
+    "ranking": 38,
+    "odds": "+35000",
+    "form": {
+      "events": 8,
+      "wins": 1,
+      "top10s": 2,
+      "cuts": 4,
+      "avg": 70.7
+    },
+    "birthYear": 1994,
+    "openingOdds": "+35000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "COL",
+    "espnId": "4408316"
+  },
+  {
+    "name": "Peter Uihlein",
     "ranking": null,
-    "odds": "+15000",
+    "odds": "+50000",
+    "form": {
+      "events": 6,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 6,
+      "avg": 71.2
+    },
+    "birthYear": 1989,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      54,
+      53,
+      32
+    ],
+    "country": "USA",
+    "espnId": "1674"
+  },
+  {
+    "name": "Francesco Laporta",
+    "ranking": null,
+    "odds": "+50000",
+    "form": {
+      "events": 4,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 2,
+      "avg": 63.8
+    },
+    "birthYear": 1990,
+    "openingOdds": "+50000",
+    "withdrawn": false,
+    "recentFinishes": [
+      18,
+      41,
+      107
+    ],
+    "country": "ITA",
+    "espnId": "5716"
+  },
+  {
+    "name": "Alistair Docherty",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1994,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "4425907"
+  },
+  {
+    "name": "Austen Truslow",
+    "ranking": null,
+    "odds": "+75000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": null,
+    "openingOdds": "+75000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "9379"
+  },
+  {
+    "name": "Cameron John",
+    "ranking": null,
+    "odds": "",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1999,
+    "openingOdds": null,
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "AUS",
+    "espnId": "4368981"
+  },
+  {
+    "name": "Sam Bairstow",
+    "ranking": null,
+    "odds": "+75000",
     "form": {
       "events": 6,
       "wins": 0,
       "top10s": 0,
       "cuts": 3,
-      "avg": 71.8
+      "avg": 57.2
     },
-    "augusta": {},
-    "birthYear": 1997,
-    "openingOdds": "+15000",
+    "birthYear": 1998,
+    "openingOdds": "+75000",
     "withdrawn": false,
     "recentFinishes": [
-      42,
-      78,
-      129
+      103,
+      110,
+      46
     ],
-    "country": "USA"
+    "country": "ENG",
+    "espnId": "4872728"
   },
   {
-    "name": "Brandon Wu",
+    "name": "Naoyuki Kataoka",
     "ranking": null,
     "odds": "+100000",
     "form": {
@@ -2192,82 +3212,17 @@
       "cuts": 0,
       "avg": null
     },
-    "augusta": {},
-    "birthYear": 1997,
+    "birthYear": 2003,
     "openingOdds": "+100000",
     "withdrawn": false,
-    "country": "USA"
+    "recentFinishes": [],
+    "country": "JPN",
+    "espnId": "4837226"
   },
   {
-    "name": "Joaquin Niemann",
+    "name": "Marcus Plunkett",
     "ranking": null,
-    "odds": "+6000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 68.1
-    },
-    "augusta": {},
-    "birthYear": 1998,
-    "openingOdds": "+6000",
-    "withdrawn": true,
-    "recentFinishes": [
-      44,
-      4,
-      15
-    ],
-    "country": "CHI"
-  },
-  {
-    "name": "Sahith Theegala",
-    "ranking": null,
-    "odds": "+8000",
-    "form": {
-      "events": 7,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 6,
-      "avg": 69.8
-    },
-    "augusta": {},
-    "birthYear": 1997,
-    "openingOdds": "+8000",
-    "withdrawn": true,
-    "recentFinishes": [
-      41,
-      115,
-      11
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Thomas Detry",
-    "ranking": null,
-    "odds": "+10000",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 3,
-      "cuts": 5,
-      "avg": 67.4
-    },
-    "augusta": {},
-    "birthYear": 1993,
-    "openingOdds": "+10000",
-    "withdrawn": true,
-    "recentFinishes": [
-      2,
-      15,
-      3
-    ],
-    "country": "BEL"
-  },
-  {
-    "name": "Joohyung Kim",
-    "ranking": null,
-    "odds": "+12500",
+    "odds": "+100000",
     "form": {
       "events": 0,
       "wins": 0,
@@ -2275,126 +3230,17 @@
       "cuts": 0,
       "avg": null
     },
-    "augusta": {},
     "birthYear": null,
-    "openingOdds": "+12500",
-    "withdrawn": true,
-    "country": "KOR"
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "USA",
+    "espnId": "5075661"
   },
   {
-    "name": "Anthony Kim",
+    "name": "Bard Bjornevik Skogen",
     "ranking": null,
-    "odds": "+12500",
-    "form": {
-      "events": 5,
-      "wins": 1,
-      "top10s": 1,
-      "cuts": 5,
-      "avg": 68.8
-    },
-    "augusta": {},
-    "birthYear": 1985,
-    "openingOdds": "+12500",
-    "withdrawn": true,
-    "recentFinishes": [
-      34,
-      18,
-      56
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Billy Horschel",
-    "ranking": null,
-    "odds": "+15000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 71
-    },
-    "augusta": {},
-    "birthYear": 1986,
-    "openingOdds": "+15000",
-    "withdrawn": true,
-    "recentFinishes": [
-      13,
-      72,
-      93
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Taylor Pendrith",
-    "ranking": null,
-    "odds": "+17500",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 71.6
-    },
-    "augusta": {},
-    "birthYear": 1991,
-    "openingOdds": "+17500",
-    "withdrawn": true,
-    "recentFinishes": [
-      47,
-      117,
-      130
-    ],
-    "country": "CAN"
-  },
-  {
-    "name": "Byeong Hun An",
-    "ranking": null,
-    "odds": "+17500",
-    "form": {
-      "events": 5,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 5,
-      "avg": 69.2
-    },
-    "augusta": {},
-    "birthYear": 1991,
-    "openingOdds": "+17500",
-    "withdrawn": true,
-    "recentFinishes": [
-      45,
-      44,
-      46
-    ],
-    "country": "KOR"
-  },
-  {
-    "name": "Davis Thompson",
-    "ranking": null,
-    "odds": "+17500",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 1,
-      "cuts": 4,
-      "avg": 70.7
-    },
-    "augusta": {},
-    "birthYear": 1999,
-    "openingOdds": "+17500",
-    "withdrawn": true,
-    "recentFinishes": [
-      90,
-      47,
-      90
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Jayden Trey Schaper",
-    "ranking": null,
-    "odds": "+20000",
+    "odds": "+100000",
     "form": {
       "events": 0,
       "wins": 0,
@@ -2402,54 +3248,83 @@
       "cuts": 0,
       "avg": null
     },
-    "augusta": {},
     "birthYear": null,
-    "openingOdds": "+20000",
-    "withdrawn": true,
-    "country": "RSA"
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "NOR",
+    "espnId": "5289694"
   },
   {
-    "name": "Pierceson Coody",
+    "name": "Kazuki Higa",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1995,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "JPN",
+    "espnId": "4597553"
+  },
+  {
+    "name": "Jiho Yang",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 0,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 0,
+      "avg": null
+    },
+    "birthYear": 1989,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [],
+    "country": "KOR",
+    "espnId": "5143177"
+  },
+  {
+    "name": "Nevill Ruiter",
+    "ranking": null,
+    "odds": "+100000",
+    "form": {
+      "events": 1,
+      "wins": 0,
+      "top10s": 0,
+      "cuts": 1,
+      "avg": 73
+    },
+    "birthYear": null,
+    "openingOdds": "+100000",
+    "withdrawn": false,
+    "recentFinishes": [
+      69
+    ],
+    "country": "NED",
+    "espnId": "5289808"
+  },
+  {
+    "name": "Aldrich Potgieter",
     "ranking": null,
     "odds": "+25000",
     "form": {
-      "events": 7,
+      "events": 0,
       "wins": 0,
       "top10s": 0,
-      "cuts": 4,
-      "avg": 67.6
+      "cuts": 0,
+      "avg": null
     },
     "augusta": {},
-    "birthYear": 2000,
+    "birthYear": null,
     "openingOdds": "+25000",
-    "withdrawn": true,
-    "recentFinishes": [
-      120,
-      57,
-      135
-    ],
-    "country": "USA"
-  },
-  {
-    "name": "Denny McCarthy",
-    "ranking": null,
-    "odds": "+30000",
-    "form": {
-      "events": 6,
-      "wins": 0,
-      "top10s": 0,
-      "cuts": 4,
-      "avg": 70.8
-    },
-    "augusta": {},
-    "birthYear": 1993,
-    "openingOdds": "+30000",
-    "withdrawn": true,
-    "recentFinishes": [
-      105,
-      26,
-      13
-    ],
-    "country": "USA"
+    "withdrawn": false
   }
 ]
