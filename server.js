@@ -507,28 +507,13 @@ const ESPN_PGA = 'https://site.api.espn.com/apis/site/v2/sports/golf/pga';
 const ESPN_EUR = 'https://site.api.espn.com/apis/site/v2/sports/golf/eur';
 const ESPN_LIV = 'https://site.api.espn.com/apis/site/v2/sports/golf/liv';
 
-// 2026 PGA Tour event IDs (The Sentry through Valero Texas Open)
-const PGA_TOURNAMENT_IDS = [
-  401811927, // The Sentry
-  401811928, // Sony Open
-  401811929, // The American Express
-  401811930, // Farmers Insurance Open
-  401811931, // WM Phoenix Open
-  401811932, // AT&T Pebble Beach
-  401811933, // Genesis Invitational
-  401811934, // Cognizant Classic
-  401811935, // Arnold Palmer Invitational
-  401811936, // Puerto Rico Open
-  401811937, // THE PLAYERS Championship
-  401811938, // Valspar Championship
-  401811939, // Houston Open
-  401811940, // Valero Texas Open
-];
+// PGA form is pulled from ALL completed 2026 PGA events (no hardcoded list), so
+// "recent form" tracks the current season automatically — same as the DP World/LIV feeds.
 
 // Fetch completed event IDs from an ESPN tour endpoint
 async function getCompletedEventIds(baseUrl, knownIds) {
   try {
-    const res = await fetch(`${baseUrl}/scoreboard?dates=2026&limit=20`);
+    const res = await fetch(`${baseUrl}/scoreboard?dates=2026&limit=60`);
     const data = await res.json();
     const completed = [];
     for (const evt of (data.events || [])) {
@@ -559,8 +544,8 @@ async function fetchLeaderboard(baseUrl, id) {
 
 // Core stats refresh logic (reusable from endpoint and post-submission)
 async function refreshStatsCore() {
-  // Fetch PGA Tour completed events
-  const pgaCompleted = await getCompletedEventIds(ESPN_PGA, PGA_TOURNAMENT_IDS);
+  // Fetch PGA Tour completed events (no ID filter — take the most recent completed)
+  const pgaCompleted = await getCompletedEventIds(ESPN_PGA, null);
   const pgaRecent = pgaCompleted.slice(-9);
 
   // Fetch DP World Tour completed events (no ID filter — take all completed)
