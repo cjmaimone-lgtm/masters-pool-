@@ -21,6 +21,29 @@ const GOLFERS_FILE = path.join(__dirname, 'data', 'golfers.json');
 const STATUS_FILE = path.join(__dirname, 'data', 'refresh-status.json');
 const FIELD_ENTRIES_FILE = path.join(__dirname, 'data', 'field-entries.json');
 
+// --- Tournament config: repurpose the whole site per event by editing this block ---
+// The pickable field is sourced live from ESPN's entrant list for espnEventId, so it
+// tracks who is actually playing (updates daily, including WDs/late adds).
+const TOURNAMENT = {
+  espnEventId: 401811957,                        // ESPN PGA-league event id = The Open 2026
+  oddsSportKey: 'golf_the_open_championship_winner', // The Odds API market key
+  name: 'The Open',                              // fallback label; real name comes from ESPN
+  lockNameMatch: 'open',                         // substring fallback for the entry lock
+};
+
+// ESPN reports country as a full name (flag.alt); map to the 3-letter codes used by
+// COUNTRY_FLAGS on the client. Unmapped countries fall back to no flag.
+const COUNTRY_NAME_TO_CODE = {
+  'United States': 'USA', 'USA': 'USA', 'England': 'ENG', 'Scotland': 'SCO',
+  'Northern Ireland': 'NIR', 'Ireland': 'IRL', 'Spain': 'ESP', 'Australia': 'AUS',
+  'Japan': 'JPN', 'South Korea': 'KOR', 'Sweden': 'SWE', 'Norway': 'NOR',
+  'Denmark': 'DEN', 'Austria': 'AUT', 'Finland': 'FIN', 'Belgium': 'BEL',
+  'Canada': 'CAN', 'New Zealand': 'NZL', 'South Africa': 'RSA', 'Colombia': 'COL',
+  'Mexico': 'MEX', 'Argentina': 'ARG', 'Chile': 'CHI', 'China': 'CHN',
+  'Thailand': 'THA', 'France': 'FRA', 'Germany': 'GER', 'Italy': 'ITA',
+  'Netherlands': 'NED', 'Zimbabwe': 'ZIM', 'Fiji': 'FJI',
+};
+
 // --- Name normalization for matching across APIs ---
 
 // Map of known nickname/spelling variants to canonical names used in golfers.json
@@ -32,11 +55,22 @@ const NAME_ALIASES = {
   'pongsapak laopakdee': 'fifa laopakdee',
   'j j spaun': 'jj spaun',
   'william zalatoris': 'will zalatoris',
+  // The Open 2026: odds-feed spellings -> ESPN field spellings (keeps odds on the real entry)
+  'joohyung kim': 'tom kim',
+  'alexander noren': 'alex noren',
+  'eugenio lopez chacarra': 'eugenio chacarra',
+  'jayden trey schaper': 'jayden schaper',
+  'jose luis ballester': 'josele ballester',
+  'baard skogen': 'bard bjornevik skogen',
+  'tom sloman': 'thomas sloman',
+  'jackson buchanan': 'jack buchanan',
 };
 
 function normalizeName(name) {
   return name
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip combining accents (\u00e5->a, \u00e9->e)
+    .replace(/[\u00f8\u00d8]/g, 'o').replace(/[\u0142\u0141]/g, 'l')       // fold letters NFD can't decompose
+    .replace(/[\u00e6\u00c6]/g, 'ae').replace(/[\u00f0\u00d0]/g, 'd')      // (e.g. H\u00f8jgaard <-> Hojgaard)
     .replace(/[.\-']/g, '')                             // strip dots, hyphens, apostrophes
     .replace(/\s+/g, ' ')                               // collapse whitespace
     .trim()
@@ -257,31 +291,26 @@ app.post('/api/submissions', async (req, res) => {
   }
 });
 
-// Shared helper: check if the Masters is live or finished
-async function isMastersLocked() {
+// Shared helper: check if the configured tournament is live or finished
+async function isTournamentLocked() {
   try {
-    const sbRes = await fetch(`${ESPN_PGA}/scoreboard`);
-    const sbData = await sbRes.json();
-    const events = sbData.events || [];
-    const mastersEvent = events.find(e => {
-      const name = (e.name || e.shortName || '').toLowerCase();
-      return name.includes('masters');
-    });
-    if (mastersEvent && (mastersEvent.status?.type?.state === 'in' || mastersEvent.status?.type?.state === 'post')) {
-      return true;
-    }
+    const res = await fetch(`${ESPN_PGA}/scoreboard/${TOURNAMENT.espnEventId}`);
+    const data = await res.json();
+    const evt = data.events?.[0] || data;
+    const state = evt?.status?.type?.state || evt?.competitions?.[0]?.status?.type?.state;
+    if (state === 'in' || state === 'post') return true;
   } catch {
     // If ESPN check fails, allow the action rather than locking everyone out
   }
   return false;
 }
 
-// PUT (edit) a submission (blocked once the Masters is live, unless admin)
+// PUT (edit) a submission (blocked once the tournament is live, unless admin)
 app.put('/api/submissions/:id', async (req, res) => {
   const isAdmin = req.query.admin === '1';
 
-  if (!isAdmin && await isMastersLocked()) {
-    return res.status(403).json({ error: 'Entries are locked — the Masters has started!' });
+  if (!isAdmin && await isTournamentLocked()) {
+    return res.status(403).json({ error: `Entries are locked — ${TOURNAMENT.name} has started!` });
   }
 
   const { entryName, golfers, winningGolfer, winningScore } = req.body;
@@ -317,12 +346,12 @@ app.put('/api/submissions/:id', async (req, res) => {
   });
 });
 
-// DELETE a submission (blocked once the Masters is live, unless admin)
+// DELETE a submission (blocked once the tournament is live, unless admin)
 app.delete('/api/submissions/:id', async (req, res) => {
   const isAdmin = req.query.admin === '1';
 
-  if (!isAdmin && await isMastersLocked()) {
-    return res.status(403).json({ error: 'Entries are locked — the Masters has started!' });
+  if (!isAdmin && await isTournamentLocked()) {
+    return res.status(403).json({ error: `Entries are locked — ${TOURNAMENT.name} has started!` });
   }
 
   const { error } = await supabase
@@ -353,7 +382,7 @@ async function refreshOddsCore() {
   const apiKey = process.env.ODDS_API_KEY;
   if (!apiKey) throw new Error('ODDS_API_KEY not configured');
 
-  const url = `https://api.the-odds-api.com/v4/sports/golf_masters_tournament_winner/odds?apiKey=${apiKey}&regions=us&markets=outrights&oddsFormat=american`;
+  const url = `https://api.the-odds-api.com/v4/sports/${TOURNAMENT.oddsSportKey}/odds?apiKey=${apiKey}&regions=us&markets=outrights&oddsFormat=american`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -365,7 +394,7 @@ async function refreshOddsCore() {
   const remaining = response.headers.get('x-requests-remaining');
 
   const allBookmakers = oddsData[0]?.bookmakers || [];
-  if (!allBookmakers.length) throw new Error('No odds data available for the Masters right now');
+  if (!allBookmakers.length) throw new Error(`No odds data available for ${TOURNAMENT.name} right now`);
 
   // Merge outcomes across all bookmakers so no golfer is falsely marked withdrawn
   // Use the first bookmaker's odds as the canonical price, but track all names seen
@@ -396,7 +425,7 @@ async function refreshOddsCore() {
     const oddsVal = outcome.price > 0 ? `+${outcome.price}` : `${outcome.price}`;
     if (idx >= 0) {
       if (!golfers[idx].openingOdds) {
-        golfers[idx].openingOdds = golfers[idx].odds;
+        golfers[idx].openingOdds = oddsVal;   // first real line seen becomes the "opening" line
       }
       golfers[idx].odds = oddsVal;
       golfers[idx].withdrawn = false;
@@ -440,12 +469,10 @@ async function refreshOddsCore() {
     if (idx >= 0) cleanSeen.add(idx);
   });
 
-  // Mark golfers not in the API response as withdrawn
-  golfers.forEach((g, i) => {
-    if (!cleanSeen.has(i) && !g.withdrawn) {
-      g.withdrawn = true;
-    }
-  });
+  // NOTE: withdrawn status is driven by ESPN field membership (refreshFieldCore), NOT by
+  // odds-market presence — the betting market is often a subset of the full field, so
+  // absence here must not withdraw a legitimate entrant. (cleanSeen retained for logging.)
+  void cleanSeen;
 
   fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
 
@@ -662,6 +689,93 @@ async function refreshStatsCore() {
 function refreshStatsInBackground() {
   refreshStatsCore().catch(err => console.error('Background stats refresh failed:', err.message));
 }
+
+// ============================================================
+// ESPN FIELD — who is actually playing this week (source of truth for the pick list)
+// ============================================================
+
+// Light in-memory cache so /api/field doesn't hit ESPN on every page load.
+let fieldCache = { window: null, data: null };
+
+// Fetch the entrant list for the configured event straight from ESPN.
+async function fetchOpenField() {
+  const res = await fetch(`${ESPN_PGA}/scoreboard/${TOURNAMENT.espnEventId}`);
+  if (!res.ok) throw new Error(`ESPN field HTTP ${res.status}`);
+  const data = await res.json();
+  const evt = data.events?.[0] || data;            // per-event endpoint returns the event at top level
+  const competitors = evt.competitions?.[0]?.competitors || [];
+  const tournamentName = evt.name || evt.shortName || TOURNAMENT.name;
+  const entrants = competitors.map(c => {
+    const a = c.athlete || {};
+    const countryName = a.flag?.alt || null;
+    return {
+      name: a.displayName || a.fullName,
+      fullName: a.fullName || a.displayName,
+      espnId: c.id || a.id || null,
+      country: countryName ? (COUNTRY_NAME_TO_CODE[countryName] || null) : null,
+    };
+  }).filter(e => e.name);
+  return { tournamentName, entrants };
+}
+
+// Rebuild golfers.json from the ESPN field so the roster == who's playing. Existing
+// birthYear/form/ranking are preserved by name; odds reset until the market opens.
+async function refreshFieldCore() {
+  const { tournamentName, entrants } = await fetchOpenField();
+  if (!entrants.length) throw new Error('ESPN returned no entrants for the configured event');
+
+  let existing = [];
+  try { existing = JSON.parse(fs.readFileSync(GOLFERS_FILE, 'utf8')); } catch { /* first run */ }
+  const prevIndex = buildNameIndex(existing);
+
+  const golfers = entrants.map(e => {
+    const key = resolveAlias(e.name);
+    const prev = prevIndex[key] !== undefined ? existing[prevIndex[key]] : null;
+    return {
+      name: e.name,                                // canonical = ESPN displayName (matches scoring)
+      ranking: prev?.ranking ?? null,
+      odds: '',                                    // filled by the odds refresh once the market opens
+      form: prev?.form || { events: 0, wins: 0, top10s: 0, cuts: 0, avg: null },
+      birthYear: prev?.birthYear ?? null,
+      openingOdds: null,
+      withdrawn: false,
+      recentFinishes: prev?.recentFinishes || [],
+      country: e.country || prev?.country || null,
+      espnId: e.espnId || prev?.espnId || null,
+    };
+  });
+
+  fs.writeFileSync(GOLFERS_FILE, JSON.stringify(golfers, null, 2));
+
+  const status = getRefreshStatus();
+  status.tournamentName = tournamentName;
+  status.fieldUpdatedAt = new Date().toISOString();
+  status.fieldCount = entrants.length;
+  saveRefreshStatus(status);
+
+  fieldCache = {
+    window: getRefreshWindow(),
+    data: { tournamentName, entrants: entrants.map(e => e.name), updatedAt: status.fieldUpdatedAt },
+  };
+  return { tournamentName, count: entrants.length, updatedAt: status.fieldUpdatedAt };
+}
+
+// GET the current field (entrant names + tournament name) — powers the client pick gate.
+app.get('/api/field', async (req, res) => {
+  try {
+    if (fieldCache.data && fieldCache.window === getRefreshWindow()) {
+      return res.json(fieldCache.data);
+    }
+    const { tournamentName, entrants } = await fetchOpenField();
+    const data = { tournamentName, entrants: entrants.map(e => e.name), updatedAt: new Date().toISOString() };
+    fieldCache = { window: getRefreshWindow(), data };
+    res.json(data);
+  } catch (err) {
+    // Fall back to the last recorded field name; empty entrants means the client keeps its fallback list
+    const status = getRefreshStatus();
+    res.json({ tournamentName: status.tournamentName || TOURNAMENT.name, entrants: [], updatedAt: status.fieldUpdatedAt || null, error: err.message });
+  }
+});
 
 app.post('/api/refresh-stats', async (req, res) => {
   try {
@@ -887,16 +1001,27 @@ app.get('/api/live-leaderboard', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Masters Fivesome Picker running at http://localhost:${PORT}`);
+  console.log(`${TOURNAMENT.name} Fivesome Picker running at http://localhost:${PORT}`);
 
-  // Auto-refresh odds and stats on startup so Render cold starts always have fresh data
-  console.log('Triggering startup odds refresh...');
-  refreshOddsCore()
-    .then(result => console.log(`Startup odds refresh complete: ${result.matched} matched, ${result.added.length} added, ${result.withdrawn.length} withdrawn (${result.source})`))
-    .catch(err => console.error('Startup odds refresh failed:', err.message));
+  // On startup (and Render cold starts): seed the field from ESPN first so the roster
+  // exists, then enrich with stats, then odds (a no-op until the betting market opens).
+  (async () => {
+    try {
+      console.log('Triggering startup field refresh...');
+      const f = await refreshFieldCore();
+      console.log(`Startup field refresh complete: ${f.count} entrants (${f.tournamentName})`);
+    } catch (err) { console.error('Startup field refresh failed:', err.message); }
 
-  console.log('Triggering startup stats refresh...');
-  refreshStatsCore()
-    .then(result => console.log(`Startup stats refresh complete: ${result.golfersUpdated} golfers updated`))
-    .catch(err => console.error('Startup stats refresh failed:', err.message));
+    try {
+      console.log('Triggering startup stats refresh...');
+      const s = await refreshStatsCore();
+      console.log(`Startup stats refresh complete: ${s.golfersUpdated} golfers updated`);
+    } catch (err) { console.error('Startup stats refresh failed:', err.message); }
+
+    try {
+      console.log('Triggering startup odds refresh...');
+      const o = await refreshOddsCore();
+      console.log(`Startup odds refresh complete: ${o.matched} matched, ${o.added.length} added (${o.source})`);
+    } catch (err) { console.error('Startup odds refresh failed:', err.message); }
+  })();
 });
