@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masters Fivesome Picker 2026</title>
+  <title>The Open Fivesome Picker 2026</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>The Masters 2026</h1>
+    <h1>The Open 2026</h1>
     <p class="subtitle">Fivesome Picker</p>
   </header>
 
@@ -38,6 +38,7 @@
 
     <!-- PICK TAB -->
     <section id="tab-pick" class="tab-content active">
+      <h2 id="pickTournamentHeader" class="pick-tournament-header">The Open — Pick Your Fivesome</h2>
       <div class="pick-header">
         <div class="name-input">
           <label for="userName">Your Name:</label>
@@ -92,7 +93,6 @@
               <th>Open</th>
               <th>Odds</th>
               <th>2026 Form</th>
-              <th>Augusta History</th>
             </tr>
           </thead>
           <tbody id="golferBody"></tbody>
@@ -109,7 +109,7 @@
           </div>
           <div class="tiebreaker-input">
             <label for="winningScore">Winning Score (to par):</label>
-            <input type="number" id="winningScore" placeholder="e.g. -17" min="-30" max="20" step="1">
+            <input type="number" id="winningScore" placeholder="e.g. -10" min="-30" max="20" step="1">
           </div>
         </div>
         <button id="submitBtn" class="submit-btn" disabled>Submit Fivesome</button>
@@ -175,12 +175,6 @@
       </div>
 
       <div class="analytics-section">
-        <h2>Augusta Course Fit</h2>
-        <p class="stats-subtitle">Best Augusta track records among picked golfers (avg finish, 2022-2025)</p>
-        <div id="augustaFit" class="popularity-chart"></div>
-      </div>
-
-      <div class="analytics-section">
         <h2>Coverage Gaps</h2>
         <p class="stats-subtitle">Top-ranked golfers nobody has picked</p>
         <div id="coverageGaps"></div>
@@ -242,7 +236,7 @@
       </div>
       <div class="edit-field">
         <label for="editWinningScore">Winning Score (to par):</label>
-        <input type="number" id="editWinningScore" placeholder="e.g. -17" min="-30" max="20" step="1">
+        <input type="number" id="editWinningScore" placeholder="e.g. -10" min="-30" max="20" step="1">
       </div>
       <div class="edit-actions">
         <button class="edit-save-btn" onclick="saveEdit()">Save Changes</button>
