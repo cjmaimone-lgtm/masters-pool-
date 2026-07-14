@@ -7,11 +7,11 @@ let fieldEntries = [];
 // --- Admin mode: append ?admin=1 to URL to retain edit/remove during tournament ---
 const IS_ADMIN = new URLSearchParams(window.location.search).has('admin');
 
-// --- 2026 Masters Official Field ---
-// This list gates which golfers appear in the Pick Your Fivesome tab.
-// On a go-forward basis, this will be populated from the Vegas odds API;
-// for this tournament we lock it to the confirmed invite list.
-const MASTERS_2026_FIELD = [
+// --- Field gate: which golfers can be picked ---
+// The pickable field is loaded live from /api/field (ESPN entrants for the configured
+// event) by loadField(), so it reflects who is actually playing. FIELD_FALLBACK below is
+// used only if that fetch fails or returns empty (it is last year's Masters field).
+const FIELD_FALLBACK = [
   'Ludvig Aberg', 'Daniel Berger', 'Akshay Bhatia', 'Keegan Bradley', 'Michael Brennan',
   'Jacob Bridgeman', 'Sam Burns', 'Angel Cabrera', 'Ben Campbell', 'Patrick Cantlay',
   'Wyndham Clark', 'Corey Conners', 'Fred Couples', 'Jason Day', 'Bryson DeChambeau',
@@ -36,13 +36,39 @@ const MASTERS_2026_FIELD = [
   'Fifa Laopakdee', 'Mateo Pulcini',
 ];
 
-// Build a normalized lookup set for field matching
-const FIELD_NORM = new Set(MASTERS_2026_FIELD.map(n =>
-  n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase()
-));
+// Normalized field lookup \u2014 populated by loadField(); isInField() checks against it.
+let tournamentName = 'The Open';
+let FIELD_NORM = new Set();
+
+function normalizeFieldName(n) {
+  return n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.\-']/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+async function loadField() {
+  try {
+    const res = await fetch(`${API}/api/field`);
+    const data = await res.json();
+    if (data.tournamentName) tournamentName = data.tournamentName;
+    const names = (data.entrants && data.entrants.length) ? data.entrants : FIELD_FALLBACK;
+    FIELD_NORM = new Set(names.map(normalizeFieldName));
+  } catch {
+    FIELD_NORM = new Set(FIELD_FALLBACK.map(normalizeFieldName));
+  }
+  applyTournamentName();
+}
+
+function applyTournamentName() {
+  const year = new Date().getFullYear();
+  document.title = `${tournamentName} Fivesome Picker ${year}`;
+  const h1 = document.querySelector('header h1');
+  if (h1) h1.textContent = `${tournamentName} ${year}`;
+  const pickHdr = document.getElementById('pickTournamentHeader');
+  if (pickHdr) pickHdr.textContent = `${tournamentName} \u2014 Pick Your Fivesome`;
+}
 
 // --- Init ---
 document.addEventListener('DOMContentLoaded', async () => {
+  await loadField();  // populate the field gate + tournament name first
   await Promise.all([loadGolfers(), loadSubmissions(), loadFieldEntries(), loadRefreshStatus()]);
   renderGolferTable();
   setupTabs();
@@ -250,7 +276,8 @@ const COUNTRY_FLAGS = {
   CAN: ['🇨🇦','Canada'], NZL: ['🇳🇿','New Zealand'], RSA: ['🇿🇦','South Africa'],
   COL: ['🇨🇴','Colombia'], MEX: ['🇲🇽','Mexico'], ARG: ['🇦🇷','Argentina'],
   CHI: ['🇨🇱','Chile'], CHN: ['🇨🇳','China'], THA: ['🇹🇭','Thailand'],
-  FJI: ['🇫🇯','Fiji']
+  FJI: ['🇫🇯','Fiji'], FRA: ['🇫🇷','France'], GER: ['🇩🇪','Germany'],
+  ITA: ['🇮🇹','Italy'], NED: ['🇳🇱','Netherlands'], ZIM: ['🇿🇼','Zimbabwe']
 };
 
 function formatCountryFlag(code) {
@@ -289,7 +316,6 @@ function renderGolferTable() {
   const tbody = document.getElementById('golferBody');
   tbody.innerHTML = filtered.map(g => {
     const formHtml = formatForm(g.form, g.recentFinishes);
-    const augustaHtml = formatAugusta(g.augusta);
     const age = g.birthYear ? new Date().getFullYear() - g.birthYear : '—';
     const inField = isInField(g.name);
     const withdrawnClass = g.withdrawn ? ' withdrawn' : '';
@@ -307,7 +333,6 @@ function renderGolferTable() {
       <td class="opening-odds-cell">${formatOddsDisplay(g.openingOdds)}</td>
       <td class="odds-cell">${formatOddsWithMovement(g)}</td>
       <td class="form-cell">${formHtml}</td>
-      <td class="augusta-cell">${augustaHtml}</td>
     </tr>
   `}).join('');
 }
@@ -582,7 +607,6 @@ function getAugustaMadeCuts(augusta) {
 function renderAllStats() {
   renderTierBreakdown();
   renderRiskByPerson();
-  renderAugustaFit();
   renderCoverageGaps();
   renderValuePicks();
   renderSimilarityScore();
@@ -605,9 +629,9 @@ function getTierLabel(tier) {
 }
 
 function getTierColor(tier) {
-  if (tier === 'favorite') return '#006747';
-  if (tier === 'contender') return '#d4a017';
-  return '#c0392b';
+  if (tier === 'favorite') return '#012169';
+  if (tier === 'contender') return '#4667a8';
+  return '#C8102E';
 }
 
 function renderTierBreakdown() {
@@ -695,7 +719,7 @@ function renderRiskByPerson() {
 
   container.innerHTML = userAvgs.map(u => {
     const pct = maxAvg > 0 ? (u.avg / maxAvg) * 100 : 0;
-    const tierColor = u.avg <= 2000 ? '#006747' : u.avg <= 8000 ? '#d4a017' : '#c0392b';
+    const tierColor = u.avg <= 2000 ? '#012169' : u.avg <= 8000 ? '#4667a8' : '#C8102E';
     return `
       <div class="pop-row">
         <div class="pop-name">${escapeHtml(u.name)}</div>
@@ -748,7 +772,7 @@ function renderAugustaFit() {
   // Bar chart for golfers with made-cut history
   html += withHistory.map(d => {
     const pct = worstAvg > 0 ? (1 - (d.avg - 1) / (worstAvg - 1)) * 100 : 50;
-    const barColor = d.avg <= 10 ? '#006747' : d.avg <= 25 ? '#d4a017' : '#c0392b';
+    const barColor = d.avg <= 10 ? '#012169' : d.avg <= 25 ? '#4667a8' : '#C8102E';
     const years = Object.entries(d.augusta).map(([y, r]) => `'${y.slice(2)}: ${r}`).join(', ');
     return `
       <div class="pop-row">
@@ -937,7 +961,7 @@ function renderSimilarityScore() {
 
   container.innerHTML = results.map(r => {
     const pct = maxUniq > 0 ? (r.uniqueness / maxUniq) * 100 : 0;
-    const color = r.uniqueness >= 80 ? '#006747' : r.uniqueness >= 60 ? '#d4a017' : '#c0392b';
+    const color = r.uniqueness >= 80 ? '#012169' : r.uniqueness >= 60 ? '#4667a8' : '#C8102E';
     const namesInBar = r.lastNames.join(', ');
     return `
       <div class="pop-row">
@@ -1002,11 +1026,11 @@ function getMomentumTier(finishes) {
 }
 
 const MOMENTUM_CONFIG = {
-  'hot':         { icon: '&#9650;&#9650;', color: '#006747', label: 'HOT' },
-  'trending-up': { icon: '&#9650;',        color: '#2e8b57', label: 'TRENDING UP' },
-  'steady':      { icon: '&#9644;',        color: '#d4a017', label: 'STEADY' },
-  'cooling-off': { icon: '&#9660;',        color: '#e67e22', label: 'COOLING OFF' },
-  'cold':        { icon: '&#9660;&#9660;', color: '#c0392b', label: 'COLD' }
+  'hot':         { icon: '&#9650;&#9650;', color: '#012169', label: 'HOT' },
+  'trending-up': { icon: '&#9650;',        color: '#3a5c9e', label: 'TRENDING UP' },
+  'steady':      { icon: '&#9644;',        color: '#4667a8', label: 'STEADY' },
+  'cooling-off': { icon: '&#9660;',        color: '#c05a6a', label: 'COOLING OFF' },
+  'cold':        { icon: '&#9660;&#9660;', color: '#C8102E', label: 'COLD' }
 };
 
 function renderMomentumTracker() {
@@ -1109,7 +1133,7 @@ function renderOwnershipGrid() {
       if (count === 0) return '<td class="og-cell og-empty"></td>';
       const opacity = 0.3 + (count / maxCount) * 0.7;
       const label = count > 1 ? count : '';
-      return `<td class="og-cell og-filled" style="background:rgba(0,103,71,${opacity})" title="${escapeHtml(p)}: ${escapeHtml(g)} (${count}x)">${label}</td>`;
+      return `<td class="og-cell og-filled" style="background:rgba(1,33,105,${opacity})" title="${escapeHtml(p)}: ${escapeHtml(g)} (${count}x)">${label}</td>`;
     }).join('');
     return `<tr><td class="og-golfer" title="${escapeHtml(g)}"><strong>${escapeHtml(lastName)}</strong><span class="og-first">${escapeHtml(firstName ? ', ' + firstName : '')}</span></td>${cells}</tr>`;
   }).join('');
@@ -1125,12 +1149,13 @@ function renderOwnershipGrid() {
 }
 
 // --- Tournament Lock ---
-// Returns true if the Masters (specifically) is in progress or finished
+// Returns true if The Open (specifically) is in progress or finished.
+// UX only — the server (isTournamentLocked in server.js) is the real gate on edits/removes.
 function isTournamentLocked() {
   if (!liveData || !liveData.tournament) return false;
   const name = (liveData.tournament.name || '').toLowerCase();
-  // Only lock for the Masters, not other PGA events
-  if (!name.includes('masters')) return false;
+  // Only lock for The Open, not other PGA events showing on the live scoreboard
+  if (!name.includes('open')) return false;
   return liveData.tournament.state === 'in' || liveData.tournament.state === 'post';
 }
 
@@ -1387,8 +1412,9 @@ function toggleScorecard(id, btn) {
 function buildScorecardHTML(entry, coursePars, tournamentState) {
   const holeNums = Array.from({ length: 18 }, (_, i) => i + 1);
   const pars = {};
-  const augustaPars = [0,4,5,4,3,4,3,4,5,4,4,3,3,5,4,4,4,4,4]; // Augusta National (72: 36 out, 35 in)
-  for (let i = 1; i <= 18; i++) pars[i] = coursePars?.[i] || augustaPars[i];
+  // Royal Birkdale, The Open 2026 (par 70). Fallback only — live ESPN hole data (coursePars) overrides once play starts.
+  const venuePars = [0,4,4,4,3,4,4,4,4,3, 4,4,3,4,3,5,4,5,4];
+  for (let i = 1; i <= 18; i++) pars[i] = coursePars?.[i] || venuePars[i];
 
   const outPar = holeNums.slice(0, 9).reduce((s, h) => s + pars[h], 0);
   const inPar = holeNums.slice(9).reduce((s, h) => s + pars[h], 0);
