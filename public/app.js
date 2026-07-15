@@ -85,6 +85,9 @@ async function loadRefreshStatus() {
     const status = await res.json();
     updateTimestampDisplay('oddsTimestamp', status.oddsUpdatedAt, status.oddsSource);
     updateTimestampDisplay('statsTimestamp', status.statsUpdatedAt);
+    // Show which event the odds feed is reporting (e.g. "Odds · The Open Championship")
+    const oddsLabel = document.getElementById('oddsEventLabel');
+    if (oddsLabel) oddsLabel.textContent = status.oddsEvent ? `Odds · ${status.oddsEvent}` : 'Odds';
   } catch { /* ignore if no status yet */ }
 }
 
