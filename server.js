@@ -396,6 +396,9 @@ async function refreshOddsCore() {
   const allBookmakers = oddsData[0]?.bookmakers || [];
   if (!allBookmakers.length) throw new Error(`No odds data available for ${TOURNAMENT.name} right now`);
 
+  // The event name the odds feed itself reports (e.g. "The Open Championship")
+  const oddsEventName = oddsData[0]?.sport_title || TOURNAMENT.name;
+
   // Merge outcomes across all bookmakers so no golfer is falsely marked withdrawn
   // Use the first bookmaker's odds as the canonical price, but track all names seen
   const outcomesMap = new Map();
@@ -479,6 +482,7 @@ async function refreshOddsCore() {
   const status = getRefreshStatus();
   status.oddsUpdatedAt = new Date().toISOString();
   status.oddsSource = bookmaker.title;
+  status.oddsEvent = oddsEventName;
   status.oddsLastWindow = getRefreshWindow();
   saveRefreshStatus(status);
 
@@ -777,24 +781,20 @@ app.post('/api/refresh-stats', async (req, res) => {
 
 app.get('/api/live-leaderboard', async (req, res) => {
   try {
-    // Fetch PGA scoreboard to find current/recent event
-    const sbRes = await fetch(`${ESPN_PGA}/scoreboard`);
-    const sbData = await sbRes.json();
-    const events = sbData.events || [];
+    // Fetch the pinned tournament directly (The Open), NOT ESPN's default
+    // scoreboard — that default lags to whatever event ESPN features this week
+    // (e.g. Corales Puntacana) until The Open goes live. Keeps the tracker on
+    // the same event as the pick field / odds / entry lock (TOURNAMENT config).
+    const lbRes = await fetch(`${ESPN_PGA}/scoreboard/${TOURNAMENT.espnEventId}`);
+    const lbData = await lbRes.json();
+    const evt = lbData.events?.[0] || lbData;
 
-    // Prefer in-progress, then most recent post, then last listed
-    let event = events.find(e => e.status?.type?.state === 'in')
-             || events.find(e => e.status?.type?.state === 'post')
-             || events[events.length - 1];
-
-    if (!event) {
+    if (!evt || !evt.competitions) {
       return res.json({ tournament: null, competitors: [], scoreMap: {} });
     }
 
-    // Fetch detailed leaderboard for this event
-    const lbRes = await fetch(`${ESPN_PGA}/scoreboard/${event.id}`);
-    const lbData = await lbRes.json();
-    const evt = lbData.events?.[0] || lbData;
+    // Downstream code reads the resolved event object as `event`
+    const event = evt;
     const competition = evt.competitions?.[0] || {};
     const competitors = competition.competitors || [];
 
