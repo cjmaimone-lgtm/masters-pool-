@@ -1289,6 +1289,7 @@ function scoreEntries(scoreMap) {
       droppedGolfer: dropped?.name,
       totalScore,
       isDQ,
+      madeCuts: activeCount,
       winningGolfer: s.winningGolfer || null,
       winningScore: s.winningScore != null ? s.winningScore : null,
       isPortfolio: s.isPortfolio
@@ -1296,6 +1297,10 @@ function scoreEntries(scoreMap) {
   }).sort((a, b) => {
     // DQ entries sink to the bottom
     if (a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
+
+    // Within the DQ group, more made cuts ranks higher (3 > 2 > 1 > 0),
+    // and only entries with the same made-cut count are compared on total score.
+    if (a.isDQ && b.isDQ && a.madeCuts !== b.madeCuts) return b.madeCuts - a.madeCuts;
 
     // Primary: total score (lower is better)
     if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
