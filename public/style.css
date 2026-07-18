@@ -1574,12 +1574,13 @@ h2 {
 }
 
 .live-entry-row.live-row-dq {
-  opacity: 0.45;
-  background: #f4f6fa;
+  opacity: 0.8;
+  background: #e7ebf2;
 }
 
 .live-entry-row.live-row-dq:hover {
-  opacity: 0.55;
+  opacity: 0.9;
+  background: #dde3ee;
 }
 
 .dq-badge {
