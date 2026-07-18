@@ -1573,11 +1573,14 @@ function renderLiveTracker() {
   let rank = 1;
   let rankedCount = 0;
   standings.forEach((entry, i) => {
+    rankedCount++;
     if (entry.isDQ) {
-      entry.rank = null;
+      // DQ entries keep a sequential rank number (they're already sorted to the bottom
+      // by made-cuts then total score); they just can't tie or be flagged "OUR BEST".
+      rank = rankedCount;
+      entry.rank = rank;
       return;
     }
-    rankedCount++;
     if (i > 0) {
       const prev = standings[i - 1];
       if (!prev.isDQ && entry.totalScore > prev.totalScore) {
@@ -1658,7 +1661,7 @@ function renderLiveTracker() {
 
     return `
       <tr class="live-entry-row${highlightClass}${dqClass}">
-        <td class="live-rank">${entry.isDQ ? '—' : entry.rank} ${expandBtn}</td>
+        <td class="live-rank">${entry.rank} ${expandBtn}</td>
         <td class="live-entry-name">${entryLabel}${leadBadge}${dqBadge}</td>
         <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
         <td class="live-golfers">${golferCells}${winScoreBadge}</td>
