@@ -1294,50 +1294,78 @@ function scoreEntries(scoreMap) {
       winningScore: s.winningScore != null ? s.winningScore : null,
       isPortfolio: s.isPortfolio
     };
-  }).sort((a, b) => {
-    // DQ entries sink to the bottom
-    if (a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
+  }).sort((a, b) => compareEntriesForRanking(a, b, scoreMap));
+}
 
-    // Within the DQ group, more made cuts ranks higher (3 > 2 > 1 > 0),
-    // and only entries with the same made-cut count are compared on total score.
-    if (a.isDQ && b.isDQ && a.madeCuts !== b.madeCuts) return b.madeCuts - a.madeCuts;
+// Round to-par string ("-6" / "E" / "+2") -> number.
+function _roundToPar(dv) {
+  return (dv === 'E' || dv == null) ? 0 : (parseInt(dv, 10) || 0);
+}
 
-    // Primary: total score (lower is better)
-    if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
+// Every completed round posted by the entry's 4 counting (best) golfers, ascending
+// (best/lowest first). Used for the best-round tiebreakers.
+function _sortedCountingRounds(entry) {
+  const counting = [...entry.golferScores].sort((a, b) => a.score - b.score).slice(0, 4);
+  const rounds = [];
+  counting.forEach(g => (g.rounds || []).forEach(r => rounds.push(_roundToPar(r.toPar))));
+  return rounds.sort((a, b) => a - b);
+}
 
-    // --- Tiebreakers (only apply during/after tournament) ---
+// Single source of truth for standings order AND rank numbering. Returns <0 if a
+// ranks ahead of b, >0 if behind, 0 only for a genuine tie (shared rank).
+function compareEntriesForRanking(a, b, scoreMap) {
+  // Tier split: entries with < 4 made cuts (DQ) sink to the bottom.
+  if (a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
 
-    // TB1: Picked the actual tournament winner
-    const actualWinner = _findTournamentWinner(scoreMap);
-    if (actualWinner) {
-      const aPickedWinner = a.winningGolfer && _normName(a.winningGolfer) === _normName(actualWinner);
-      const bPickedWinner = b.winningGolfer && _normName(b.winningGolfer) === _normName(actualWinner);
-      if (aPickedWinner !== bPickedWinner) return aPickedWinner ? -1 : 1;
+  // Within the DQ tier, more made cuts ranks higher (3 > 2 > 1 > 0).
+  if (a.isDQ && b.isDQ && a.madeCuts !== b.madeCuts) return b.madeCuts - a.madeCuts;
+
+  // Primary: best-4 total (lower is better).
+  if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
+
+  // TB1: picked the actual champion (only resolves once the tournament is final).
+  const actualWinner = _findTournamentWinner(scoreMap);
+  if (actualWinner) {
+    const aPicked = a.winningGolfer && _normName(a.winningGolfer) === _normName(actualWinner);
+    const bPicked = b.winningGolfer && _normName(b.winningGolfer) === _normName(actualWinner);
+    if (aPicked !== bPicked) return aPicked ? -1 : 1;
+  }
+
+  // TB2: winning-score guess, Price-is-Right (closest without going under). Final only.
+  const actualScore = _findWinningScore(scoreMap);
+  if (actualScore != null && (a.winningScore != null || b.winningScore != null)) {
+    const aValid = a.winningScore != null && a.winningScore >= actualScore;
+    const bValid = b.winningScore != null && b.winningScore >= actualScore;
+    if (aValid !== bValid) return aValid ? -1 : 1;
+    if (aValid && bValid) {
+      const aDiff = a.winningScore - actualScore;
+      const bDiff = b.winningScore - actualScore;
+      if (aDiff !== bDiff) return aDiff - bDiff;
     }
+  }
 
-    // TB2: Winning score — Price is Right rules (closest without going over)
-    // "Going over" = predicting a score further under par than actual (more negative)
-    // e.g. actual -10: prediction -11 is "over", -9 is valid
-    const actualScore = _findWinningScore(scoreMap);
-    if (actualScore != null && (a.winningScore != null || b.winningScore != null)) {
-      const aValid = a.winningScore != null && a.winningScore >= actualScore; // not further under par
-      const bValid = b.winningScore != null && b.winningScore >= actualScore;
-      if (aValid !== bValid) return aValid ? -1 : 1;
-      if (aValid && bValid) {
-        // Closer to actual wins (smaller difference is better)
-        const aDiff = a.winningScore - actualScore;
-        const bDiff = b.winningScore - actualScore;
-        if (aDiff !== bDiff) return aDiff - bDiff;
-      }
-    }
+  // TB3: golfer-by-golfer down the counting 4 — 4th best, then 3rd, 2nd, best (lower wins).
+  const aS = [...a.golferScores].sort((x, y) => x.score - y.score);
+  const bS = [...b.golferScores].sort((x, y) => x.score - y.score);
+  for (let i = 3; i >= 0; i--) {
+    const av = aS[i]?.score ?? 999;
+    const bv = bS[i]?.score ?? 999;
+    if (av !== bv) return av - bv;
+  }
 
-    // TB3: 4th best golfer score (lower is better)
-    const a4th = [...a.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
-    const b4th = [...b.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
-    if (a4th !== b4th) return a4th - b4th;
+  // TB4: fewer cut golfers — an entry with all 5 made-cut beats one with a cut golfer.
+  if (a.madeCuts !== b.madeCuts) return b.madeCuts - a.madeCuts;
 
-    return 0;
-  });
+  // TB5: best single round, then 2nd-best round (across the counting 4 golfers).
+  const ar = _sortedCountingRounds(a);
+  const br = _sortedCountingRounds(b);
+  for (let i = 0; i < 2; i++) {
+    const av = ar[i] ?? 999;
+    const bv = br[i] ?? 999;
+    if (av !== bv) return av - bv;
+  }
+
+  return 0; // genuine tie — entries share a rank number.
 }
 
 function _normName(name) {
@@ -1568,46 +1596,22 @@ function renderLiveTracker() {
   // Score and rank all entries
   const standings = scoreEntries(scoreMap);
 
-  // Assign ranks — since standings are fully sorted (with tiebreakers),
-  // entries only share a rank if they're identical on all tiebreaker dimensions
+  // Assign ranks using the SAME comparator that sorted the standings, so the numbers
+  // always match the order. Two entries share a rank number only when the comparator
+  // finds a genuine tie (returns 0) — i.e. identical down the entire tiebreaker ladder.
+  // DQ entries are numbered too; they just can never tie with a non-DQ entry.
   let rank = 1;
-  let rankedCount = 0;
   standings.forEach((entry, i) => {
-    rankedCount++;
-    if (entry.isDQ) {
-      // DQ entries keep a sequential rank number (they're already sorted to the bottom
-      // by made-cuts then total score); they just can't tie or be flagged "OUR BEST".
-      rank = rankedCount;
-      entry.rank = rank;
-      return;
-    }
-    if (i > 0) {
-      const prev = standings[i - 1];
-      if (!prev.isDQ && entry.totalScore > prev.totalScore) {
-        rank = rankedCount;
-      }
-      // Same total score — tiebreaker sort already separated them,
-      // but if they remain adjacent with same score, they're truly tied
-      // only if all tiebreaker values match
-      if (!prev.isDQ && entry.totalScore === prev.totalScore) {
-        const scoreMap = liveData?.scoreMap || {};
-        const winner = _findTournamentWinner(scoreMap);
-        const actualScore = _findWinningScore(scoreMap);
-        const aPicked = prev.winningGolfer && winner && _normName(prev.winningGolfer) === _normName(winner);
-        const bPicked = entry.winningGolfer && winner && _normName(entry.winningGolfer) === _normName(winner);
-        const aWS = prev.winningScore, bWS = entry.winningScore;
-        const a4th = [...prev.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
-        const b4th = [...entry.golferScores].sort((x, y) => x.score - y.score)[3]?.score ?? 999;
-        const sameOnAllTB = aPicked === bPicked
-          && aWS === bWS
-          && a4th === b4th;
-        if (!sameOnAllTB) {
-          rank = rankedCount;
-        }
-      }
+    if (i > 0 && compareEntriesForRanking(standings[i - 1], entry, scoreMap) !== 0) {
+      rank = i + 1; // strictly behind the previous entry — standard competition ranking
     }
     entry.rank = rank;
   });
+
+  // Flag genuine ties (a rank shared by 2+ entries) so the board can show e.g. "T1".
+  const rankCounts = {};
+  standings.forEach(e => { rankCounts[e.rank] = (rankCounts[e.rank] || 0) + 1; });
+  standings.forEach(e => { e.isTied = rankCounts[e.rank] > 1; });
 
   // Find our top portfolio entries (up to 5), excluding DQ
   const ourEntries = standings.filter(e => e.isPortfolio && !e.isDQ);
@@ -1661,7 +1665,7 @@ function renderLiveTracker() {
 
     return `
       <tr class="live-entry-row${highlightClass}${dqClass}">
-        <td class="live-rank">${entry.rank} ${expandBtn}</td>
+        <td class="live-rank">${entry.isTied ? 'T' : ''}${entry.rank} ${expandBtn}</td>
         <td class="live-entry-name">${entryLabel}${leadBadge}${dqBadge}</td>
         <td class="live-total ${entry.totalScore < 0 ? 'under-par' : entry.totalScore > 0 ? 'over-par' : ''}">${totalDisplay}</td>
         <td class="live-golfers">${golferCells}${winScoreBadge}</td>
