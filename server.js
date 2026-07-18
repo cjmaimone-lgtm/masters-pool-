@@ -29,6 +29,13 @@ const TOURNAMENT = {
   oddsSportKey: 'golf_the_open_championship_winner', // The Odds API market key
   name: 'The Open',                              // fallback label; real name comes from ESPN
   lockNameMatch: 'open',                         // substring fallback for the entry lock
+  // Cut line (to-par number). Leave null to AUTO-DETECT: the app scrapes ESPN's leaderboard
+  // page for espnEventId and reads the posted cut line. This is needed because ESPN's
+  // scoreboard *API* lags for hours after R2 — it keeps returning cut players as "active"
+  // with an empty R3 linescore, defeating status-based detection. Whatever the line, any
+  // player whose 36-hole (R1+R2) score is worse than it is marked cut. Set a number here
+  // only if you ever need to override the scrape.
+  cutLine: null,
 };
 
 // ESPN reports country as a full name (flag.alt); map to the 3-letter codes used by
@@ -779,6 +786,45 @@ app.post('/api/refresh-stats', async (req, res) => {
 // LIVE TOURNAMENT LEADERBOARD
 // ============================================================
 
+// Cut line is not exposed by ESPN's JSON APIs — only rendered on the leaderboard web
+// page. We scrape it from the page for THIS event and cache it. Confirming espnEventId
+// is present in the returned HTML guards against ESPN redirecting to a different event.
+let cutLineCache = { value: null, fetchedAt: 0 };
+const CUT_LINE_TTL_MS = 5 * 60 * 1000; // refetch at most every 5 minutes
+
+async function getCutLine() {
+  // Manual override in config always wins.
+  if (TOURNAMENT.cutLine != null) return TOURNAMENT.cutLine;
+
+  const now = Date.now();
+  if (cutLineCache.value != null && (now - cutLineCache.fetchedAt) < CUT_LINE_TTL_MS) {
+    return cutLineCache.value;
+  }
+
+  try {
+    const url = `https://www.espn.com/golf/leaderboard?tournamentId=${TOURNAMENT.espnEventId}`;
+    const pageRes = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' } });
+    if (!pageRes.ok) return cutLineCache.value; // keep last known on error
+    const html = await pageRes.text();
+
+    // Confirm ESPN served the event we asked for (no redirect to a featured event).
+    if (!html.includes(String(TOURNAMENT.espnEventId))) return cutLineCache.value;
+
+    // Anchor to the final post-cut message so we never read a moving "projected cut"
+    // shown earlier in the event (both use the same cut-score span):
+    //   ...failed to make the cut at <span class="cut-score">+1</span>
+    const m = html.match(/make the cut at[\s\S]{0,40}?<span class="cut-score">([+\-]?\d+|E)<\/span>/);
+    if (m) {
+      const cl = m[1] === 'E' ? 0 : parseInt(m[1], 10);
+      if (!Number.isNaN(cl)) cutLineCache = { value: cl, fetchedAt: now };
+    }
+    return cutLineCache.value; // null until the cut is actually posted
+  } catch (err) {
+    console.error('Cut-line scrape failed:', err.message);
+    return cutLineCache.value;
+  }
+}
+
 app.get('/api/live-leaderboard', async (req, res) => {
   try {
     // Fetch the pinned tournament directly (The Open), NOT ESPN's default
@@ -802,6 +848,9 @@ app.get('/api/live-leaderboard', async (req, res) => {
 
     // Competition period tells us which round the tournament is in
     const competitionPeriod = competition.status?.period || 1;
+
+    // Cut line, scraped from ESPN's page for this event (null until the cut is posted).
+    const cutLine = await getCutLine();
 
     const competitorList = competitors.map((c, idx) => {
       const displayName = c.athlete?.displayName || c.athlete?.fullName || 'Unknown';
@@ -917,6 +966,20 @@ app.get('/api/live-leaderboard', async (req, res) => {
         const maxRound = Math.max(...roundScores.map(ls => ls.period || 0), 0);
         if (maxRound <= 2) {
           playerStatus = 'cut';
+        }
+      }
+      // Authoritative cut detection via the scraped cut line. A player whose 36-hole
+      // (R1+R2) score is worse than the line missed the cut. This uses the through-36
+      // total, NOT the current cumulative score, so a golfer who made the cut and then
+      // plays a poor R3 stays "active" — only the first two rounds decide the cut. Fixes
+      // the case where ESPN's API still marks cut players "active" with a phantom R3 round.
+      if (playerStatus === 'active' && cutLine != null) {
+        const toParNum = (dv) => (dv === 'E' || dv == null) ? 0 : (parseInt(dv, 10) || 0);
+        const r1 = rounds.find(r => r.round === 1);
+        const r2 = rounds.find(r => r.round === 2);
+        if (r1 && r2) {
+          const through36 = toParNum(r1.toPar) + toParNum(r2.toPar);
+          if (through36 > cutLine) playerStatus = 'cut';
         }
       }
 
